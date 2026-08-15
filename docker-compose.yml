@@ -1,0 +1,1 @@
+# Placeholder docker-compose to run frontend, backend, ml-service\r\nversion: '3.8'\r\nservices:\r\n  frontend:\r\n    build: ./frontend\r\n  backend:\r\n    build: ./backend\r\n  ml-service:\r\n    build: ./ml-service\r\n
