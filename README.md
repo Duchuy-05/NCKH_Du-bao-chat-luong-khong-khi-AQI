@@ -1,5 +1,6 @@
-project-root/
-├── frontend/                 
+```
+NCKH/
+├── frontend/                     
 │   └── src/
 │       ├── assets/
 │       ├── components/
@@ -12,7 +13,7 @@ project-root/
 │       ├── styles/
 │       └── utils/
 │
-├── backend/                      
+├── backend/                     
 │   └── src/
 │       ├── config/
 │       │   ├── database.config.ts
@@ -50,3 +51,4 @@ project-root/
 │   └── .env
 │
 └── docker-compose.yml             # chạy đồng thời 3 service
+```
