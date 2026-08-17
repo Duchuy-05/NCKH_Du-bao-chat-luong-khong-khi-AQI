@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { Wind, Mail, Phone, MapPin, Send, CheckCircle2, Shield, FileText, ArrowRight, Heart } from 'lucide-react';
 
 interface FooterProps {
   onOpenTerms: () => void;
   onOpenPrivacy: () => void;
-  setActivePage: (page: string) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
   onOpenTerms,
   onOpenPrivacy,
-  setActivePage,
 }) => {
+  const navigate = useNavigate();
+  const setActivePage = (page: string) => {
+    navigate(page === 'home' ? '/' : `/${page}`);
+  };
   const { lang, t } = useLanguage();
   const [email, setEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);

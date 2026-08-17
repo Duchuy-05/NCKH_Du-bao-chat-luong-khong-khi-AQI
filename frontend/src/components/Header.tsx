@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import { Sun, Moon, Globe, Menu, X, Wind, ShieldAlert, User, LogIn, Compass, Calendar, Info, MapPin } from 'lucide-react';
 
 interface HeaderProps {
-  activePage: string;
-  setActivePage: (page: string) => void;
   onOpenAuth: (mode: 'login' | 'register') => void;
   currentUser?: { name: string; email: string } | null;
   onLogout?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
-  activePage,
-  setActivePage,
   onOpenAuth,
   currentUser,
   onLogout,
@@ -21,17 +18,21 @@ export const Header: React.FC<HeaderProps> = ({
   const { theme, toggleTheme } = useTheme();
   const { lang, toggleLang, t } = useLanguage();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  // 'home' ứng với path gốc "/", các trang khác lấy tên từ path (bỏ dấu "/")
+  const activePage = location.pathname === '/' ? 'home' : location.pathname.replace('/', '');
 
   const navItems = [
-    { id: 'home', labelKey: 'nav.home', icon: Wind },
-    { id: 'maps', labelKey: 'nav.maps', icon: Compass },
-    { id: 'forecast', labelKey: 'nav.forecast', icon: Calendar },
-    { id: 'alerts', labelKey: 'nav.alerts', icon: ShieldAlert },
-    { id: 'about', labelKey: 'nav.about', icon: Info },
+    { id: 'home', path: '/', labelKey: 'nav.home', icon: Wind },
+    { id: 'maps', path: '/maps', labelKey: 'nav.maps', icon: Compass },
+    { id: 'forecast', path: '/forecast', labelKey: 'nav.forecast', icon: Calendar },
+    { id: 'alerts', path: '/alerts', labelKey: 'nav.alerts', icon: ShieldAlert },
+    { id: 'about', path: '/about', labelKey: 'nav.about', icon: Info },
   ];
 
-  const handleNavClick = (pageId: string) => {
-    setActivePage(pageId);
+  const handleNavClick = (path: string) => {
+    navigate(path);
     setIsMobileMenuOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -44,7 +45,7 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
         {/* Brand Logo */}
         <div
-          onClick={() => handleNavClick('home')}
+          onClick={() => handleNavClick('/')}
           className="flex items-center gap-3 cursor-pointer select-none group shrink-0"
         >
           <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-orange-500 to-sky-500 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform shrink-0">
@@ -73,7 +74,7 @@ export const Header: React.FC<HeaderProps> = ({
             return (
               <button
                 key={item.id}
-                onClick={() => handleNavClick(item.id)}
+                onClick={() => handleNavClick(item.path)}
                 className={`flex items-center justify-center gap-2 px-3.5 xl:px-4 py-2 rounded-xl text-[15px] font-semibold whitespace-nowrap transition-all cursor-pointer ${
                   isActive
                     ? 'bg-slate-100 dark:bg-slate-800 text-orange-500 dark:text-orange-400 shadow-xs'
@@ -181,7 +182,7 @@ export const Header: React.FC<HeaderProps> = ({
               return (
                 <button
                   key={item.id}
-                  onClick={() => handleNavClick(item.id)}
+                  onClick={() => handleNavClick(item.path)}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium cursor-pointer ${
                     isActive
                       ? 'bg-orange-50 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400 font-bold'
