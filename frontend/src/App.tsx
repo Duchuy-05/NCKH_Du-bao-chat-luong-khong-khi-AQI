@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { Suspense, lazy, useState } from "react";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
 import { LanguageProvider } from "./context/LanguageContext";
 import { NotificationProvider } from "./context/NotificationContext";
@@ -9,15 +10,26 @@ import { AuthModal } from "./components/AuthModal";
 import { TermsModal } from "./components/TermsModal";
 import { PrivacyModal } from "./components/PrivacyModal";
 import { StationDetailModal } from "./components/StationDetailModal";
-import { Home } from "./pages/Home";
-import { Maps } from "./pages/Maps";
-import { Forecast } from "./pages/Forecast";
-import { HealthAlerts } from "./pages/HealthAlerts";
-import { AboutUs } from "./pages/AboutUs";
 import type { AirStation } from "./types/airQuality.types";
 
+// Lazy load: mỗi trang chỉ được tải (và render) khi người dùng thực sự
+// truy cập route tương ứng, thay vì gộp tất cả vào 1 bundle duy nhất.
+const Home = lazy(() => import("./pages/Home").then((m) => ({ default: m.Home })));
+const Maps = lazy(() => import("./pages/Maps").then((m) => ({ default: m.Maps })));
+const Forecast = lazy(() => import("./pages/Forecast").then((m) => ({ default: m.Forecast })));
+const HealthAlerts = lazy(() => import("./pages/HealthAlerts").then((m) => ({ default: m.HealthAlerts })));
+const AboutUs = lazy(() => import("./pages/AboutUs").then((m) => ({ default: m.AboutUs })));
+
+function PageLoader() {
+  return (
+    <div className="flex items-center justify-center py-24 text-slate-400 dark:text-slate-500">
+      Đang tải trang...
+    </div>
+  );
+}
+
 function MainApp() {
-  const [activePage, setActivePage] = useState<string>("home");
+  const navigate = useNavigate();
   const [selectedStationForModal, setSelectedStationForModal] = useState<AirStation | null>(null);
 
   // Auth state & modals
@@ -46,52 +58,41 @@ function MainApp() {
     setSelectedStationForModal(station);
   };
 
+  const goTo = (path: string) => {
+    navigate(path);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-[#0B0F17] text-slate-900 dark:text-slate-100 transition-colors">
       {/* Top sticky Navigation Header */}
-      <Header
-        activePage={activePage}
-        setActivePage={setActivePage}
-        onOpenAuth={handleOpenAuth}
-        currentUser={currentUser}
-        onLogout={handleLogout}
-      />
+      <Header onOpenAuth={handleOpenAuth} currentUser={currentUser} onLogout={handleLogout} />
 
-      {/* Main Page Body */}
+      {/* Main Page Body - chỉ route khớp URL mới được render */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-        {activePage === "home" && (
-          <Home
-            onSelectStation={handleSelectStation}
-            onNavigateToMaps={() => {
-              setActivePage("maps");
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-            onNavigateToForecast={() => {
-              setActivePage("forecast");
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-            onNavigateToAlerts={() => {
-              setActivePage("alerts");
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-          />
-        )}
-
-        {activePage === "maps" && <Maps onSelectStation={handleSelectStation} />}
-
-        {activePage === "forecast" && <Forecast />}
-
-        {activePage === "alerts" && <HealthAlerts />}
-
-        {activePage === "about" && <AboutUs />}
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Home
+                  onSelectStation={handleSelectStation}
+                  onNavigateToMaps={() => goTo("/maps")}
+                  onNavigateToForecast={() => goTo("/forecast")}
+                  onNavigateToAlerts={() => goTo("/alerts")}
+                />
+              }
+            />
+            <Route path="/maps" element={<Maps onSelectStation={handleSelectStation} />} />
+            <Route path="/forecast" element={<Forecast />} />
+            <Route path="/alerts" element={<HealthAlerts />} />
+            <Route path="/about" element={<AboutUs />} />
+          </Routes>
+        </Suspense>
       </main>
 
       {/* Footer */}
-      <Footer
-        onOpenTerms={() => setIsTermsOpen(true)}
-        onOpenPrivacy={() => setIsPrivacyOpen(true)}
-        setActivePage={setActivePage}
-      />
+      <Footer onOpenTerms={() => setIsTermsOpen(true)} onOpenPrivacy={() => setIsPrivacyOpen(true)} />
 
       {/* Dialog Modals */}
       <AuthModal
@@ -115,13 +116,15 @@ function MainApp() {
 
 function App() {
   return (
-    <ThemeProvider>
-      <LanguageProvider>
-        <NotificationProvider>
-          <MainApp />
-        </NotificationProvider>
-      </LanguageProvider>
-    </ThemeProvider>
+    <BrowserRouter>
+      <ThemeProvider>
+        <LanguageProvider>
+          <NotificationProvider>
+            <MainApp />
+          </NotificationProvider>
+        </LanguageProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }
 
