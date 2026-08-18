@@ -45,17 +45,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }, 900);
   };
 
-  const handleQuickDemo = () => {
-    setEmail('vietnam.demo@airvision.vn');
-    setPassword('AirVision@2026');
-    setFullName('Nguyễn Hoàng Nam');
-    onLoginSuccess({
-      name: 'Nguyễn Hoàng Nam',
-      email: 'vietnam.demo@airvision.vn',
-    });
-    onClose();
-  };
-
   return (
     <AnimatePresence>
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm">
