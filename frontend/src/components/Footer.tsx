@@ -167,9 +167,6 @@ export const Footer: React.FC<FooterProps> = ({
                   <span>{t('footer.privacy')}</span>
                 </button>
               </li>
-              <li className="pt-2 text-[11px] text-slate-500 leading-relaxed">
-                Quy chuẩn kỹ thuật quốc gia về chất lượng không khí xung quanh <strong>QCVN 05:2023/BTNMT</strong>.
-              </li>
             </ul>
           </div>
 
