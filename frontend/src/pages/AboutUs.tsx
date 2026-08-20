@@ -32,7 +32,7 @@ export const AboutUs: React.FC = () => {
 
   const dataSources = [
     {
-      name: 'Tổng cục Môi trường (VEA - BTNMT)',
+      name: 'Tổng cục Môi trường',
       desc: 'Mạng lưới trạm quan trắc không khí tự động chuẩn quốc gia tại các đô thị trọng điểm.',
       badge: 'Chính thống',
     },

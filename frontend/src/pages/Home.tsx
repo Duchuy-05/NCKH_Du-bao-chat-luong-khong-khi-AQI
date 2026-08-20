@@ -442,17 +442,17 @@ export const Home: React.FC<HomeProps> = ({
             <table className="w-full text-left border-collapse text-xs">
               <thead>
                 <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-400 font-bold uppercase tracking-wider text-[11px]">
+                  <th className="py-4 px-4 sm:px-6 text-center w-16">{t('table.col_stt')}</th>
                   <th className="py-4 px-6">{t('table.col_day')}</th>
                   <th className="py-4 px-6">{t('table.col_area')}</th>
                   <th className="py-4 px-6">{t('table.col_level')}</th>
-                  <th className="py-4 px-6">{t('table.col_id')}</th>
                   <th className="py-4 px-6">{t('table.col_aqi')}</th>
                   <th className="py-4 px-6">{t('table.col_temp')}</th>
                   <th className="py-4 px-6">{t('table.col_condition')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800/70">
-                {filteredForecast.map((item) => {
+                {filteredForecast.map((item, index) => {
                   const cat = getAQICategory(item.aqi);
                   return (
                     <tr
@@ -464,6 +464,9 @@ export const Home: React.FC<HomeProps> = ({
                         backgroundColor: item.aqi > 150 ? 'rgba(239, 68, 68, 0.04)' : undefined,
                       }}
                     >
+                      <td className="py-4 px-4 sm:px-6 text-center font-bold text-slate-500 dark:text-slate-400">
+                        {index + 1}
+                      </td>
                       <td className="py-4 px-6 font-bold text-slate-900 dark:text-white">
                         <div>
                           <span>{lang === 'vi' ? item.dayOfWeekVi : item.dayOfWeekEn}</span>
@@ -475,9 +478,6 @@ export const Home: React.FC<HomeProps> = ({
                       </td>
                       <td className="py-4 px-6">
                         <AQIBadge aqi={item.aqi} size="sm" />
-                      </td>
-                      <td className="py-4 px-6 font-mono text-slate-500 font-medium">
-                        {item.id}
                       </td>
                       <td className="py-4 px-6">
                         <span
@@ -507,7 +507,7 @@ export const Home: React.FC<HomeProps> = ({
 
           {/* Mobile Card Grid View */}
           <div className="grid grid-cols-1 gap-3 md:hidden">
-            {filteredForecast.map((item) => {
+            {filteredForecast.map((item, index) => {
               const cat = getAQICategory(item.aqi);
               return (
                 <div
@@ -519,9 +519,10 @@ export const Home: React.FC<HomeProps> = ({
                   <div className="flex items-center justify-between">
                     <div>
                       <span className="text-xs font-bold text-slate-900 dark:text-white">
+                        <span className="text-orange-500 font-black mr-1.5">#{index + 1}</span>
                         {lang === 'vi' ? item.dayOfWeekVi : item.dayOfWeekEn} ({item.date})
                       </span>
-                      <span className="block text-[11px] text-slate-400">{item.location} • {item.id}</span>
+                      <span className="block text-[11px] text-slate-400">{item.location}</span>
                     </div>
                     <div
                       className="px-3 py-1 rounded-xl font-black text-sm"

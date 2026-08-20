@@ -1,14 +1,13 @@
 import { Sequelize } from 'sequelize-typescript';
 import { envConfig } from './env.config';
 import { User } from '../models/entities/User.entity';
-import { AirQualityPrediction } from '../models/entities/AirQualityPrediction.entity';
 
 /**
  * Sequelize instance configured from environment variables.
  * Add new entity classes to the `models` array when created.
  */
 export const sequelize = new Sequelize({
-  dialect: 'postgres',               // change to 'mysql' if using MySQL
+  dialect: 'postgres',         
   host: envConfig.DB_HOST,
   port: envConfig.DB_PORT,
   database: envConfig.DB_NAME,
@@ -17,7 +16,6 @@ export const sequelize = new Sequelize({
   logging: envConfig.NODE_ENV === 'development' ? console.log : false,
   models: [
     User,
-    AirQualityPrediction,           // register all entities here
   ],
   define: {
     underscored: true,              // snake_case columns in DB
