@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AirStation } from '../types/airQuality.types';
 import { getAQICategory } from '../utils/aqi.util';
 import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
 import { AQIBadge } from './AQIBadge';
 import { MapPin, Wind, Thermometer, Droplets, ArrowUpRight, ZoomIn, ZoomOut, Layers } from 'lucide-react';
 
@@ -27,6 +28,8 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
   id,
 }) => {
   const { lang, t } = useLanguage();
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const [hoveredStation, setHoveredStation] = useState<AirStation | null>(null);
   const [regionFilter, setRegionFilter] = useState<'All' | 'Bac' | 'Trung' | 'Nam'>('All');
   const [zoomLevel, setZoomLevel] = useState(1);
@@ -58,12 +61,12 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
   return (
     <div
       id={id || 'vietnam-interactive-map'}
-      className={`relative w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 shadow-xl flex flex-col ${heightClass}`}
+      className={`relative w-full rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl flex flex-col transition-colors ${heightClass}`}
     >
       {/* Top Map Control Bar */}
       <div className="absolute top-4 left-4 right-4 z-20 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
         {/* Region Filter Chips */}
-        <div className="pointer-events-auto flex items-center gap-1.5 bg-slate-900/80 backdrop-blur-md p-1 rounded-xl border border-slate-700/80 shadow-md">
+        <div className="pointer-events-auto flex items-center gap-1.5 bg-white/90 dark:bg-slate-900/80 backdrop-blur-md p-1 rounded-xl border border-slate-200 dark:border-slate-700/80 shadow-md">
           {(['All', 'Bac', 'Trung', 'Nam'] as const).map((r) => {
             const labelKey = r === 'All' ? 'map.filter_all' : r === 'Bac' ? 'map.filter_bac' : r === 'Trung' ? 'map.filter_trung' : 'map.filter_nam';
             return (
@@ -73,7 +76,7 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
                 className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
                   regionFilter === r
                     ? 'bg-sky-500 text-white shadow-sm font-semibold'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
                 }`}
               >
                 {t(labelKey)}
@@ -85,17 +88,17 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
         {/* Map Actions & Legend Quick Info */}
         <div className="pointer-events-auto flex items-center gap-2">
           {showControls && (
-            <div className="flex items-center bg-slate-900/80 backdrop-blur-md p-1 rounded-xl border border-slate-700/80 shadow-md">
+            <div className="flex items-center bg-white/90 dark:bg-slate-900/80 backdrop-blur-md p-1 rounded-xl border border-slate-200 dark:border-slate-700/80 shadow-md">
               <button
                 onClick={() => setZoomLevel((z) => Math.min(1.4, z + 0.15))}
-                className="p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
+                className="p-1.5 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
                 title="Phóng to"
               >
                 <ZoomIn className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setZoomLevel((z) => Math.max(0.9, z - 0.15))}
-                className="p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
+                className="p-1.5 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
                 title="Thu nhỏ"
               >
                 <ZoomOut className="w-4 h-4" />
@@ -121,7 +124,7 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
         <div
           className="absolute inset-0 opacity-15"
           style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, #38BDF8 1px, transparent 0)`,
+            backgroundImage: `radial-gradient(circle at 1px 1px, ${isDark ? '#38BDF8' : '#0284C7'} 1px, transparent 0)`,
             backgroundSize: '24px 24px',
           }}
         />
@@ -133,30 +136,37 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
           {/* Vietnam SVG Map - Accurate Cartographic Silhouette matching /src/assets/vietnam-map.svg */}
           <svg
             viewBox="0 0 800 1000"
-            className="w-full h-full filter drop-shadow-[0_10px_35px_rgba(0,0,0,0.7)]"
+            className="w-full h-full filter drop-shadow-[0_10px_35px_rgba(0,0,0,0.15)] dark:drop-shadow-[0_10px_35px_rgba(0,0,0,0.7)]"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
             <defs>
-              {/* Mainland Gradient Fill */}
-              <linearGradient id="vnMainlandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              {/* Mainland Gradient Fill (Dark) */}
+              <linearGradient id="vnMainlandGradDark" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="#1e3a5f" />
                 <stop offset="50%" stopColor="#172b47" />
                 <stop offset="100%" stopColor="#0f1f38" />
               </linearGradient>
 
+              {/* Mainland Gradient Fill (Light) */}
+              <linearGradient id="vnMainlandGradLight" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#e0f2fe" />
+                <stop offset="50%" stopColor="#bae6fd" />
+                <stop offset="100%" stopColor="#93c5fd" />
+              </linearGradient>
+
               {/* Glow Filter */}
               <filter id="vnGlow" x="-10%" y="-10%" width="120%" height="120%">
-                <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#38BDF8" floodOpacity="0.25" />
+                <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor={isDark ? '#38BDF8' : '#0284C7'} floodOpacity={isDark ? 0.25 : 0.2} />
               </filter>
 
               <pattern id="diagonalHatch" width="12" height="12" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
-                <line x1="0" y1="0" x2="0" y2="12" stroke="#38BDF8" strokeWidth="0.6" strokeOpacity="0.1" />
+                <line x1="0" y1="0" x2="0" y2="12" stroke={isDark ? '#38BDF8' : '#0284C7'} strokeWidth="0.6" strokeOpacity={isDark ? 0.1 : 0.12} />
               </pattern>
             </defs>
 
             {/* Maritime Zones & Grid Lines */}
-            <g opacity="0.35" stroke="#38BDF8" strokeWidth="0.6" strokeDasharray="4 4">
+            <g opacity={isDark ? 0.35 : 0.2} stroke={isDark ? '#38BDF8' : '#0284C7'} strokeWidth="0.6" strokeDasharray="4 4">
               <line x1="60" y1="180" x2="740" y2="180" />
               <line x1="60" y1="360" x2="740" y2="360" />
               <line x1="60" y1="540" x2="740" y2="540" />
@@ -168,7 +178,7 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
             </g>
 
             {/* Geographic Coordinates Labeling */}
-            <g fill="#64748B" fontSize="10" fontWeight="600" opacity="0.6" letterSpacing="0.5">
+            <g fill={isDark ? '#64748B' : '#64748B'} fontSize="10" fontWeight="600" opacity="0.7" letterSpacing="0.5">
               <text x="70" y="174">22°N</text>
               <text x="70" y="354">18°N</text>
               <text x="70" y="534">14°N</text>
@@ -185,9 +195,9 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
             />
 
             {/* Regional Atmospheric Heat Aura (AQI Hotspots) */}
-            <circle cx="380" cy="200" r="65" fill="rgba(239, 68, 68, 0.12)" filter="blur(20px)" />
-            <circle cx="485" cy="480" r="50" fill="rgba(56, 189, 248, 0.10)" filter="blur(16px)" />
-            <circle cx="440" cy="780" r="70" fill="rgba(249, 115, 22, 0.12)" filter="blur(22px)" />
+            <circle cx="380" cy="200" r="65" fill={isDark ? 'rgba(239, 68, 68, 0.12)' : 'rgba(239, 68, 68, 0.08)'} filter="blur(20px)" />
+            <circle cx="485" cy="480" r="50" fill={isDark ? 'rgba(56, 189, 248, 0.10)' : 'rgba(2, 132, 199, 0.08)'} filter="blur(16px)" />
+            <circle cx="440" cy="780" r="70" fill={isDark ? 'rgba(249, 115, 22, 0.12)' : 'rgba(249, 115, 22, 0.08)'} filter="blur(22px)" />
 
             {/* ========================================================= */}
             {/* VIETNAM MAINLAND - ACCURATE GEOGRAPHIC SILHOUETTE         */}
@@ -237,11 +247,11 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
                   C 222 149, 240 130, 258 114
                   C 276 98, 298 82, 315 72 Z
                 "
-                fill="url(#vnMainlandGrad)"
-                stroke="#38BDF8"
+                fill={isDark ? 'url(#vnMainlandGradDark)' : 'url(#vnMainlandGradLight)'}
+                stroke={isDark ? '#38BDF8' : '#0284C7'}
                 strokeWidth="2.5"
                 strokeLinejoin="round"
-                className="transition-colors hover:brightness-110 cursor-pointer"
+                className="transition-colors hover:brightness-105 cursor-pointer"
               />
 
               {/* Northern West & East border natural contours */}
@@ -257,8 +267,8 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
                   C 375 155, 355 130, 335 110
                   C 325 98, 318 85, 315 72 Z
                 "
-                fill="url(#vnMainlandGrad)"
-                stroke="#38BDF8"
+                fill={isDark ? 'url(#vnMainlandGradDark)' : 'url(#vnMainlandGradLight)'}
+                stroke={isDark ? '#38BDF8' : '#0284C7'}
                 strokeWidth="2"
                 strokeLinejoin="round"
               />
@@ -273,8 +283,8 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
                   C 307 910, 322 895, 338 880
                   C 352 892, 350 904, 350 914 Z
                 "
-                fill="url(#vnMainlandGrad)"
-                stroke="#38BDF8"
+                fill={isDark ? 'url(#vnMainlandGradDark)' : 'url(#vnMainlandGradLight)'}
+                stroke={isDark ? '#38BDF8' : '#0284C7'}
                 strokeWidth="2"
                 strokeLinejoin="round"
               />
@@ -285,25 +295,25 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
             {/* ========================================================= */}
             <g id="hoang-sa-archipelago" className="cursor-pointer group">
               {/* Island Cluster matching user image */}
-              <circle cx="560" cy="420" r="5" fill="#38BDF8" className="animate-pulse" />
-              <circle cx="576" cy="428" r="4" fill="#38BDF8" />
-              <circle cx="552" cy="440" r="4.5" fill="#38BDF8" />
-              <circle cx="590" cy="448" r="3.5" fill="#38BDF8" />
-              <circle cx="572" cy="460" r="4" fill="#38BDF8" />
-              <circle cx="545" cy="458" r="3.5" fill="#38BDF8" />
-              <circle cx="585" cy="472" r="4" fill="#38BDF8" />
-              <circle cx="600" cy="440" r="3" fill="#38BDF8" />
-              <circle cx="565" cy="482" r="3" fill="#38BDF8" />
-              <circle cx="605" cy="465" r="3.5" fill="#38BDF8" />
-              <circle cx="550" cy="488" r="3" fill="#38BDF8" />
+              <circle cx="560" cy="420" r="5" fill={isDark ? '#38BDF8' : '#0284C7'} className="animate-pulse" />
+              <circle cx="576" cy="428" r="4" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="552" cy="440" r="4.5" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="590" cy="448" r="3.5" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="572" cy="460" r="4" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="545" cy="458" r="3.5" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="585" cy="472" r="4" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="600" cy="440" r="3" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="565" cy="482" r="3" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="605" cy="465" r="3.5" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="550" cy="488" r="3" fill={isDark ? '#38BDF8' : '#0284C7'} />
 
               {/* Archipelago Boundary */}
-              <ellipse cx="575" cy="455" rx="48" ry="42" stroke="#38BDF8" strokeWidth="1.2" strokeDasharray="4 4" fill="rgba(56,189,248,0.08)" opacity="0.8" />
+              <ellipse cx="575" cy="455" rx="48" ry="42" stroke={isDark ? '#38BDF8' : '#0284C7'} strokeWidth="1.2" strokeDasharray="4 4" fill={isDark ? 'rgba(56,189,248,0.08)' : 'rgba(2,132,199,0.08)'} opacity="0.8" />
 
               {/* Sovereignty Title Box */}
               <g transform="translate(505, 375)">
-                <rect x="0" y="0" width="165" height="26" rx="8" fill="#020617" stroke="#38BDF8" strokeWidth="1.5" opacity="0.95" />
-                <text x="82.5" y="17" fill="#F8FAFC" fontSize="11" fontWeight="800" textAnchor="middle" letterSpacing="0.5">
+                <rect x="0" y="0" width="165" height="26" rx="8" fill={isDark ? '#020617' : '#FFFFFF'} stroke={isDark ? '#38BDF8' : '#0284C7'} strokeWidth="1.5" opacity="0.95" />
+                <text x="82.5" y="17" fill={isDark ? '#F8FAFC' : '#0F172A'} fontSize="11" fontWeight="800" textAnchor="middle" letterSpacing="0.5">
                   ★ QĐ. HOÀNG SA (VN)
                 </text>
               </g>
@@ -314,33 +324,33 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
             {/* ========================================================= */}
             <g id="truong-sa-archipelago" className="cursor-pointer group">
               {/* Island Cluster matching user image */}
-              <circle cx="610" cy="730" r="5" fill="#38BDF8" className="animate-pulse" />
-              <circle cx="628" cy="748" r="4" fill="#38BDF8" />
-              <circle cx="595" cy="762" r="4.5" fill="#38BDF8" />
-              <circle cx="645" cy="770" r="4" fill="#38BDF8" />
-              <circle cx="618" cy="795" r="5" fill="#38BDF8" />
-              <circle cx="585" cy="815" r="3.5" fill="#38BDF8" />
-              <circle cx="635" cy="828" r="4" fill="#38BDF8" />
-              <circle cx="605" cy="850" r="4.5" fill="#38BDF8" />
-              <circle cx="660" cy="805" r="3.5" fill="#38BDF8" />
-              <circle cx="650" cy="845" r="4" fill="#38BDF8" />
-              <circle cx="620" cy="875" r="4" fill="#38BDF8" />
-              <circle cx="575" cy="840" r="3.5" fill="#38BDF8" />
-              <circle cx="590" cy="895" r="4" fill="#38BDF8" />
-              <circle cx="640" cy="890" r="3.5" fill="#38BDF8" />
-              <circle cx="610" cy="920" r="4" fill="#38BDF8" />
-              <circle cx="550" cy="915" r="3" fill="#38BDF8" />
-              <circle cx="570" cy="940" r="3.5" fill="#38BDF8" />
-              <circle cx="630" cy="945" r="3.5" fill="#38BDF8" />
-              <circle cx="600" cy="960" r="3" fill="#38BDF8" />
+              <circle cx="610" cy="730" r="5" fill={isDark ? '#38BDF8' : '#0284C7'} className="animate-pulse" />
+              <circle cx="628" cy="748" r="4" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="595" cy="762" r="4.5" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="645" cy="770" r="4" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="618" cy="795" r="5" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="585" cy="815" r="3.5" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="635" cy="828" r="4" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="605" cy="850" r="4.5" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="660" cy="805" r="3.5" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="650" cy="845" r="4" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="620" cy="875" r="4" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="575" cy="840" r="3.5" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="590" cy="895" r="4" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="640" cy="890" r="3.5" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="610" cy="920" r="4" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="550" cy="915" r="3" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="570" cy="940" r="3.5" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="630" cy="945" r="3.5" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <circle cx="600" cy="960" r="3" fill={isDark ? '#38BDF8' : '#0284C7'} />
 
               {/* Archipelago Boundary */}
-              <ellipse cx="615" cy="845" rx="65" ry="85" stroke="#38BDF8" strokeWidth="1.2" strokeDasharray="4 4" fill="rgba(56,189,248,0.08)" opacity="0.8" />
+              <ellipse cx="615" cy="845" rx="65" ry="85" stroke={isDark ? '#38BDF8' : '#0284C7'} strokeWidth="1.2" strokeDasharray="4 4" fill={isDark ? 'rgba(56,189,248,0.08)' : 'rgba(2,132,199,0.08)'} opacity="0.8" />
 
               {/* Sovereignty Title Box */}
               <g transform="translate(530, 680)">
-                <rect x="0" y="0" width="168" height="26" rx="8" fill="#020617" stroke="#38BDF8" strokeWidth="1.5" opacity="0.95" />
-                <text x="84" y="17" fill="#F8FAFC" fontSize="11" fontWeight="800" textAnchor="middle" letterSpacing="0.5">
+                <rect x="0" y="0" width="168" height="26" rx="8" fill={isDark ? '#020617' : '#FFFFFF'} stroke={isDark ? '#38BDF8' : '#0284C7'} strokeWidth="1.5" opacity="0.95" />
+                <text x="84" y="17" fill={isDark ? '#F8FAFC' : '#0F172A'} fontSize="11" fontWeight="800" textAnchor="middle" letterSpacing="0.5">
                   ★ QĐ. TRƯỜNG SA (VN)
                 </text>
               </g>
@@ -351,48 +361,48 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
             {/* ========================================================= */}
             {/* Đảo Phú Quốc */}
             <g id="dao-phu-quoc" className="cursor-pointer">
-              <ellipse cx="260" cy="880" rx="10" ry="18" fill="url(#vnMainlandGrad)" stroke="#38BDF8" strokeWidth="2" transform="rotate(-15 260 880)" />
-              <text x="205" y="885" fill="#E2E8F0" fontSize="11" fontWeight="700">Đ. Phú Quốc</text>
+              <ellipse cx="260" cy="880" rx="10" ry="18" fill={isDark ? 'url(#vnMainlandGradDark)' : 'url(#vnMainlandGradLight)'} stroke={isDark ? '#38BDF8' : '#0284C7'} strokeWidth="2" transform="rotate(-15 260 880)" />
+              <text x="205" y="885" fill={isDark ? '#E2E8F0' : '#334155'} fontSize="11" fontWeight="700">Đ. Phú Quốc</text>
             </g>
 
             {/* Côn Đảo */}
             <g id="con-dao" className="cursor-pointer">
-              <ellipse cx="390" cy="940" rx="7" ry="10" fill="url(#vnMainlandGrad)" stroke="#38BDF8" strokeWidth="1.8" transform="rotate(30 390 940)" />
-              <text x="405" y="945" fill="#E2E8F0" fontSize="10" fontWeight="700">Côn Đảo</text>
+              <ellipse cx="390" cy="940" rx="7" ry="10" fill={isDark ? 'url(#vnMainlandGradDark)' : 'url(#vnMainlandGradLight)'} stroke={isDark ? '#38BDF8' : '#0284C7'} strokeWidth="1.8" transform="rotate(30 390 940)" />
+              <text x="405" y="945" fill={isDark ? '#E2E8F0' : '#334155'} fontSize="10" fontWeight="700">Côn Đảo</text>
             </g>
 
             {/* Đảo Phú Quý */}
             <g id="dao-phu-quy" className="cursor-pointer">
-              <circle cx="490" cy="775" r="4.5" fill="#38BDF8" />
-              <text x="502" y="778" fill="#CBD5E1" fontSize="9" fontWeight="600">Phú Quý</text>
+              <circle cx="490" cy="775" r="4.5" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <text x="502" y="778" fill={isDark ? '#CBD5E1' : '#475569'} fontSize="9" fontWeight="600">Phú Quý</text>
             </g>
 
             {/* Đảo Lý Sơn */}
             <g id="dao-ly-son" className="cursor-pointer">
-              <circle cx="475" cy="540" r="4.5" fill="#38BDF8" />
-              <text x="488" y="543" fill="#CBD5E1" fontSize="9" fontWeight="600">Lý Sơn</text>
+              <circle cx="475" cy="540" r="4.5" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <text x="488" y="543" fill={isDark ? '#CBD5E1' : '#475569'} fontSize="9" fontWeight="600">Lý Sơn</text>
             </g>
 
             {/* Đảo Cồn Cỏ */}
             <g id="dao-con-co" className="cursor-pointer">
-              <circle cx="395" cy="385" r="3.5" fill="#38BDF8" />
-              <text x="405" y="388" fill="#CBD5E1" fontSize="8" fontWeight="600">Cồn Cỏ</text>
+              <circle cx="395" cy="385" r="3.5" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <text x="405" y="388" fill={isDark ? '#CBD5E1' : '#475569'} fontSize="8" fontWeight="600">Cồn Cỏ</text>
             </g>
 
             {/* Bạch Long Vĩ */}
             <g id="bach-long-vi" className="cursor-pointer">
-              <circle cx="485" cy="225" r="4" fill="#38BDF8" />
-              <text x="495" y="228" fill="#CBD5E1" fontSize="9" fontWeight="600">Bạch Long Vĩ</text>
+              <circle cx="485" cy="225" r="4" fill={isDark ? '#38BDF8' : '#0284C7'} />
+              <text x="495" y="228" fill={isDark ? '#CBD5E1' : '#475569'} fontSize="9" fontWeight="600">Bạch Long Vĩ</text>
             </g>
 
             {/* Sea Geography Watermark Labels */}
-            <text x="510" y="590" fill="#38BDF8" opacity="0.16" fontSize="32" fontWeight="900" letterSpacing="6">
+            <text x="510" y="590" fill={isDark ? '#38BDF8' : '#0284C7'} opacity={isDark ? 0.16 : 0.14} fontSize="32" fontWeight="900" letterSpacing="6">
               BIỂN ĐÔNG
             </text>
-            <text x="390" y="270" fill="#38BDF8" opacity="0.14" fontSize="16" fontWeight="800" letterSpacing="2">
+            <text x="390" y="270" fill={isDark ? '#38BDF8' : '#0284C7'} opacity={isDark ? 0.14 : 0.12} fontSize="16" fontWeight="800" letterSpacing="2">
               VỊNH BẮC BỘ
             </text>
-            <text x="180" y="820" fill="#38BDF8" opacity="0.14" fontSize="16" fontWeight="800" letterSpacing="2">
+            <text x="180" y="820" fill={isDark ? '#38BDF8' : '#0284C7'} opacity={isDark ? 0.14 : 0.12} fontSize="16" fontWeight="800" letterSpacing="2">
               VỊNH THÁI LAN
             </text>
           </svg>
@@ -447,7 +457,7 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
                 </div>
 
                 {/* Tiny Province Label Tag */}
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 whitespace-nowrap px-1.5 py-0.5 rounded-md bg-slate-950/90 text-[9px] font-bold text-slate-200 shadow-md border border-slate-700/50 pointer-events-none">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 whitespace-nowrap px-1.5 py-0.5 rounded-md bg-white/95 dark:bg-slate-950/90 text-[9px] font-bold text-slate-800 dark:text-slate-200 shadow-md border border-slate-200 dark:border-slate-700/50 pointer-events-none">
                   {st.province}
                 </div>
               </div>
@@ -463,7 +473,7 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
             const st = hoveredStation || selectedStation!;
             onSelectStation(st);
           }}
-          className="absolute bottom-4 left-4 right-4 md:right-auto md:w-80 z-30 bg-slate-900/95 backdrop-blur-md p-3.5 rounded-xl border border-slate-700 shadow-2xl text-white cursor-pointer hover:border-orange-500 transition-colors"
+          className="absolute bottom-4 left-4 right-4 md:right-auto md:w-80 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl text-slate-900 dark:text-white cursor-pointer hover:border-orange-500 transition-colors"
           title="Nhấn để xem chi tiết thông số trạm / Click to view station details"
         >
           {(() => {
@@ -473,33 +483,33 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
               <div>
                 <div className="flex items-start justify-between gap-2 mb-1.5">
                   <div>
-                    <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                    <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                       {st.province} • {st.id}
                     </span>
-                    <h4 className="text-sm font-bold text-white line-clamp-1">{st.name}</h4>
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-white line-clamp-1">{st.name}</h4>
                   </div>
                   <AQIBadge aqi={st.aqi} size="sm" />
                 </div>
 
-                <div className="grid grid-cols-3 gap-2 mt-2 pt-2 border-t border-slate-800 text-xs">
-                  <div className="bg-slate-800/60 p-1.5 rounded-lg text-center">
-                    <span className="text-[10px] text-slate-400 block">PM2.5</span>
-                    <span className="font-bold text-orange-400">{st.pollutants.pm25.value}</span>
-                    <span className="text-[9px] text-slate-500 block">µg/m³</span>
+                <div className="grid grid-cols-3 gap-2 mt-2 pt-2 border-t border-slate-200 dark:border-slate-800 text-xs">
+                  <div className="bg-slate-100 dark:bg-slate-800/60 p-1.5 rounded-xl text-center">
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block">PM2.5</span>
+                    <span className="font-bold text-orange-500 dark:text-orange-400">{st.pollutants.pm25.value}</span>
+                    <span className="text-[9px] text-slate-400 dark:text-slate-500 block">µg/m³</span>
                   </div>
-                  <div className="bg-slate-800/60 p-1.5 rounded-lg text-center">
-                    <span className="text-[10px] text-slate-400 block">Nhiệt độ</span>
-                    <span className="font-bold text-sky-400">{st.temperature}°C</span>
-                    <span className="text-[9px] text-slate-500 block">{st.humidity}% ẩm</span>
+                  <div className="bg-slate-100 dark:bg-slate-800/60 p-1.5 rounded-xl text-center">
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block">{t('hero.temp')}</span>
+                    <span className="font-bold text-sky-500 dark:text-sky-400">{st.temperature}°C</span>
+                    <span className="text-[9px] text-slate-400 dark:text-slate-500 block">{st.humidity}%</span>
                   </div>
-                  <div className="bg-slate-800/60 p-1.5 rounded-lg text-center">
-                    <span className="text-[10px] text-slate-400 block">Gió</span>
-                    <span className="font-bold text-emerald-400">{st.windSpeed}</span>
-                    <span className="text-[9px] text-slate-500 block">km/h</span>
+                  <div className="bg-slate-100 dark:bg-slate-800/60 p-1.5 rounded-xl text-center">
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block">{t('hero.wind')}</span>
+                    <span className="font-bold text-emerald-500 dark:text-emerald-400">{st.windSpeed}</span>
+                    <span className="text-[9px] text-slate-400 dark:text-slate-500 block">km/h</span>
                   </div>
                 </div>
 
-                <div className="mt-2.5 flex items-center justify-between text-[11px] text-slate-300">
+                <div className="mt-2.5 flex items-center justify-between text-[11px] text-slate-600 dark:text-slate-300">
                   <span className="truncate">{lang === 'vi' ? category.descriptionVi : category.descriptionEn}</span>
                 </div>
               </div>
@@ -509,27 +519,27 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
       )}
 
       {/* Bottom Color Scale Bar */}
-      <div className="p-3 bg-slate-950/90 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs">
-        <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+      <div className="p-3 bg-slate-50/95 dark:bg-slate-950/90 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs">
+        <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
           {t('map.legend_title')}
         </span>
         <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="inline-flex items-center gap-1 text-[11px] text-slate-300">
+          <span className="inline-flex items-center gap-1 text-[11px] text-slate-600 dark:text-slate-300">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> 0-50 {lang === 'vi' ? 'Tốt' : 'Good'}
           </span>
-          <span className="inline-flex items-center gap-1 text-[11px] text-slate-300">
+          <span className="inline-flex items-center gap-1 text-[11px] text-slate-600 dark:text-slate-300">
             <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span> 51-100 {lang === 'vi' ? 'TB' : 'Mod'}
           </span>
-          <span className="inline-flex items-center gap-1 text-[11px] text-slate-300">
+          <span className="inline-flex items-center gap-1 text-[11px] text-slate-600 dark:text-slate-300">
             <span className="w-2.5 h-2.5 rounded-full bg-orange-500"></span> 101-150 {lang === 'vi' ? 'Kém' : 'Sens'}
           </span>
-          <span className="inline-flex items-center gap-1 text-[11px] text-slate-300">
+          <span className="inline-flex items-center gap-1 text-[11px] text-slate-600 dark:text-slate-300">
             <span className="w-2.5 h-2.5 rounded-full bg-red-500"></span> 151-200 {lang === 'vi' ? 'Xấu' : 'Unhealthy'}
           </span>
-          <span className="inline-flex items-center gap-1 text-[11px] text-slate-300">
+          <span className="inline-flex items-center gap-1 text-[11px] text-slate-600 dark:text-slate-300">
             <span className="w-2.5 h-2.5 rounded-full bg-purple-500"></span> 201-300 {lang === 'vi' ? 'Rất xấu' : 'Very Unhealthy'}
           </span>
-          <span className="inline-flex items-center gap-1 text-[11px] text-slate-300">
+          <span className="inline-flex items-center gap-1 text-[11px] text-slate-600 dark:text-slate-300">
             <span className="w-2.5 h-2.5 rounded-full bg-amber-950"></span> &gt;300 {lang === 'vi' ? 'Nguy hại' : 'Haz'}
           </span>
         </div>
