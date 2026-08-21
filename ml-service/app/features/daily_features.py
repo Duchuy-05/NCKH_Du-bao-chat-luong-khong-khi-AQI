@@ -22,7 +22,7 @@ from app.core.config import CLEAN_DAILY_PATH, FEATURES_DAILY_PATH, DAILY_HORIZON
 AQI_LAGS = [1, 2, 3, 5, 7, 14]
 # Rolling window (ngày) tính mean/std trên aqi_mean
 ROLLING_WINDOWS = [3, 7, 14]
-# Thời tiết chỉ lấy lag 1 + rolling 7 ngày (đỡ nổ số chiều)
+# Thời tiết chỉ lấy lag 1 + rolling 7 ngày
 WEATHER_COLS = [
     "temperature_2m",
     "relative_humidity_2m",
