@@ -7,3 +7,5 @@ scikit-learn
 joblib
 pyarrow
 python-dotenv
+sqlalchemy
+psycopg2-binary

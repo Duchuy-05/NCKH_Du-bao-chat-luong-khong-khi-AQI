@@ -13,10 +13,10 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DB_HOST=postgres
+      - DB_HOST=localhost
       - DB_PORT=5432
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
+      - DB_NAME=aqi_prediction
+      - DB_USER=postgres
       - DB_PASSWORD=${DB_PASSWORD}
       - ML_SERVICE_URL=http://ml-service:8000
       - ML_INTERNAL_API_KEY=${ML_INTERNAL_API_KEY}

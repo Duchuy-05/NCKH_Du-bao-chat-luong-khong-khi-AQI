@@ -13,6 +13,7 @@ from datetime import datetime, timezone
 import joblib
 import numpy as np
 import pandas as pd
+from sklearn.compose import TransformedTargetRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.model_selection import GridSearchCV, TimeSeriesSplit
 from sklearn.multioutput import MultiOutputRegressor
@@ -25,20 +26,24 @@ from app.features.daily_features import build_daily_features
 
 TARGET_COLS = [f"d_{h}" for h in range(1, DAILY_HORIZON + 1)]
 
-# Lưới tham số nhỏ gọn — SVR khá nhạy với C/epsilon/gamma, không cần quá rộng
+# Lưới tham số — mở rộng thêm vì giờ target đã được chuẩn hoá (scale ~ N(0,1)),
 PARAM_GRID = {
-    "svr__estimator__kernel": ["rbf"],
-    "svr__estimator__C": [1, 10, 50, 100],
-    "svr__estimator__epsilon": [0.1, 0.5, 1.0],
-    "svr__estimator__gamma": ["scale", 0.01, 0.1],
+    "regressor__svr__estimator__kernel": ["rbf"],
+    "regressor__svr__estimator__C": [1, 5, 10, 50, 100],
+    "regressor__svr__estimator__epsilon": [0.01, 0.05, 0.1, 0.2],
+    "regressor__svr__estimator__gamma": ["scale", "auto", 0.001, 0.01, 0.1],
 }
 
 
-def build_pipeline() -> Pipeline:
-    return Pipeline([
+def build_pipeline() -> TransformedTargetRegressor:
+    inner_pipeline = Pipeline([
         ("scaler", StandardScaler()),
         ("svr", MultiOutputRegressor(SVR())),
     ])
+    return TransformedTargetRegressor(
+        regressor=inner_pipeline,
+        transformer=StandardScaler(),
+    )
 
 
 def evaluate(y_true: pd.DataFrame, y_pred: np.ndarray) -> dict:
