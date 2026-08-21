@@ -1,36 +1,42 @@
+from __future__ import annotations
+
 import os
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parents[2]  # -> ml-service/
+# Base directories
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+DATA_DIR = BASE_DIR / "data"
+MODELS_DIR = BASE_DIR / "models"
 
-# ---- Dữ liệu ----
-DATA_DIR = Path(os.getenv("ML_DATA_DIR", BASE_DIR / "data"))
-RAW_BACKUP_DIR = DATA_DIR / "raw"     
-CLEAN_DIR = DATA_DIR / "hanoi"        # clean_3h.parquet, clean_daily.parquet
-FEATURE_DIR = DATA_DIR / "features"
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+MODELS_DIR.mkdir(parents=True, exist_ok=True)
 
-CLEAN_DAILY_PATH = CLEAN_DIR / "clean_daily.parquet"
-CLEAN_3H_PATH = CLEAN_DIR / "clean_3h.parquet"
+# File paths
+CLEAN_3H_PATH = DATA_DIR / "clean_3h.parquet"
+CLEAN_DAILY_PATH = DATA_DIR / "clean_daily.parquet"
+DAILY_FEATURES_PATH = DATA_DIR / "daily_features.parquet"
+HOURLY_FEATURES_PATH = DATA_DIR / "hourly_features.parquet"
 
-FEATURES_DAILY_PATH = FEATURE_DIR / "features_daily.parquet"
-FEATURES_HOURLY_PATH = FEATURE_DIR / "features_hourly.parquet"  # Luồng B sau
+# Models
+SVR_DAILY_MODEL_PATH = MODELS_DIR / "svr_daily.joblib"
+SVR_HOURLY_MODEL_PATH = MODELS_DIR / "svr_hourly.joblib"
 
-# ---- Tên bảng trong PostgreSQL ----
-POLLUTANTS_TABLE = "hanoi_pollutants"
-WEATHER_TABLE = "hanoi_weather"
-
-# ---- Model ----
-MODEL_DIR = Path(os.getenv("ML_MODEL_DIR", BASE_DIR / "app" / "ml"))
-SVR_DAILY_MODEL_PATH = MODEL_DIR / "svr_daily.joblib"
-SVR_HOURLY_MODEL_PATH = MODEL_DIR / "svr_hourly.joblib"  # Luồng B sau
-
-# ---- Nghiệp vụ ----
+# Forecast settings
+DAILY_HORIZON = 7        # 7 ngày tới
+HOURLY_HORIZON = 8       # 8 bước 3h = 24h tới
+STEP_HOURS = 3           # Bước 3h
 CITY = "hanoi"
+STATION_NAME = "Hoàn Kiếm"
 TIMEZONE = "Asia/Ho_Chi_Minh"
 
-DAILY_HORIZON = 7
-HOURLY_HORIZON = 8
-HOURLY_STEP_HOURS = 3
+# Database Configuration
+DB_USER = os.getenv("DB_USER", "postgres")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "123456")
+DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_PORT = os.getenv("DB_PORT", "5432")
+DB_NAME = os.getenv("DB_NAME", "aqi_prediction")
 
-for d in (CLEAN_DIR, FEATURE_DIR, MODEL_DIR):
-    d.mkdir(parents=True, exist_ok=True)
+DATABASE_URL = os.getenv(
+    "DATABASE_URL",
+    f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+)
