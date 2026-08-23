@@ -2,9 +2,15 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Base directories
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+# Load environment variables from .env at project root
+load_dotenv(dotenv_path=BASE_DIR / ".env")
+load_dotenv()  # Fallback to current working directory if different
+
 DATA_DIR = BASE_DIR / "data"
 MODELS_DIR = BASE_DIR / "models"
 
@@ -29,14 +35,18 @@ CITY = "hanoi"
 STATION_NAME = "Hoàn Kiếm"
 TIMEZONE = "Asia/Ho_Chi_Minh"
 
-# Database Configuration
-DB_USER = os.getenv("DB_USER", "postgres")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "123456")
-DB_HOST = os.getenv("DB_HOST", "localhost")
-DB_PORT = os.getenv("DB_PORT", "5432")
-DB_NAME = os.getenv("DB_NAME", "aqi_prediction")
+# Database Configuration from environment variables
+DB_HOST = os.getenv("DB_HOST", "")
+DB_PORT = os.getenv("DB_PORT", "")
+DB_NAME = os.getenv("DB_NAME", "")
+DB_USER = os.getenv("DB_USER", "")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "")
 
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-)
+# Build DATABASE_URL dynamically from env or use custom DATABASE_URL if defined
+DATABASE_URL = os.getenv("DATABASE_URL")
+if not DATABASE_URL:
+    if DB_PASSWORD:
+        DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    else:
+        DATABASE_URL = f"postgresql://{DB_USER}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+
