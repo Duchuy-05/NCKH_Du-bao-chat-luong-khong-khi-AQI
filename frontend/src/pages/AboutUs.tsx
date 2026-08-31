@@ -32,7 +32,7 @@ export const AboutUs: React.FC = () => {
 
   const dataSources = [
     {
-      name: 'Tổng cục Môi trường (VEA - BTNMT)',
+      name: 'Tổng cục Môi trường',
       desc: 'Mạng lưới trạm quan trắc không khí tự động chuẩn quốc gia tại các đô thị trọng điểm.',
       badge: 'Chính thống',
     },
@@ -96,9 +96,6 @@ export const AboutUs: React.FC = () => {
             <h2 className="text-xl font-black text-slate-900 dark:text-white">
               {lang === 'vi' ? 'Nguồn dữ liệu & Phương pháp Chuẩn hóa' : 'Data Sources & Methodology'}
             </h2>
-            <p className="text-xs text-slate-500 mt-1">
-              Dữ liệu được làm sạch, hiệu chỉnh chéo và tính toán chỉ số AQI VN theo chuẩn QCVN 05:2023/BTNMT
-            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -177,7 +174,7 @@ export const AboutUs: React.FC = () => {
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="Nguyễn Văn A"
+                    placeholder="Nguyen Van A"
                     className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-orange-500"
                   />
                 </div>

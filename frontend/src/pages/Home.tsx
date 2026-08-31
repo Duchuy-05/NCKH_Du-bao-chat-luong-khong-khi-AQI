@@ -442,17 +442,17 @@ export const Home: React.FC<HomeProps> = ({
             <table className="w-full text-left border-collapse text-xs">
               <thead>
                 <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-400 font-bold uppercase tracking-wider text-[11px]">
+                  <th className="py-4 px-4 sm:px-6 text-center w-16">{t('table.col_stt')}</th>
                   <th className="py-4 px-6">{t('table.col_day')}</th>
                   <th className="py-4 px-6">{t('table.col_area')}</th>
                   <th className="py-4 px-6">{t('table.col_level')}</th>
-                  <th className="py-4 px-6">{t('table.col_id')}</th>
                   <th className="py-4 px-6">{t('table.col_aqi')}</th>
                   <th className="py-4 px-6">{t('table.col_temp')}</th>
                   <th className="py-4 px-6">{t('table.col_condition')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800/70">
-                {filteredForecast.map((item) => {
+                {filteredForecast.map((item, index) => {
                   const cat = getAQICategory(item.aqi);
                   return (
                     <tr
@@ -464,6 +464,9 @@ export const Home: React.FC<HomeProps> = ({
                         backgroundColor: item.aqi > 150 ? 'rgba(239, 68, 68, 0.04)' : undefined,
                       }}
                     >
+                      <td className="py-4 px-4 sm:px-6 text-center font-bold text-slate-500 dark:text-slate-400">
+                        {index + 1}
+                      </td>
                       <td className="py-4 px-6 font-bold text-slate-900 dark:text-white">
                         <div>
                           <span>{lang === 'vi' ? item.dayOfWeekVi : item.dayOfWeekEn}</span>
@@ -475,9 +478,6 @@ export const Home: React.FC<HomeProps> = ({
                       </td>
                       <td className="py-4 px-6">
                         <AQIBadge aqi={item.aqi} size="sm" />
-                      </td>
-                      <td className="py-4 px-6 font-mono text-slate-500 font-medium">
-                        {item.id}
                       </td>
                       <td className="py-4 px-6">
                         <span
@@ -507,7 +507,7 @@ export const Home: React.FC<HomeProps> = ({
 
           {/* Mobile Card Grid View */}
           <div className="grid grid-cols-1 gap-3 md:hidden">
-            {filteredForecast.map((item) => {
+            {filteredForecast.map((item, index) => {
               const cat = getAQICategory(item.aqi);
               return (
                 <div
@@ -519,9 +519,10 @@ export const Home: React.FC<HomeProps> = ({
                   <div className="flex items-center justify-between">
                     <div>
                       <span className="text-xs font-bold text-slate-900 dark:text-white">
+                        <span className="text-orange-500 font-black mr-1.5">#{index + 1}</span>
                         {lang === 'vi' ? item.dayOfWeekVi : item.dayOfWeekEn} ({item.date})
                       </span>
-                      <span className="block text-[11px] text-slate-400">{item.location} • {item.id}</span>
+                      <span className="block text-[11px] text-slate-400">{item.location}</span>
                     </div>
                     <div
                       className="px-3 py-1 rounded-xl font-black text-sm"
@@ -605,28 +606,31 @@ export const Home: React.FC<HomeProps> = ({
       {/* 4. THÔNG BÁO ĐẨY THEO VỊ TRÍ CỦA BẠN */}
       <section>
         <FadeIn direction="up">
-          <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-slate-900 to-slate-950 text-white border border-slate-800 shadow-2xl relative overflow-hidden">
+          <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-gradient-to-br dark:from-slate-900 dark:to-slate-950 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-800 shadow-2xl relative overflow-hidden transition-colors duration-300">
             <div className="absolute top-0 right-0 w-80 h-80 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
 
             <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               <div className="lg:col-span-7 space-y-3">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold border border-orange-500/30">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100 dark:bg-orange-500/20 text-orange-600 dark:text-orange-400 text-xs font-bold border border-orange-200 dark:border-orange-500/30 transition-colors duration-300">
                   <BellRing className="w-3.5 h-3.5" />
                   <span>{lang === 'vi' ? 'Cảnh báo sớm thời gian thực' : 'Early Real-Time Alerts'}</span>
                 </div>
                 <h3 className="text-2xl font-black tracking-tight">{t('notif.title')}</h3>
-                <p className="text-xs text-slate-300 leading-relaxed max-w-xl">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed max-w-xl transition-colors duration-300">
                   {t('notif.desc')}
                 </p>
 
                 {/* Slider for AQI Alert Threshold */}
                 <div className="pt-3 max-w-md space-y-2">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-300 font-semibold">{t('notif.threshold_label')}</span>
-                    <span className="font-black text-orange-400 px-2 py-0.5 rounded bg-orange-500/20">
+                    <span className="text-slate-700 dark:text-slate-300 font-semibold transition-colors duration-300">
+                      {t('notif.threshold_label')}
+                    </span>
+                    <span className="font-black text-orange-600 dark:text-orange-400 px-2 py-0.5 rounded bg-orange-100 dark:bg-orange-500/20 transition-colors duration-300">
                       AQI &gt; {customThreshold}
                     </span>
                   </div>
+                  
                   <input
                     type="range"
                     min="50"
@@ -634,9 +638,10 @@ export const Home: React.FC<HomeProps> = ({
                     step="10"
                     value={customThreshold}
                     onChange={(e) => setCustomThreshold(Number(e.target.value))}
-                    className="w-full accent-orange-500 h-2 bg-slate-800 rounded-lg cursor-pointer"
+                    className="w-full h-2 rounded-lg cursor-pointer accent-orange-500 bg-slate-200 dark:bg-slate-700 transition-colors duration-300"
                   />
-                  <div className="flex justify-between text-[10px] text-slate-400 font-medium">
+                  
+                  <div className="flex justify-between text-[10px] text-slate-500 dark:text-slate-400 font-medium transition-colors duration-300">
                     <span>50 (Tốt)</span>
                     <span>100 (Trung bình)</span>
                     <span>150 (Kém)</span>

@@ -17,7 +17,6 @@ export enum UserRole {
   USER = 'user',
   ADMIN = 'admin',
 }
-
 @Table({
   tableName: 'users',
   timestamps: true,

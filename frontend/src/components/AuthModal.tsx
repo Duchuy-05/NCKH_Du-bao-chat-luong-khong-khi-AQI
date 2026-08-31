@@ -28,7 +28,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const displayName = mode === 'login' ? (email.split('@')[0] || 'Nguyễn Văn A') : fullName || 'Thành viên mới';
+    const displayName = mode === 'login' ? (email.split('@')[0] || 'Nguyen Van A') : fullName || 'Thành viên mới';
     setSuccessMsg(
       mode === 'login'
         ? (lang === 'vi' ? 'Đăng nhập thành công!' : 'Signed in successfully!')

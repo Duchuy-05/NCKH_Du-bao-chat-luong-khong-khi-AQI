@@ -8,3 +8,7 @@ __pycache__/
 *.pyc
 venv/
 .env
+*.csv
+data/*.parquet
+*.joblib
+*.parquet

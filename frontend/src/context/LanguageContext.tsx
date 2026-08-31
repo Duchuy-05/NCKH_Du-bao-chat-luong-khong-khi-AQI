@@ -69,6 +69,7 @@ const translations: Record<Language, Record<string, string>> = {
 
     // 7-day Table
     'table.title': 'Bảng dự báo chất lượng không khí 7 ngày tới',
+    'table.col_stt': 'STT',
     'table.col_day': 'Thứ / Ngày',
     'table.col_area': 'Khu vực',
     'table.col_level': 'Mức độ',
@@ -170,6 +171,7 @@ const translations: Record<Language, Record<string, string>> = {
 
     // 7-day Table
     'table.title': '7-Day Air Quality Forecast Table',
+    'table.col_stt': 'No.',
     'table.col_day': 'Day / Date',
     'table.col_area': 'Region',
     'table.col_level': 'Category',
