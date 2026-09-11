@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import logoImg from '../assets/epu_logo.png'
 import { useLanguage } from '../context/LanguageContext';
 import { Wind, Mail, Phone, MapPin, Send, CheckCircle2, Shield, FileText, ArrowRight, Heart } from 'lucide-react';
 
@@ -45,9 +46,11 @@ export const Footer: React.FC<FooterProps> = ({
               }}
               className="flex items-center gap-2.5 cursor-pointer select-none"
             >
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-orange-500 to-sky-500 flex items-center justify-center text-white shadow-md">
-                <Wind className="w-5 h-5" />
-              </div>
+              <img
+                src={logoImg}
+                alt="AirVision VN"
+                className="w-9 h-9 rounded-xl bg-gradient-to-tr from-orange-500 to-sky-500 flex items-center justify-center text-white shadow-md"
+              />
               <div className="flex items-center gap-1.5">
                 <span className="text-xl font-black tracking-tight text-slate-900 dark:text-white">AirVision</span>
                 <span className="text-xs font-bold px-1.5 py-0.5 rounded-md bg-orange-500 text-white">VN</span>
