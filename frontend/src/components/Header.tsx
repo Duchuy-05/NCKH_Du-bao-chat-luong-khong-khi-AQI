@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
+import logoImg from '../assets/epu_logo.png';
 import { useLanguage } from '../context/LanguageContext';
 import { Sun, Moon, Globe, Menu, X, Wind, ShieldAlert, User, LogIn, Compass, Calendar, Info, MapPin } from 'lucide-react';
 
@@ -48,9 +49,11 @@ export const Header: React.FC<HeaderProps> = ({
           onClick={() => handleNavClick('/')}
           className="flex items-center gap-3 cursor-pointer select-none group shrink-0"
         >
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-orange-500 to-sky-500 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform shrink-0">
-            <Wind className="w-5 h-5" />
-          </div>
+          <img
+            src={logoImg}
+            alt="AirVision VN"
+            className="w-10 h-10 rounded-xl bg-gradient-to-tr from-orange-500 to-sky-500 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform shrink-0"
+          />
           <div>
             <div className="flex items-center gap-1.5">
               <span className="text-lg font-black tracking-tight text-slate-900 dark:text-white">
