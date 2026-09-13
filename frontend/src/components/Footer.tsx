@@ -33,7 +33,7 @@ export const Footer: React.FC<FooterProps> = ({
   return (
     <footer
       id="main-footer"
-      className="w-full bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-300 border-t border-slate-200 dark:border-slate-800/80 pt-16 pb-12 transition-colors"
+      className="w-full bg-slate-100 dark:bg-black text-slate-600 dark:text-slate-300 border-t border-slate-200 dark:border-slate-800/80 pt-16 pb-12 transition-colors"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-200 dark:border-slate-800/60">

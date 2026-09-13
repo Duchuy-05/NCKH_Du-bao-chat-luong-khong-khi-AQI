@@ -196,12 +196,12 @@ export const Home: React.FC<HomeProps> = ({
                     setIsSearching(true);
                   }}
                   placeholder={t('hero.search_placeholder')}
-                  className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl pl-12 pr-4 py-3.5 text-sm text-slate-900 dark:text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all placeholder-slate-400"
+                  className="w-full bg-white dark:surface-card border border-slate-200 surface-border rounded-2xl pl-12 pr-4 py-3.5 text-sm text-slate-900 dark:text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all placeholder-slate-400"
                 />
 
                 {/* Autocomplete Dropdown */}
                 {isSearching && searchResults.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl z-50 max-h-72 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800">
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:surface-card border border-slate-200 surface-border rounded-2xl shadow-2xl z-50 max-h-72 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800">
                     {searchResults.map((st) => (
                       <div
                         key={st.id}
@@ -213,7 +213,7 @@ export const Home: React.FC<HomeProps> = ({
                         className="p-3.5 hover:bg-slate-50 dark:hover:bg-slate-800/80 cursor-pointer flex items-center justify-between transition-colors"
                       >
                         <div className="flex items-center gap-3">
-                          <div className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                          <div className="p-2 rounded-xl bg-slate-100 dark:surface-card text-slate-600 dark:text-slate-300">
                             <MapPin className="w-4 h-4 text-orange-500" />
                           </div>
                           <div>
@@ -257,17 +257,11 @@ export const Home: React.FC<HomeProps> = ({
               borderColor: category.borderColor,
             }}
           >
-            {/* Subtle atmosphere background gradient matching AQI */}
-            <div
-              className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-15 filter blur-3xl pointer-events-none"
-              style={{ backgroundColor: category.color }}
-            />
-
             <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               {/* Left Column: Big AQI Indicator & Main Info */}
               <div className="lg:col-span-7 space-y-5">
                 <div className="flex flex-wrap items-center gap-2.5">
-                  <span className="text-xs font-black px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
+                  <span className="text-xs font-black px-2.5 py-1 rounded-lg bg-slate-100 dark:surface-card text-slate-700 dark:text-slate-200">
                     {currentStation.id}
                   </span>
                   <span className="text-xs text-slate-500 font-medium">
@@ -291,8 +285,8 @@ export const Home: React.FC<HomeProps> = ({
                     onClick={() => onSelectStation(currentStation)}
                     className="flex items-center justify-center rounded-3xl p-5 shadow-lg min-w-[140px] cursor-pointer hover:scale-105 transition-transform"
                     style={{
-                      backgroundColor: category.bgColor,
-                      border: `2px solid ${category.borderColor}`,
+                      backgroundColor: 'var(--bg-card-header)',
+                      border: '2px solid var(--border-color)',
                     }}
                     title="Nhấn để xem chi tiết trạm / Click to view station details"
                   >
@@ -327,8 +321,8 @@ export const Home: React.FC<HomeProps> = ({
                   onClick={onNavigateToAlerts}
                   className="p-3.5 rounded-2xl border text-xs leading-relaxed flex items-start gap-2.5 cursor-pointer hover:opacity-90 transition-opacity"
                   style={{
-                    backgroundColor: category.bgColor,
-                    borderColor: category.borderColor,
+                    backgroundColor: 'var(--bg-card-header)',
+                    borderColor: 'var(--border-color)',
                     color: category.textColor,
                   }}
                   title="Nhấn để xem toàn bộ khuyến nghị sức khỏe / Click to view health recommendations"
@@ -343,7 +337,7 @@ export const Home: React.FC<HomeProps> = ({
 
               {/* Right Column: 6 Weather Micro Metrics */}
               <div className="lg:col-span-5 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-3.5">
-                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-800 flex items-center gap-3">
+                <div className="p-4 rounded-2xl bg-slate-50 dark:surface-card border border-slate-200/70 surface-border flex items-center gap-3">
                   <div className="p-2.5 rounded-xl bg-orange-100 dark:bg-orange-950/60 text-orange-500">
                     <Thermometer className="w-5 h-5" />
                   </div>
@@ -353,7 +347,7 @@ export const Home: React.FC<HomeProps> = ({
                   </div>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-800 flex items-center gap-3">
+                <div className="p-4 rounded-2xl bg-slate-50 dark:surface-card border border-slate-200/70 surface-border flex items-center gap-3">
                   <div className="p-2.5 rounded-xl bg-sky-100 dark:bg-sky-950/60 text-sky-500">
                     <Droplets className="w-5 h-5" />
                   </div>
@@ -363,7 +357,7 @@ export const Home: React.FC<HomeProps> = ({
                   </div>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-800 flex items-center gap-3">
+                <div className="p-4 rounded-2xl bg-slate-50 dark:surface-card border border-slate-200/70 surface-border flex items-center gap-3">
                   <div className="p-2.5 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-500">
                     <Wind className="w-5 h-5" />
                   </div>
@@ -373,7 +367,7 @@ export const Home: React.FC<HomeProps> = ({
                   </div>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-800 flex items-center gap-3">
+                <div className="p-4 rounded-2xl bg-slate-50 dark:surface-card border border-slate-200/70 surface-border flex items-center gap-3">
                   <div className="p-2.5 rounded-xl bg-amber-100 dark:bg-amber-950/60 text-amber-500">
                     <Sun className="w-5 h-5" />
                   </div>
@@ -383,7 +377,7 @@ export const Home: React.FC<HomeProps> = ({
                   </div>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-800 flex items-center gap-3">
+                <div className="p-4 rounded-2xl bg-slate-50 dark:surface-card border border-slate-200/70 surface-border flex items-center gap-3">
                   <div className="p-2.5 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-500">
                     <Eye className="w-5 h-5" />
                   </div>
@@ -393,7 +387,7 @@ export const Home: React.FC<HomeProps> = ({
                   </div>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-800 flex items-center gap-3">
+                <div className="p-4 rounded-2xl bg-slate-50 dark:surface-card border border-slate-200/70 surface-border flex items-center gap-3">
                   <div className="p-2.5 rounded-xl bg-blue-100 dark:bg-blue-950/60 text-blue-500">
                     <Gauge className="w-5 h-5" />
                   </div>
@@ -427,7 +421,7 @@ export const Home: React.FC<HomeProps> = ({
               <select
                 value={selectedProvinceFilter}
                 onChange={(e) => setSelectedProvinceFilter(e.target.value)}
-                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-900 dark:text-white font-medium focus:outline-none focus:border-orange-500 cursor-pointer"
+                className="bg-white dark:surface-card border border-slate-200 surface-border rounded-xl px-3 py-1.5 text-xs text-slate-900 dark:text-white font-medium focus:outline-none focus:border-orange-500 cursor-pointer"
               >
                 <option value="All">{lang === 'vi' ? 'Tất cả khu vực' : 'All Regions'}</option>
                 {uniqueProvinces.filter((p) => p !== 'All').map((p) => (
@@ -438,10 +432,10 @@ export const Home: React.FC<HomeProps> = ({
           </div>
 
           {/* Desktop Table View */}
-          <div className="hidden md:block overflow-x-auto rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl">
+          <div className="hidden md:block overflow-x-auto rounded-3xl border border-slate-200 surface-border bg-white dark:surface-card shadow-xl">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-400 font-bold uppercase tracking-wider text-[11px]">
+                <tr className="border-b border-slate-200 surface-border bg-slate-50 dark:surface-card-header text-slate-400 font-bold uppercase tracking-wider text-[11px]">
                   <th className="py-4 px-4 sm:px-6 text-center w-16">{t('table.col_stt')}</th>
                   <th className="py-4 px-6">{t('table.col_day')}</th>
                   <th className="py-4 px-6">{t('table.col_area')}</th>
@@ -477,7 +471,12 @@ export const Home: React.FC<HomeProps> = ({
                         {item.location}
                       </td>
                       <td className="py-4 px-6">
-                        <AQIBadge aqi={item.aqi} size="sm" />
+                        <span
+                          className="text-[0.84rem] font-bold tracking-wide"
+                          style={{ color: cat.textColor }}
+                        >
+                          {lang === 'vi' ? cat.labelVi : cat.labelEn}
+                        </span>
                       </td>
                       <td className="py-4 px-6">
                         <span
@@ -513,7 +512,7 @@ export const Home: React.FC<HomeProps> = ({
                 <div
                   key={item.id}
                   onClick={onNavigateToForecast}
-                  className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2.5 cursor-pointer hover:border-orange-500 transition-colors"
+                  className="p-4 rounded-2xl bg-white dark:surface-card border border-slate-200 surface-border shadow-sm space-y-2.5 cursor-pointer hover:border-white/35 transition-colors"
                   title="Nhấn để xem dự báo 7 ngày chi tiết / Click to view detailed forecast"
                 >
                   <div className="flex items-center justify-between">
@@ -567,7 +566,7 @@ export const Home: React.FC<HomeProps> = ({
                 <div
                   key={group.id}
                   onClick={onNavigateToAlerts}
-                  className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-md space-y-3 cursor-pointer hover:border-orange-500/70 hover:shadow-xl hover:-translate-y-0.5 transition-all"
+                  className="p-6 rounded-3xl bg-white dark:surface-card border border-slate-200 surface-border shadow-md space-y-3 cursor-pointer hover:border-white/35 hover:shadow-xl hover:-translate-y-0.5 transition-all"
                   title="Nhấn để xem trung tâm cảnh báo & bảo vệ sức khỏe / Click to view health alert center"
                 >
                   <div className="flex items-center justify-between">
@@ -606,7 +605,7 @@ export const Home: React.FC<HomeProps> = ({
       {/* 4. THÔNG BÁO ĐẨY THEO VỊ TRÍ CỦA BẠN */}
       <section>
         <FadeIn direction="up">
-          <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-gradient-to-br dark:from-slate-900 dark:to-slate-950 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-800 shadow-2xl relative overflow-hidden transition-colors duration-300">
+          <div className="p-6 sm:p-8 rounded-3xl bg-white dark:surface-card text-slate-900 dark:text-white border border-slate-200 surface-border shadow-2xl relative overflow-hidden transition-colors duration-300">
             <div className="absolute top-0 right-0 w-80 h-80 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
 
             <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
@@ -694,10 +693,10 @@ export const Home: React.FC<HomeProps> = ({
                 <div
                   key={key}
                   onClick={() => onSelectStation(currentStation)}
-                  className={`p-4 rounded-2xl bg-white dark:bg-slate-900 border transition-all hover:shadow-lg hover:-translate-y-0.5 cursor-pointer ${
+                  className={`p-4 rounded-2xl bg-white dark:surface-card border transition-all hover:shadow-lg hover:-translate-y-0.5 cursor-pointer ${
                     isOverLimit
-                      ? 'border-orange-300 dark:border-orange-900/60 hover:border-orange-500'
-                      : 'border-slate-200 dark:border-slate-800 hover:border-sky-500'
+                      ? 'border-orange-300 dark:border-orange-900/60 hover:border-white/35'
+                      : 'border-slate-200 surface-border hover:border-white/35'
                   }`}
                   title="Nhấn để xem phân tích chi tiết / Click to view detailed analysis"
                 >
@@ -747,12 +746,12 @@ export const Home: React.FC<HomeProps> = ({
             </div>
 
             {/* Chart Tab Selector */}
-            <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800/80 rounded-2xl self-start sm:self-auto">
+            <div className="flex items-center gap-1 p-1 bg-slate-100 dark:surface-card rounded-2xl self-start sm:self-auto">
               <button
                 onClick={() => setChartTab('24h')}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   chartTab === '24h'
-                    ? 'bg-white dark:bg-slate-900 text-orange-500 shadow-xs'
+                    ? 'bg-white dark:surface-card text-orange-500 shadow-xs'
                     : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
@@ -762,7 +761,7 @@ export const Home: React.FC<HomeProps> = ({
                 onClick={() => setChartTab('pollutants')}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   chartTab === 'pollutants'
-                    ? 'bg-white dark:bg-slate-900 text-orange-500 shadow-xs'
+                    ? 'bg-white dark:surface-card text-orange-500 shadow-xs'
                     : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
@@ -772,7 +771,7 @@ export const Home: React.FC<HomeProps> = ({
                 onClick={() => setChartTab('temp')}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   chartTab === 'temp'
-                    ? 'bg-white dark:bg-slate-900 text-orange-500 shadow-xs'
+                    ? 'bg-white dark:surface-card text-orange-500 shadow-xs'
                     : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
@@ -781,7 +780,7 @@ export const Home: React.FC<HomeProps> = ({
             </div>
           </div>
 
-          <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl">
+          <div className="p-6 rounded-3xl bg-white dark:surface-card border border-slate-200 surface-border shadow-xl">
             {chartTab === '24h' && (
               <div className="h-72 w-full">
                 <ResponsiveContainer width="100%" height="100%">
@@ -947,7 +946,7 @@ export const Home: React.FC<HomeProps> = ({
         <FadeIn direction="up">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Best Outdoor Hours */}
-            <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-md space-y-4">
+            <div className="p-6 rounded-3xl bg-white dark:surface-card border border-slate-200 surface-border shadow-md space-y-4">
               <div className="flex items-center gap-2.5">
                 <div className="p-2 rounded-xl bg-sky-100 dark:bg-sky-950/60 text-sky-500">
                   <Clock className="w-4 h-4" />
@@ -961,7 +960,7 @@ export const Home: React.FC<HomeProps> = ({
                 {BEST_OUTDOOR_HOURS.map((item, idx) => (
                   <div
                     key={idx}
-                    className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 flex items-center justify-between gap-2 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
+                    className="p-2.5 rounded-xl bg-slate-50 dark:surface-card flex items-center justify-between gap-2 hover:bg-slate-100 dark:hover:bg-[var(--bg-card-header)] transition-colors cursor-pointer"
                   >
                     <div>
                       <span className="font-bold text-slate-800 dark:text-slate-200 block">{item.time}</span>
@@ -974,7 +973,7 @@ export const Home: React.FC<HomeProps> = ({
             </div>
 
             {/* Quick City Comparisons */}
-            <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-md space-y-4">
+            <div className="p-6 rounded-3xl bg-white dark:surface-card border border-slate-200 surface-border shadow-md space-y-4">
               <div className="flex items-center gap-2.5">
                 <div className="p-2 rounded-xl bg-orange-100 dark:bg-orange-950/60 text-orange-500">
                   <Activity className="w-4 h-4" />
@@ -1001,7 +1000,7 @@ export const Home: React.FC<HomeProps> = ({
                           onSelectStation(match);
                         }
                       }}
-                      className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 flex items-center justify-between cursor-pointer hover:bg-orange-50/60 dark:hover:bg-orange-950/30 hover:scale-[1.02] transition-all"
+                      className="p-2.5 rounded-xl bg-slate-50 dark:surface-card flex items-center justify-between cursor-pointer hover:bg-orange-50/60 dark:hover:bg-orange-950/30 hover:scale-[1.02] transition-all"
                       title={`Nhấn để chuyển sang trạm ${c.city} / Click to view ${c.city} station`}
                     >
                       <div>
@@ -1024,7 +1023,7 @@ export const Home: React.FC<HomeProps> = ({
             </div>
 
             {/* Indoor Air Purification Tips */}
-            <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-md space-y-4">
+            <div className="p-6 rounded-3xl bg-white dark:surface-card border border-slate-200 surface-border shadow-md space-y-4">
               <div className="flex items-center gap-2.5">
                 <div className="p-2 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-500">
                   <Leaf className="w-4 h-4" />
