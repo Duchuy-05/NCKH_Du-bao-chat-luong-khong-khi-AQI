@@ -13,14 +13,14 @@
 
   .dark {
     --bg-primary: #0B0F17;
-    --bg-card: #131B2A;
-    --bg-card-subtle: #1A2438;
+    --bg-card: #242933;
+    --bg-card-subtle: #2D333D;
     --border-color: #1E293B;
     --text-main: #F8FAFC;
     --text-muted: #94A3B8;
     --accent-orange: #FB923C;
     --accent-blue: #38BDF8;
-    --accent-navy: #1E293B;
+    --accent-navy: #2D333D;
   }
 
   body {
@@ -97,3 +97,4 @@
 .animate-pulse-ring {
   animation: pulse-ring 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
