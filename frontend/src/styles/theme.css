@@ -12,21 +12,22 @@
   }
 
   .dark {
-    --bg-primary: #0B0F17;
-    --bg-card: #131B2A;
-    --bg-card-subtle: #1A2438;
-    --border-color: #1E293B;
+    --bg-primary: #0A0A0D;
+    --bg-card: color-mix(in srgb, var(--bg-primary) 95%, white 5%);
+    --bg-card-subtle: color-mix(in srgb, var(--bg-primary) 95%, white 5%);
+    --bg-card-header: color-mix(in srgb, var(--bg-primary) 90%, white 10%);
+    --border-color: color-mix(in srgb, var(--bg-primary) 88%, white 12%);
     --text-main: #F8FAFC;
     --text-muted: #94A3B8;
     --accent-orange: #FB923C;
     --accent-blue: #38BDF8;
-    --accent-navy: #1E293B;
+    --accent-navy: var(--bg-card-header);
   }
 
   body {
     background-color: var(--bg-primary);
     color: var(--text-main);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     overflow-x: hidden;
     transition: background-color 0.25s ease, color 0.25s ease;
   }
@@ -76,6 +77,20 @@
   background-color: rgba(19, 27, 42, 0.85);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(30, 41, 59, 0.8);
+}
+
+.dark .surface-card,
+.dark .dark\:surface-card {
+  background-color: var(--bg-card);
+}
+
+.dark .surface-card-header,
+.dark .dark\:surface-card-header {
+  background-color: var(--bg-card-header);
+}
+
+.dark .surface-border {
+  border-color: var(--border-color);
 }
 
 /* Custom pulse animations for map pins */
