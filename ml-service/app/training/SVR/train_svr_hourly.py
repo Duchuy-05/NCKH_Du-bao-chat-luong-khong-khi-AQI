@@ -3,7 +3,7 @@ GIAI ĐOẠN 2 — Train svr_hourly (Luồng B, 24h tới, 8 bước nhảy 3h)
 
 Chạy:
     cd ml-service
-    python -m app.training.train_svr_hourly
+    python -m app.training.SVR.train_svr_hourly
 """
 from __future__ import annotations
 
@@ -63,10 +63,12 @@ def evaluate(y_true: pd.DataFrame, y_pred: np.ndarray) -> dict:
 
 def train():
     df = build_hourly_features(save=True)
-    feature_cols = [c for c in df.columns if c not in TARGET_COLS_HOURLY]
+    # Đảm bảo chỉ chọn các cột số làm features, loại bỏ các cột nhãn/metadata phi số
+    non_features = set(TARGET_COLS_HOURLY + ["dominant_pollutant", "level", "city_id", "station_id", "station_name", "time", "id"])
+    feature_cols = [c for c in df.columns if c not in non_features and pd.api.types.is_numeric_dtype(df[c])]
 
-    X = df[feature_cols]
-    y = df[TARGET_COLS_HOURLY]
+    X = df[feature_cols].astype(float)
+    y = df[TARGET_COLS_HOURLY].astype(float)
 
     # Time-based split: 85% train, 15% test
     split_idx = int(len(df) * 0.85)

@@ -128,7 +128,7 @@ def build_features(
     df = pd.get_dummies(df, columns=["city_id", "season"], drop_first=False)
 
     # Loại bỏ các cột không phải số hoặc metadata
-    drop_cols = ["id", "time", "station_name", "missing_flag"]
+    drop_cols = ["id", "time", "station_name", "station_id", "missing_flag", "dominant_pollutant", "level"]
     drop_cols = [c for c in drop_cols if c in df.columns]
     df = df.drop(columns=drop_cols)
 
