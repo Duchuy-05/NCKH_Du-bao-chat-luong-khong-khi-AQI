@@ -52,7 +52,7 @@ export const Forecast: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-1.5 rounded-2xl shadow-sm self-start sm:self-auto cursor-pointer">
+          <div className="flex items-center gap-2 bg-white dark:surface-card border border-slate-200 surface-border p-1.5 rounded-2xl shadow-sm self-start sm:self-auto cursor-pointer">
             <MapPin className="w-4 h-4 text-orange-500 ml-2" />
             <select
               value={selectedCity}
@@ -60,7 +60,7 @@ export const Forecast: React.FC = () => {
               className="bg-transparent text-xs font-bold text-slate-900 dark:text-white focus:outline-none pr-3 cursor-pointer"
             >
               {cityOptions.map((c) => (
-                <option key={c} value={c} className="dark:bg-slate-900">
+                <option key={c} value={c} className="dark:bg-[var(--bg-card-header)]">
                   {c}
                 </option>
               ))}
@@ -79,7 +79,7 @@ export const Forecast: React.FC = () => {
                 className={`p-4 rounded-3xl border transition-all flex flex-col justify-between cursor-pointer hover:shadow-xl hover:-translate-y-1 ${
                   isToday
                     ? 'border-orange-500 bg-orange-50/40 dark:bg-orange-950/20 shadow-md ring-2 ring-orange-500/20'
-                    : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-orange-400'
+                    : 'border-slate-200 surface-border bg-white dark:surface-card hover:border-orange-400'
                 }`}
               >
                 <div>
@@ -103,7 +103,7 @@ export const Forecast: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="pt-2 border-t border-slate-100 dark:border-slate-800 text-xs space-y-1">
+                <div className="pt-2 border-t border-slate-100 surface-border text-xs space-y-1">
                   <div className="flex items-center justify-between font-bold">
                     <span className="text-red-500">{day.maxTemp}°</span>
                     <span className="text-slate-300">/</span>
@@ -119,7 +119,7 @@ export const Forecast: React.FC = () => {
         </div>
 
         {/* Combined Recharts Multi-layer Chart */}
-        <div className="mt-8 p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
+        <div className="mt-8 p-6 sm:p-8 rounded-3xl bg-white dark:surface-card border border-slate-200 surface-border shadow-xl space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <h3 className="text-base font-bold text-slate-900 dark:text-white">
@@ -134,14 +134,14 @@ export const Forecast: React.FC = () => {
           <div className="h-80 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={SEVEN_DAY_FORECAST} margin={{ top: 20, right: 20, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.2} vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" opacity={0.35} vertical={false} />
                 <XAxis dataKey="dayOfWeekVi" stroke="#94A3B8" fontSize={11} tickLine={false} />
                 <YAxis yAxisId="left" stroke="#F97316" fontSize={11} tickLine={false} />
                 <YAxis yAxisId="right" orientation="right" stroke="#38BDF8" fontSize={11} tickLine={false} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#0F172A',
-                    borderColor: '#334155',
+                    backgroundColor: 'var(--bg-card-header)',
+                    borderColor: 'var(--border-color)',
                     borderRadius: '12px',
                     color: '#F8FAFC',
                     fontSize: '12px',
@@ -201,7 +201,7 @@ export const Forecast: React.FC = () => {
               return (
                 <div
                   key={idx}
-                  className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm text-center space-y-2 cursor-pointer hover:shadow-md hover:-translate-y-0.5 hover:border-orange-400 transition-all"
+                  className="p-4 rounded-2xl bg-white dark:surface-card border border-slate-200 surface-border shadow-sm text-center space-y-2 cursor-pointer hover:shadow-md hover:-translate-y-0.5 hover:border-orange-400 transition-all"
                 >
                   <span className="text-xs font-bold text-slate-500 block">{item.time}</span>
                   <div

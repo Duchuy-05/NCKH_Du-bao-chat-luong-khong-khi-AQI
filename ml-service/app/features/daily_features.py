@@ -101,6 +101,12 @@ def build_daily_features(save: bool = True) -> pd.DataFrame:
 
     df = pd.read_parquet(CLEAN_DAILY_PATH).sort_index()
 
+    # Loại bỏ các cột string/phân loại phi số trước khi trích xuất đặc trưng
+    non_numeric_meta = ["dominant_pollutant", "level", "city_id", "station_id", "station_name", "time", "id"]
+    drop_meta = [c for c in non_numeric_meta if c in df.columns]
+    if drop_meta:
+        df = df.drop(columns=drop_meta)
+
     df = _add_calendar_features(df)
     df = _add_aqi_lag_features(df)
     df = _add_weather_features(df)
@@ -108,6 +114,11 @@ def build_daily_features(save: bool = True) -> pd.DataFrame:
     target_base = df["aqi_mean"] if "aqi_mean" in df.columns else df["aqi"]
     for h in range(1, DAILY_HORIZON + 1):
         df[f"d_{h}"] = target_base.shift(-h)
+
+    # Loại bỏ bất kỳ cột object/string còn sót lại
+    obj_cols = [c for c in df.columns if df[c].dtype == "object" or not np.issubdtype(df[c].dtype, np.number)]
+    if obj_cols:
+        df = df.drop(columns=obj_cols)
 
     # Bỏ các dòng NaN ở tập train
     df_clean = df.dropna().copy()

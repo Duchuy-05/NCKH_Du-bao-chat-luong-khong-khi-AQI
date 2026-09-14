@@ -102,7 +102,7 @@ export const AboutUs: React.FC = () => {
             {dataSources.map((src, idx) => (
               <div
                 key={idx}
-                className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2.5"
+                className="p-6 rounded-3xl bg-white dark:surface-card border border-slate-200 surface-border shadow-sm space-y-2.5"
               >
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-bold text-slate-900 dark:text-white">{src.name}</h3>
@@ -133,7 +133,7 @@ export const AboutUs: React.FC = () => {
             {team.map((member, idx) => (
               <div
                 key={idx}
-                className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm text-center space-y-2"
+                className="p-6 rounded-3xl bg-white dark:surface-card border border-slate-200 surface-border shadow-sm text-center space-y-2"
               >
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-orange-400 to-sky-500 text-white font-black text-lg flex items-center justify-center mx-auto shadow-md">
                   {member.name.split(' ').pop()?.charAt(0)}
@@ -147,7 +147,7 @@ export const AboutUs: React.FC = () => {
         </div>
 
         {/* Contact and Feedback Form */}
-        <div className="mt-14 p-6 sm:p-10 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl max-w-3xl mx-auto">
+        <div className="mt-14 p-6 sm:p-10 rounded-3xl bg-white dark:surface-card border border-slate-200 surface-border shadow-xl max-w-3xl mx-auto">
           <div className="text-center space-y-1 mb-6">
             <h3 className="text-xl font-black text-slate-900 dark:text-white">
               {lang === 'vi' ? 'Liên hệ & Góp ý Dữ liệu' : 'Contact & Feedback'}
@@ -175,7 +175,7 @@ export const AboutUs: React.FC = () => {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="Nguyen Van A"
-                    className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-orange-500"
+                    className="w-full bg-slate-50 dark:surface-card-header border border-slate-200 surface-border rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-orange-500"
                   />
                 </div>
 
@@ -189,7 +189,7 @@ export const AboutUs: React.FC = () => {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="email@example.com"
-                    className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-orange-500"
+                    className="w-full bg-slate-50 dark:surface-card-header border border-slate-200 surface-border rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-orange-500"
                   />
                 </div>
               </div>
@@ -204,7 +204,7 @@ export const AboutUs: React.FC = () => {
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   placeholder={lang === 'vi' ? 'Nhập nội dung cần hỗ trợ hoặc hợp tác dữ liệu...' : 'Enter your message or inquiry...'}
-                  className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 rounded-xl p-3.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-orange-500"
+                  className="w-full bg-slate-50 dark:surface-card-header border border-slate-200 surface-border rounded-xl p-3.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-orange-500"
                 />
               </div>
 
