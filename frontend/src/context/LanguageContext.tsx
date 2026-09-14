@@ -25,7 +25,7 @@ const translations: Record<Language, Record<string, string>> = {
     // Hero
     'hero.title': 'Dự báo Chất lượng Không khí & Thời tiết Việt Nam',
     'hero.subtitle': 'Giám sát chỉ số AQI thời gian thực từ hơn 150 trạm quan trắc chuẩn quốc gia',
-    'hero.search_placeholder': 'Tìm kiếm thành phố, quận/huyện, trạm đo (vd: Hoàn Kiếm, Cầu Rồng, Bến Thành)...',
+    'hero.search_placeholder': 'Tìm kiếm thành phố (vd: Hà Nội, TP.HCM, Đà Nẵng)...',
     'hero.allow_location': 'Vị trí của bạn',
     'hero.locating': 'Đang lấy vị trí...',
     'hero.location_detected': 'Đã định vị thành công',
@@ -127,7 +127,7 @@ const translations: Record<Language, Record<string, string>> = {
     // Hero
     'hero.title': 'Vietnam Air Quality & Weather Forecast',
     'hero.subtitle': 'Real-time AQI monitoring from over 150 standard environmental stations across Vietnam',
-    'hero.search_placeholder': 'Search city, district, monitoring station (e.g., Hoan Kiem, Dragon Bridge, Ben Thanh)...',
+    'hero.search_placeholder': 'Search city (e.g., Ha Noi, Ho Chi Minh, Da Nang)...',
     'hero.allow_location': 'Your Location',
     'hero.locating': 'Locating...',
     'hero.location_detected': 'Location Detected',
