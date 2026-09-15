@@ -64,7 +64,7 @@ function MainApp() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-[#0B0F17] text-slate-900 dark:text-slate-100 transition-colors">
+    <div className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-slate-900 dark:text-slate-100 transition-colors">
       {/* Top sticky Navigation Header */}
       <Header onOpenAuth={handleOpenAuth} currentUser={currentUser} onLogout={handleLogout} />
 
