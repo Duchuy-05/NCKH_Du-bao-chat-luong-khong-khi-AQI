@@ -831,13 +831,14 @@ export const Home: React.FC<HomeProps> = ({
             )}
 
             {chartTab === 'pollutants' && (
-              <div className="h-72 w-full">
+              <div className="h-72 w-full [&_*:focus]:outline-none">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={pollutantDataForBarChart} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.2} vertical={false} />
                     <XAxis dataKey="name" stroke="#94A3B8" fontSize={11} tickLine={false} />
                     <YAxis stroke="#94A3B8" fontSize={11} tickLine={false} />
                     <Tooltip
+                      cursor={false}
                       contentStyle={{
                         backgroundColor: '#0F172A',
                         borderColor: '#334155',
@@ -846,7 +847,7 @@ export const Home: React.FC<HomeProps> = ({
                         fontSize: '12px',
                       }}
                     />
-                    <Bar dataKey="value" name="Nồng độ hiện tại" radius={[8, 8, 0, 0]}>
+                    <Bar dataKey="value" name="Nồng độ hiện tại" activeBar={false} radius={[8, 8, 0, 0]}>
                       {pollutantDataForBarChart.map((entry, idx) => (
                         <Cell
                           key={`cell-${idx}`}
@@ -854,7 +855,7 @@ export const Home: React.FC<HomeProps> = ({
                         />
                       ))}
                     </Bar>
-                    <Bar dataKey="safe" name="Ngưỡng chuẩn an toàn" fill="#94A3B8" opacity={0.3} radius={[8, 8, 0, 0]} />
+                    <Bar dataKey="safe" name="Ngưỡng chuẩn an toàn" activeBar={false} fill="#94A3B8" opacity={0.3} radius={[8, 8, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
