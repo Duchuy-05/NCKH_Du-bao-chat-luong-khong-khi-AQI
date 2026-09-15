@@ -336,65 +336,53 @@ export const Home: React.FC<HomeProps> = ({
               </div>
 
               {/* Right Column: 6 Weather Micro Metrics */}
-              <div className="lg:col-span-5 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-3.5">
-                <div className="p-4 rounded-2xl bg-slate-50 dark:surface-card border border-slate-200/70 surface-border flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-orange-100 dark:bg-orange-950/60 text-orange-500">
-                    <Thermometer className="w-5 h-5" />
+              <div className="lg:col-span-5 grid grid-cols-3 gap-1.5 w-fit mx-auto lg:translate-y-[50%]">
+                <div className="w-[120px] min-h-[76px] px-[10px] py-2 rounded-lg bg-orange-100/40 dark:bg-orange-950/30 border border-orange-200/70 dark:border-orange-900/50 flex flex-col items-center justify-center text-center">
+                  <div className="flex items-center gap-1.5">
+                    <Thermometer className="w-4 h-4 text-black/60 dark:text-white/60" />
+                    <span className="text-[10px] uppercase tracking-wide font-normal text-black/60 dark:text-white/60">{t('hero.temp')}</span>
                   </div>
-                  <div>
-                    <span className="text-xs uppercase tracking-wider font-bold text-slate-500 block">{t('hero.temp')}</span>
-                    <span className="text-base font-black text-slate-900 dark:text-white">{currentStation.temperature}°C</span>
-                  </div>
+                  <span className="text-xs font-normal text-black/85 dark:text-white/85 mt-1">{currentStation.temperature}°C</span>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-slate-50 dark:surface-card border border-slate-200/70 surface-border flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-sky-100 dark:bg-sky-950/60 text-sky-500">
-                    <Droplets className="w-5 h-5" />
+                <div className="w-[120px] min-h-[76px] px-[10px] py-2 rounded-lg bg-orange-100/40 dark:bg-orange-950/30 border border-orange-200/70 dark:border-orange-900/50 flex flex-col items-center justify-center text-center">
+                  <div className="flex items-center gap-1.5">
+                    <Droplets className="w-4 h-4 text-black/60 dark:text-white/60" />
+                    <span className="text-[10px] uppercase tracking-wide font-normal text-black/60 dark:text-white/60">{t('hero.humidity')}</span>
                   </div>
-                  <div>
-                    <span className="text-xs uppercase tracking-wider font-bold text-slate-500 block">{t('hero.humidity')}</span>
-                    <span className="text-base font-black text-slate-900 dark:text-white">{currentStation.humidity}%</span>
-                  </div>
+                  <span className="text-xs font-normal text-black/85 dark:text-white/85 mt-1">{currentStation.humidity}%</span>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-slate-50 dark:surface-card border border-slate-200/70 surface-border flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-500">
-                    <Wind className="w-5 h-5" />
+                <div className="w-[120px] min-h-[76px] px-[10px] py-2 rounded-lg bg-orange-100/40 dark:bg-orange-950/30 border border-orange-200/70 dark:border-orange-900/50 flex flex-col items-center justify-center text-center">
+                  <div className="flex items-center gap-1.5">
+                    <Wind className="w-4 h-4 text-black/60 dark:text-white/60" />
+                    <span className="text-[10px] uppercase tracking-wide font-normal text-black/60 dark:text-white/60">{t('hero.wind')}</span>
                   </div>
-                  <div>
-                    <span className="text-xs uppercase tracking-wider font-bold text-slate-500 block">{t('hero.wind')}</span>
-                    <span className="text-base font-black text-slate-900 dark:text-white">{currentStation.windSpeed} km/h</span>
-                  </div>
+                  <span className="text-xs font-normal text-black/85 dark:text-white/85 mt-1">{currentStation.windSpeed} km/h</span>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-slate-50 dark:surface-card border border-slate-200/70 surface-border flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-amber-100 dark:bg-amber-950/60 text-amber-500">
-                    <Sun className="w-5 h-5" />
+                <div className="w-[120px] min-h-[76px] px-[10px] py-2 rounded-lg bg-orange-100/40 dark:bg-orange-950/30 border border-orange-200/70 dark:border-orange-900/50 flex flex-col items-center justify-center text-center">
+                  <div className="flex items-center gap-1.5">
+                    <Sun className="w-4 h-4 text-black/60 dark:text-white/60" />
+                    <span className="text-[10px] uppercase tracking-wide font-normal text-black/60 dark:text-white/60">{t('hero.uv')}</span>
                   </div>
-                  <div>
-                    <span className="text-xs uppercase tracking-wider font-bold text-slate-500 block">{t('hero.uv')}</span>
-                    <span className="text-base font-black text-slate-900 dark:text-white">8.5 (Cao)</span>
-                  </div>
+                  <span className="text-xs font-normal text-black/85 dark:text-white/85 mt-1">8.5 (Cao)</span>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-slate-50 dark:surface-card border border-slate-200/70 surface-border flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-500">
-                    <Eye className="w-5 h-5" />
+                <div className="w-[120px] min-h-[76px] px-[10px] py-2 rounded-lg bg-orange-100/40 dark:bg-orange-950/30 border border-orange-200/70 dark:border-orange-900/50 flex flex-col items-center justify-center text-center">
+                  <div className="flex items-center gap-1.5">
+                    <Eye className="w-4 h-4 text-black/60 dark:text-white/60" />
+                    <span className="text-[10px] uppercase tracking-wide font-normal text-black/60 dark:text-white/60">{t('hero.visibility')}</span>
                   </div>
-                  <div>
-                    <span className="text-xs uppercase tracking-wider font-bold text-slate-500 block">{t('hero.visibility')}</span>
-                    <span className="text-base font-black text-slate-900 dark:text-white">7.0 km</span>
-                  </div>
+                  <span className="text-xs font-normal text-black/85 dark:text-white/85 mt-1">7.0 km</span>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-slate-50 dark:surface-card border border-slate-200/70 surface-border flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-blue-100 dark:bg-blue-950/60 text-blue-500">
-                    <Gauge className="w-5 h-5" />
+                <div className="w-[120px] min-h-[76px] px-[10px] py-2 rounded-lg bg-orange-100/40 dark:bg-orange-950/30 border border-orange-200/70 dark:border-orange-900/50 flex flex-col items-center justify-center text-center">
+                  <div className="flex items-center gap-1.5">
+                    <Gauge className="w-4 h-4 text-black/60 dark:text-white/60" />
+                    <span className="text-[10px] uppercase tracking-wide font-normal text-black/60 dark:text-white/60">{t('hero.pressure')}</span>
                   </div>
-                  <div>
-                    <span className="text-xs uppercase tracking-wider font-bold text-slate-500 block">{t('hero.pressure')}</span>
-                    <span className="text-base font-black text-slate-900 dark:text-white">1012 hPa</span>
-                  </div>
+                  <span className="text-xs font-normal text-black/85 dark:text-white/85 mt-1">1012 hPa</span>
                 </div>
               </div>
             </div>
