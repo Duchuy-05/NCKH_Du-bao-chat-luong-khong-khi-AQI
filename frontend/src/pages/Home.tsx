@@ -177,7 +177,7 @@ export const Home: React.FC<HomeProps> = ({
   };
 
   return (
-    <div className="w-full space-y-16 pb-20">
+    <div className="w-full space-y-12 pb-16">
       {/* 1. HERO SECTION */}
       <section className="relative pt-6 sm:pt-10">
         <FadeIn direction="up">
@@ -218,7 +218,7 @@ export const Home: React.FC<HomeProps> = ({
                           </div>
                           <div>
                             <p className="text-xs font-bold text-slate-900 dark:text-white">{st.name}</p>
-                            <p className="text-[11px] text-slate-500">{st.province} • {st.address}</p>
+                            <p className="text-xs text-slate-600">{st.province} • {st.address}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -235,7 +235,7 @@ export const Home: React.FC<HomeProps> = ({
               <button
                 onClick={handleDetectLocation}
                 disabled={isLocating}
-                className="px-5 py-3.5 rounded-2xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs shadow-md flex items-center justify-center gap-2 transition-all active:scale-95 shrink-0 cursor-pointer"
+                className="px-5 py-3.5 rounded-2xl bg-sky-700 hover:bg-sky-800 text-white font-bold text-xs shadow-md flex items-center justify-center gap-2 transition-all active:scale-95 shrink-0 cursor-pointer"
               >
                 <Navigation className={`w-4 h-4 ${isLocating ? 'animate-spin' : ''}`} />
                 <span>{isLocating ? t('hero.locating') : t('hero.allow_location')}</span>
@@ -251,7 +251,7 @@ export const Home: React.FC<HomeProps> = ({
 
           {/* Main Hero Showcase Card */}
           <div
-            className="relative rounded-3xl overflow-hidden shadow-2xl border transition-all duration-500 p-6 sm:p-10"
+            className="relative rounded-3xl overflow-hidden shadow-xl border transition-all duration-500 p-6 sm:p-10"
             style={{
               backgroundColor: 'var(--bg-card)',
               borderColor: category.borderColor,
@@ -283,7 +283,7 @@ export const Home: React.FC<HomeProps> = ({
                 <div className="flex flex-wrap items-center gap-5 pt-2">
                   <div
                     onClick={() => onSelectStation(currentStation)}
-                    className="flex items-center justify-center rounded-3xl p-5 shadow-lg min-w-[140px] cursor-pointer hover:scale-105 transition-transform"
+                    className="flex items-center justify-center rounded-3xl p-5 shadow-md min-w-[140px] cursor-pointer hover:scale-105 transition-transform"
                     style={{
                       backgroundColor: 'var(--bg-card-header)',
                       border: '2px solid var(--border-color)',
@@ -297,7 +297,7 @@ export const Home: React.FC<HomeProps> = ({
                       >
                         {Math.round(currentStation.aqi)}
                       </span>
-                      <span className="block text-[11px] font-black uppercase tracking-widest text-slate-500 mt-0.5">
+                      <span className="block text-xs font-black uppercase tracking-widest text-slate-600 mt-0.5">
                         AQI VN
                       </span>
                     </div>
@@ -342,7 +342,7 @@ export const Home: React.FC<HomeProps> = ({
                     <Thermometer className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400 block">{t('hero.temp')}</span>
+                    <span className="text-xs uppercase tracking-wider font-bold text-slate-500 block">{t('hero.temp')}</span>
                     <span className="text-base font-black text-slate-900 dark:text-white">{currentStation.temperature}°C</span>
                   </div>
                 </div>
@@ -352,7 +352,7 @@ export const Home: React.FC<HomeProps> = ({
                     <Droplets className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400 block">{t('hero.humidity')}</span>
+                    <span className="text-xs uppercase tracking-wider font-bold text-slate-500 block">{t('hero.humidity')}</span>
                     <span className="text-base font-black text-slate-900 dark:text-white">{currentStation.humidity}%</span>
                   </div>
                 </div>
@@ -362,7 +362,7 @@ export const Home: React.FC<HomeProps> = ({
                     <Wind className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400 block">{t('hero.wind')}</span>
+                    <span className="text-xs uppercase tracking-wider font-bold text-slate-500 block">{t('hero.wind')}</span>
                     <span className="text-base font-black text-slate-900 dark:text-white">{currentStation.windSpeed} km/h</span>
                   </div>
                 </div>
@@ -372,7 +372,7 @@ export const Home: React.FC<HomeProps> = ({
                     <Sun className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400 block">{t('hero.uv')}</span>
+                    <span className="text-xs uppercase tracking-wider font-bold text-slate-500 block">{t('hero.uv')}</span>
                     <span className="text-base font-black text-slate-900 dark:text-white">8.5 (Cao)</span>
                   </div>
                 </div>
@@ -382,7 +382,7 @@ export const Home: React.FC<HomeProps> = ({
                     <Eye className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400 block">{t('hero.visibility')}</span>
+                    <span className="text-xs uppercase tracking-wider font-bold text-slate-500 block">{t('hero.visibility')}</span>
                     <span className="text-base font-black text-slate-900 dark:text-white">7.0 km</span>
                   </div>
                 </div>
@@ -392,7 +392,7 @@ export const Home: React.FC<HomeProps> = ({
                     <Gauge className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400 block">{t('hero.pressure')}</span>
+                    <span className="text-xs uppercase tracking-wider font-bold text-slate-500 block">{t('hero.pressure')}</span>
                     <span className="text-base font-black text-slate-900 dark:text-white">1012 hPa</span>
                   </div>
                 </div>
@@ -435,7 +435,7 @@ export const Home: React.FC<HomeProps> = ({
           <div className="hidden md:block overflow-x-auto rounded-3xl border border-slate-200 surface-border bg-white dark:surface-card shadow-xl">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="border-b border-slate-200 surface-border bg-slate-50 dark:surface-card-header text-slate-400 font-bold uppercase tracking-wider text-[11px]">
+                <tr className="border-b border-slate-200 surface-border bg-slate-50 dark:surface-card-header text-slate-600 dark:text-slate-300 font-bold uppercase tracking-wider text-xs">
                   <th className="py-4 px-4 sm:px-6 text-center w-16">{t('table.col_stt')}</th>
                   <th className="py-4 px-6">{t('table.col_day')}</th>
                   <th className="py-4 px-6">{t('table.col_area')}</th>
@@ -464,7 +464,7 @@ export const Home: React.FC<HomeProps> = ({
                       <td className="py-4 px-6 font-bold text-slate-900 dark:text-white">
                         <div>
                           <span>{lang === 'vi' ? item.dayOfWeekVi : item.dayOfWeekEn}</span>
-                          <span className="block text-[11px] text-slate-400 font-normal">{item.date}</span>
+                          <span className="block text-xs text-slate-500 dark:text-slate-400 font-normal">{item.date}</span>
                         </div>
                       </td>
                       <td className="py-4 px-6 font-semibold text-slate-700 dark:text-slate-300">
@@ -492,7 +492,7 @@ export const Home: React.FC<HomeProps> = ({
                       <td className="py-4 px-6 text-slate-600 dark:text-slate-300">
                         <div className="flex items-center gap-2">
                           <span>{lang === 'vi' ? item.conditionVi : item.conditionEn}</span>
-                          <span className="text-[10px] text-sky-500 font-semibold px-1.5 py-0.5 rounded bg-sky-50 dark:bg-sky-950/60">
+                          <span className="text-xs text-sky-700 dark:text-sky-300 font-semibold px-1.5 py-0.5 rounded bg-sky-50 dark:bg-sky-950/60">
                             {item.rainProbability}% mưa
                           </span>
                         </div>
@@ -521,7 +521,7 @@ export const Home: React.FC<HomeProps> = ({
                         <span className="text-orange-500 font-black mr-1.5">#{index + 1}</span>
                         {lang === 'vi' ? item.dayOfWeekVi : item.dayOfWeekEn} ({item.date})
                       </span>
-                      <span className="block text-[11px] text-slate-400">{item.location}</span>
+                      <span className="block text-xs text-slate-500 dark:text-slate-400">{item.location}</span>
                     </div>
                     <div
                       className="px-3 py-1 rounded-xl font-black text-sm"
@@ -578,7 +578,7 @@ export const Home: React.FC<HomeProps> = ({
                         {lang === 'vi' ? group.titleVi : group.titleEn}
                       </h3>
                     </div>
-                    <span className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full ${
+                    <span className={`text-xs uppercase tracking-wider font-bold px-2 py-0.5 rounded-full ${
                       group.riskLevel === 'critical'
                         ? 'bg-red-100 dark:bg-red-950/60 text-red-600 dark:text-red-400'
                         : 'bg-orange-100 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400'
@@ -605,7 +605,7 @@ export const Home: React.FC<HomeProps> = ({
       {/* 4. THÔNG BÁO ĐẨY THEO VỊ TRÍ CỦA BẠN */}
       <section>
         <FadeIn direction="up">
-          <div className="p-6 sm:p-8 rounded-3xl bg-white dark:surface-card text-slate-900 dark:text-white border border-slate-200 surface-border shadow-2xl relative overflow-hidden transition-colors duration-300">
+          <div className="p-6 sm:p-8 rounded-3xl bg-white dark:surface-card text-slate-900 dark:text-white border border-slate-200 surface-border shadow-lg relative overflow-hidden transition-colors duration-300">
             <div className="absolute top-0 right-0 w-80 h-80 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
 
             <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
@@ -640,7 +640,7 @@ export const Home: React.FC<HomeProps> = ({
                     className="w-full h-2 rounded-lg cursor-pointer accent-orange-500 bg-slate-200 dark:bg-slate-700 transition-colors duration-300"
                   />
                   
-                  <div className="flex justify-between text-[10px] text-slate-500 dark:text-slate-400 font-medium transition-colors duration-300">
+                  <div className="flex justify-between text-xs text-slate-600 dark:text-slate-300 font-medium transition-colors duration-300">
                     <span>50 (Tốt)</span>
                     <span>100 (Trung bình)</span>
                     <span>150 (Kém)</span>
@@ -652,7 +652,7 @@ export const Home: React.FC<HomeProps> = ({
               <div className="lg:col-span-5 flex flex-col justify-center">
                 <button
                   onClick={handleSaveNotificationConfig}
-                  className="w-full py-3.5 px-6 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs shadow-lg transition-all active:scale-98 flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-3.5 px-6 rounded-2xl bg-orange-700 hover:bg-orange-800 text-white font-bold text-xs shadow-md transition-all active:scale-98 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Bell className="w-4 h-4" />
                   <span>{preferences.enabled ? t('notif.enabled') : t('notif.enable_btn')}</span>
@@ -702,7 +702,7 @@ export const Home: React.FC<HomeProps> = ({
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-xs font-black text-slate-700 dark:text-slate-200">{title}</span>
-                    <div className="flex items-center gap-0.5 text-[10px] font-bold">
+                    <div className="flex items-center gap-0.5 text-xs font-bold">
                       {poll.trend === 'up' && <ArrowUpRight className="w-3 h-3 text-red-500" />}
                       {poll.trend === 'down' && <ArrowDownRight className="w-3 h-3 text-emerald-500" />}
                       {poll.trend === 'stable' && <Minus className="w-3 h-3 text-slate-400" />}
@@ -716,10 +716,10 @@ export const Home: React.FC<HomeProps> = ({
                     <span className={`text-2xl font-black ${isOverLimit ? 'text-orange-500' : 'text-slate-900 dark:text-white'}`}>
                       {poll.value}
                     </span>
-                    <span className="text-[11px] text-slate-400 font-medium ml-1">{poll.unit}</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400 font-medium ml-1">{poll.unit}</span>
                   </div>
 
-                  <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[10px] text-slate-400">
+                  <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                     <span>{t('pollutants.safe_limit')}:</span>
                     <span className="font-semibold text-slate-600 dark:text-slate-300">
                       {poll.maxSafe} {poll.unit}
@@ -780,7 +780,7 @@ export const Home: React.FC<HomeProps> = ({
             </div>
           </div>
 
-          <div className="p-6 rounded-3xl bg-white dark:surface-card border border-slate-200 surface-border shadow-xl">
+          <div className="p-6 rounded-3xl bg-white dark:surface-card border border-slate-200 surface-border shadow-lg">
             {chartTab === '24h' && (
               <div className="h-72 w-full">
                 <ResponsiveContainer width="100%" height="100%">
@@ -923,7 +923,7 @@ export const Home: React.FC<HomeProps> = ({
             </div>
             <button
               onClick={onNavigateToMaps}
-              className="text-xs font-semibold px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white shadow-sm flex items-center gap-1.5 self-start sm:self-auto transition-all active:scale-95 cursor-pointer"
+              className="text-xs font-semibold px-4 py-2 rounded-xl bg-orange-700 hover:bg-orange-800 text-white shadow-sm flex items-center gap-1.5 self-start sm:self-auto transition-all active:scale-95 cursor-pointer"
             >
               <span>{t('map.view_full')}</span>
               <ArrowUpRight className="w-4 h-4" />
@@ -965,7 +965,7 @@ export const Home: React.FC<HomeProps> = ({
                   >
                     <div>
                       <span className="font-bold text-slate-800 dark:text-slate-200 block">{item.time}</span>
-                      <span className="text-[10px] text-slate-500">{lang === 'vi' ? item.adviceVi : item.adviceEn}</span>
+                      <span className="text-xs text-slate-600 leading-relaxed">{lang === 'vi' ? item.adviceVi : item.adviceEn}</span>
                     </div>
                     <AQIBadge aqi={item.aqi} size="sm" />
                   </div>
@@ -1006,7 +1006,7 @@ export const Home: React.FC<HomeProps> = ({
                     >
                       <div>
                         <span className="font-bold text-slate-900 dark:text-white">{c.city}</span>
-                        <span className="text-[10px] text-slate-400 block">{c.temp}°C • PM2.5: {c.pm25}</span>
+                        <span className="text-xs text-slate-500 block">{c.temp}°C • PM2.5: {c.pm25}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <span
@@ -1041,7 +1041,7 @@ export const Home: React.FC<HomeProps> = ({
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                       <span>{lang === 'vi' ? tip.titleVi : tip.titleEn}</span>
                     </h4>
-                    <p className="text-slate-500 leading-relaxed text-[11px] pl-3">
+                    <p className="text-slate-600 leading-relaxed text-xs pl-3">
                       {lang === 'vi' ? tip.descVi : tip.descEn}
                     </p>
                   </div>

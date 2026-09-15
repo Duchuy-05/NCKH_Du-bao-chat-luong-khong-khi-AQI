@@ -3,6 +3,7 @@
     --bg-primary: #F8FAFC;
     --bg-card: #FFFFFF;
     --bg-card-subtle: #F1F5F9;
+    --bg-card-header: #F1F5F9;
     --border-color: #E2E8F0;
     --text-main: #0F172A;
     --text-muted: #64748B;
@@ -27,7 +28,7 @@
   body {
     background-color: var(--bg-primary);
     color: var(--text-main);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
     overflow-x: hidden;
     transition: background-color 0.25s ease, color 0.25s ease;
   }
