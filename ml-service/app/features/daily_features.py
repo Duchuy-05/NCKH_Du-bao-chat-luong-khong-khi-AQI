@@ -102,8 +102,8 @@ def build_daily_features(save: bool = True) -> pd.DataFrame:
     df = pd.read_parquet(CLEAN_DAILY_PATH).sort_index()
 
     # Loại bỏ các cột string/phân loại phi số trước khi trích xuất đặc trưng
-    non_numeric_meta = ["dominant_pollutant", "level", "city_id", "station_id", "station_name", "time", "id"]
-    drop_meta = [c for c in non_numeric_meta if c in df.columns]
+    non_numeric_cols = ["dominant_pollutant", "level", "city_id", "station_id", "station_name", "time", "id"]
+    drop_meta = [c for c in non_numeric_cols if c in df.columns]
     if drop_meta:
         df = df.drop(columns=drop_meta)
 
