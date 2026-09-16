@@ -1,6 +1,6 @@
 """
 GIAI ĐOẠN 1 — Bước 2 + 5: Join, cắt phạm vi, xuất clean_3h.parquet / clean_daily.parquet
-Đọc dữ liệu từ PostgreSQ
+Đọc dữ liệu từ PostgreSQL
 """
 from __future__ import annotations
 
@@ -76,9 +76,12 @@ def build_clean_3h() -> pd.DataFrame:
     return df
 
 def build_clean_daily(df_3h: pd.DataFrame) -> pd.DataFrame:
+    pollutant_cols = [c for c in POLLUTANT_COLUMNS if c in df_3h.columns and c != "co2"]
     weather_cols = [c for c in WEATHER_COLUMNS if c in df_3h.columns]
 
     agg = {"aqi": ["mean", "max", "min"]}
+    for col in pollutant_cols:
+        agg[col] = "mean"
     for col in weather_cols:
         agg[col] = "mean"
 

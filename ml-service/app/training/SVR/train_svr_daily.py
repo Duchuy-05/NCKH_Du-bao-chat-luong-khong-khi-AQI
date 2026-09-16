@@ -59,6 +59,24 @@ def evaluate(y_true: pd.DataFrame, y_pred: np.ndarray) -> dict:
     return metrics
 
 
+def build_forecast(final_model, X: pd.DataFrame, last_date: pd.Timestamp) -> list[dict]:
+    """
+    Dùng dòng dữ liệu MỚI NHẤT (ngày cuối cùng thực sự có trong DB) để dự báo
+    7 ngày TIẾP THEO ngày đó — không phải ngày bất kỳ đã có sẵn trong dữ liệu.
+    """
+    X_last = X.iloc[[-1]]
+    y_pred_last = final_model.predict(X_last)[0]
+
+    forecast_rows = []
+    for h in range(1, DAILY_HORIZON + 1):
+        forecast_date = last_date + pd.Timedelta(days=h)
+        forecast_rows.append({
+            "date": forecast_date.strftime("%Y-%m-%d"),
+            "aqi_predicted": round(float(y_pred_last[h - 1]), 1),
+        })
+    return forecast_rows
+
+
 def train():
     df = build_daily_features(save=True)
     # Đảm bảo chỉ chọn các cột số làm features, loại bỏ các cột nhãn/metadata phi số
@@ -67,6 +85,10 @@ def train():
 
     X = df[feature_cols].astype(float)
     y = df[TARGET_COLS].astype(float)
+
+    # Ngày cuối cùng thực sự có trong dữ liệu — mốc để tính ngày dự báo tiếp theo
+    last_date = df.index.max()
+    print(f"[train_svr_daily] Ngày dữ liệu cuối cùng trong DB: {last_date.date()}")
 
     # Time-based split: 85% train (theo thời gian), 15% cuối để test giữ nguyên thứ tự
     split_idx = int(len(df) * 0.85)
@@ -91,11 +113,16 @@ def train():
     best_model = grid.best_estimator_
     y_pred_test = best_model.predict(X_test)
     test_metrics = evaluate(y_test, y_pred_test)
-    print("[train_svr_daily] Test metrics:", json.dumps(test_metrics, indent=2))
+    print("[train_svr_daily] Test metrics:", json.dumps(test_metrics, indent=2, ensure_ascii=False))
 
     # Fit lại trên toàn bộ dữ liệu (train+test) với best params để dùng cho production
     final_model = build_pipeline().set_params(**grid.best_params_)
     final_model.fit(X, y)
+
+    # Dự báo thực tế cho 7 ngày SAU ngày cuối cùng trong DB
+    forecast_rows = build_forecast(final_model, X, last_date)
+    print(f"[train_svr_daily] Dự báo {DAILY_HORIZON} ngày tiếp theo (từ {last_date.date()}):")
+    print(json.dumps(forecast_rows, indent=2, ensure_ascii=False))
 
     SVR_DAILY_MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
     joblib.dump(
@@ -106,6 +133,8 @@ def train():
             "trained_at": datetime.now(timezone.utc).isoformat(),
             "best_params": grid.best_params_,
             "test_metrics": test_metrics,
+            "last_data_date": last_date.isoformat(),
+            "forecast": forecast_rows,
         },
         SVR_DAILY_MODEL_PATH,
     )
