@@ -126,10 +126,10 @@ Thực hiện huấn luyện cho cả 2 luồng:
 
 ```bash
 # 1. Train mô hình SVR 7 ngày tới -> Lưu vào models/svr_daily.joblib
-python -m app.training.train_svr_daily
+python -m app.training.SVR.train_svr_daily
 
 # 2. Train mô hình SVR 24h bước 3h -> Lưu vào models/svr_hourly.joblib
-python -m app.training.train_svr_hourly (chưa xong)
+python -m app.training.SVR.train_svr_hourly
 ```
 
 ---
