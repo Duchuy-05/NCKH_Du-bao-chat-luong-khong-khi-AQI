@@ -24,6 +24,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVR
 
 from app.core.config import (
+    CLEAN_DAILY_PATH,
     DAILY_HORIZON,
     DAILY_MIN_TRAIN_SAMPLES,
     DAILY_TRAIN_WINDOW_DAYS,
@@ -205,13 +206,14 @@ def _save_bundle_atomically(bundle: dict[str, Any]) -> None:
 
 def train() -> None:
     df = build_daily_features(save=True)
-    last_date = df.index.max()
-    print(f"[train_svr_daily] Ngày dữ liệu cuối cùng trong DB: {last_date.date()}")
+    clean_df = pd.read_parquet(CLEAN_DAILY_PATH).sort_index()
+    last_date = clean_df.index.max()
+    print(f"[train_svr_daily] Last data date: {last_date.date()}")
     bundle = train_from_frame(df, forecast_date=last_date)
     print("[train_svr_daily] Metrics:", json.dumps(bundle["metrics"], indent=2, ensure_ascii=False))
     print(
-        f"[train_svr_daily] Dự báo {DAILY_HORIZON} ngày tiếp theo "
-        f"(từ {last_date.date()}):"
+        f"[train_svr_daily] Forecast next {DAILY_HORIZON} days "
+        f"(from {last_date.date()}):"
     )
     print(json.dumps(bundle["forecast"], indent=2, ensure_ascii=False))
     _save_bundle_atomically(bundle)

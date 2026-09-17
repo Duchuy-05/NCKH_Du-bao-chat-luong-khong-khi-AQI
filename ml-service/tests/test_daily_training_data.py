@@ -33,7 +33,7 @@ def test_calendar_window_is_30_dates_per_year_without_nearest_fill():
     assert selected.metadata["window_days"] == 30
     assert "2023-02-15" not in selected.metadata["selected_anchor_dates"]
     assert all(
-        pd.Timestamp(value).month in {2, 3}
+        (pd.Timestamp(value) + timedelta(days=1)).month in {2, 3, 4}
         for value in selected.metadata["selected_anchor_dates"]
     )
 
@@ -91,3 +91,17 @@ def test_insufficient_samples_reports_horizon_and_season():
             horizon=3,
             min_samples=30,
         )
+
+
+def test_seasonal_three_month_pool_is_used():
+    dates = pd.date_range("2020-01-01", "2024-10-31", freq="D")
+    selected = select_horizon_training_data(
+        make_feature_frame(dates),
+        forecast_date=pd.Timestamp("2024-08-09"),
+        horizon=1,
+        min_samples=30,
+    )
+
+    assert selected.metadata["target_season"] == "Thu"
+    assert selected.metadata["seasonal_months"] == [8, 9, 10]
+    assert len(selected.X) >= 30

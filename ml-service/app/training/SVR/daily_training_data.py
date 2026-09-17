@@ -61,6 +61,15 @@ def _mapped_historical_dates(
     return mapped
 
 
+def _season_months(season: str) -> set[int]:
+    return {
+        "Xuan": {2, 3, 4},
+        "Ha": {5, 6, 7},
+        "Thu": {8, 9, 10},
+        "Dong": {1, 11, 12},
+    }[season]
+
+
 def _feature_columns(df: pd.DataFrame, target_column: str) -> list[str]:
     excluded = {target_column} | {
         column for column in df.columns if column.startswith("d_")
@@ -111,6 +120,15 @@ def select_horizon_training_data(
         forecast_date, available_years, window_days
     )
     target_season = get_season_name((forecast_date + pd.Timedelta(days=horizon)).month)
+    seasonal_months = _season_months(target_season)
+    seasonal_dates = [
+        timestamp
+        for timestamp in frame.index
+        if timestamp.year <= forecast_date.year
+        and timestamp <= forecast_date
+        and timestamp.month in seasonal_months
+    ]
+    candidate_dates = list(dict.fromkeys(candidate_dates + seasonal_dates))
     feature_columns = _feature_columns(frame, target_column)
 
     selected_dates: list[pd.Timestamp] = []
@@ -144,6 +162,7 @@ def select_horizon_training_data(
         "target_date": (forecast_date + pd.Timedelta(days=horizon)).date().isoformat(),
         "target_season": target_season,
         "window_days": window_days,
+        "seasonal_months": sorted(seasonal_months),
         "available_years": available_years,
         "candidate_count": len(candidate_dates),
         "season_filtered_count": season_filtered,

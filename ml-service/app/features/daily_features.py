@@ -120,8 +120,10 @@ def build_daily_features(save: bool = True) -> pd.DataFrame:
     if obj_cols:
         df = df.drop(columns=obj_cols)
 
-    # Bỏ các dòng NaN ở tập train
-    df_clean = df.dropna().copy()
+    # Chỉ loại dòng thiếu feature đầu vào. Các target cuối chuỗi có thể NaN
+    # vì vẫn cần giữ dòng ngày mới nhất làm input dự báo production.
+    feature_cols = [c for c in df.columns if not c.startswith("d_")]
+    df_clean = df.dropna(subset=feature_cols).copy()
 
     if save:
         DAILY_FEATURES_PATH.parent.mkdir(parents=True, exist_ok=True)

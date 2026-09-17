@@ -68,10 +68,11 @@ Với mỗi horizon `h`, tập anchor date được chọn từ:
    [D - 29 ngày, D]
    ```
 2. Cửa sổ lịch tương ứng của cùng khoảng ngày ở mỗi năm lịch sử có trong dữ liệu.
+3. Tập ngày trong đủ ba tháng của mùa target ở mỗi năm lịch sử, giới hạn không vượt quá ngày mốc `D` ở năm hiện tại.
 
 Khi ánh xạ sang năm trước, ngày và tháng của cửa sổ được giữ tương ứng với `D`; năm được thay bằng từng năm lịch sử. Cần xử lý đúng ngày nhuận, đặc biệt khi khoảng thời gian chứa ngày 29/02: ngày không tồn tại ở năm không nhuận phải được bỏ qua, không thay thế âm thầm bằng ngày khác.
 
-Không lấy một cửa sổ 30 ngày bất kỳ ở nơi khác trong năm. Đây là cửa sổ theo vị trí lịch, không phải 30 dòng dữ liệu gần nhất sau khi bỏ qua các ngày thiếu.
+Tập ứng viên là hợp của cửa sổ 30 ngày và tập ba tháng mùa target. Không lấy 30 dòng dữ liệu gần nhất sau khi bỏ qua các ngày thiếu. Việc bổ sung ba tháng mùa là bắt buộc để tránh trường hợp cửa sổ 30 ngày nằm ở ranh giới mùa, sau khi lọc cùng mùa thì không đủ số mẫu tối thiểu.
 
 ### 3.4. Lọc theo mùa
 
@@ -217,6 +218,7 @@ Nếu dữ liệu không đáp ứng, hệ thống không tự động fallback 
 - **Dữ liệu trùng ngày:** phải được xử lý từ bước làm sạch hiện có trước khi chọn mẫu; bộ chọn không tự ý chọn ngẫu nhiên.
 - **Mùa Đông qua tháng 12-tháng 1:** dùng đúng hàm mùa hiện tại, trong đó tháng 11, 12 và 1 cùng thuộc `Dong`.
 - **Không đủ dữ liệu:** dừng trước khi lưu bundle production, kèm thông báo horizon và điều kiện gây thiếu.
+- **Cửa sổ 30 ngày không đủ mẫu cùng mùa:** dùng thêm các ngày còn lại trong đủ ba tháng của cùng mùa; đây là phạm vi chọn mẫu theo thiết kế, không phải fallback sang mùa khác.
 
 ## 7. Các thay đổi dự kiến theo file
 

@@ -126,6 +126,7 @@ Pipeline huấn luyện sử dụng:
 Daily training không dùng toàn bộ lịch sử một cách mặc định. Với ngày dữ liệu cuối cùng `D`, mỗi horizon sử dụng:
 
 - Cửa sổ lịch `[D-29, D]` và cửa sổ cùng ngày-tháng của từng năm lịch sử.
+- Toàn bộ ba tháng thuộc mùa của ngày target (`Xuân` 2-4, `Hạ` 5-7, `Thu` 8-10, `Đông` 11-1) để không làm tập mẫu bị rỗng khi cửa sổ 30 ngày nằm ở ranh giới mùa.
 - Chỉ các mẫu có `season(t+h)` trùng với mùa của ngày dự báo `D+h`.
 - Không thay thế ngày thiếu bằng ngày gần nhất và không fallback âm thầm sang mùa khác hoặc toàn bộ lịch sử.
 
