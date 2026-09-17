@@ -35,7 +35,11 @@ def aqi_to_level(aqi: float) -> str:
 class DailyPredictor:
     def __init__(self):
         bundle = joblib.load(SVR_DAILY_MODEL_PATH)
-        self.model = bundle["model"]
+        self.models = bundle.get("models", {})
+        expected_models = {f"d_{h}" for h in range(1, DAILY_HORIZON + 1)}
+        missing_models = sorted(expected_models - set(self.models))
+        if missing_models:
+            raise ValueError(f"Daily model bundle missing horizons: {missing_models}")
         self.feature_columns = bundle["feature_columns"]
         self.target_columns = bundle["target_columns"]
 
@@ -59,12 +63,11 @@ class DailyPredictor:
 
     def predict(self) -> DailyForecastResponse:
         X_latest, last_date = self._build_latest_feature_row()
-        y_pred = self.model.predict(X_latest)[0]  # shape (DAILY_HORIZON,)
 
         points = []
         for h in range(1, DAILY_HORIZON + 1):
             forecast_date = (last_date + timedelta(days=h)).date()
-            aqi_value = round(float(y_pred[h - 1]), 1)
+            aqi_value = round(float(self.models[f"d_{h}"].predict(X_latest)[0]), 1)
             points.append(
                 DailyForecastPoint(
                     date=forecast_date,
