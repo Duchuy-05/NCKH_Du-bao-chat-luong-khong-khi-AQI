@@ -29,6 +29,8 @@ SVR_HOURLY_MODEL_PATH = MODELS_DIR / "svr_hourly.joblib"
 
 # Forecast settings
 DAILY_HORIZON = 7        # 7 ngày tới
+DAILY_TRAIN_WINDOW_DAYS = 30
+DAILY_MIN_TRAIN_SAMPLES = 30
 HOURLY_HORIZON = 8       # 8 bước 3h = 24h tới
 STEP_HOURS = 3           # Bước 3h
 CITY = "hanoi"
@@ -56,4 +58,3 @@ if not DATABASE_URL:
         DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     else:
         DATABASE_URL = f"postgresql://{DB_USER}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-

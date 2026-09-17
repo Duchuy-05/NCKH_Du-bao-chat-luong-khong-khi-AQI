@@ -25,6 +25,7 @@ NCKH/
 │   │   │   └── hourly_predictor.py     # Service nạp svr_hourly.joblib & sinh dự báo 24h bước 3h
 │   │   └── training/
 │   │       ├── train_svr_daily.py      # Pipeline huấn luyện SVR Luồng A (TimeSeriesSplit + GridSearchCV)
+│   │       ├── daily_training_data.py  # Chọn cửa sổ lịch 30 ngày và lọc theo mùa của target
 │   │       └── train_svr_hourly.py     # Pipeline huấn luyện SVR Luồng B (TimeSeriesSplit + GridSearchCV)
 │   ├── data/                           # Nơi chứa các file dữ liệu trung gian & Parquet sạch
 │   ├── models/                         # Nơi lưu trữ các model đã train (.joblib)
@@ -118,9 +119,17 @@ python -m app.features.hourly_features
 ### Bước 4: Huấn luyện mô hình SVR (Support Vector Regression)
 Pipeline huấn luyện sử dụng:
 - **`StandardScaler`**: Chuẩn hóa độc lập dữ liệu đầu vào và đầu ra thông qua `TransformedTargetRegressor` để tránh rò rỉ dữ liệu (data leakage).
-- **`MultiOutputRegressor(SVR(kernel='rbf'))`**: Dự báo đa bước cho chuỗi thời gian.
+- **Bảy pipeline SVR một đầu ra**: mỗi model `d_1` ... `d_7` phụ trách một horizon, cho phép mỗi ngày dùng tập dữ liệu được lọc riêng.
 - **`TimeSeriesSplit(n_splits=5)`**: Cross-validation bảo toàn thứ tự thời gian.
 - **`GridSearchCV`**: Tối ưu hóa siêu tham số ($C, \epsilon, \gamma$).
+
+Daily training không dùng toàn bộ lịch sử một cách mặc định. Với ngày dữ liệu cuối cùng `D`, mỗi horizon sử dụng:
+
+- Cửa sổ lịch `[D-29, D]` và cửa sổ cùng ngày-tháng của từng năm lịch sử.
+- Chỉ các mẫu có `season(t+h)` trùng với mùa của ngày dự báo `D+h`.
+- Không thay thế ngày thiếu bằng ngày gần nhất và không fallback âm thầm sang mùa khác hoặc toàn bộ lịch sử.
+
+Bundle `models/svr_daily.joblib` chỉ được thay thế khi cả bảy horizon huấn luyện và đánh giá thành công. Bundle lưu model, số mẫu, mùa, khoảng thời gian, tham số tốt nhất và metric MAE/RMSE riêng cho từng horizon.
 
 Thực hiện huấn luyện cho cả 2 luồng:
 
