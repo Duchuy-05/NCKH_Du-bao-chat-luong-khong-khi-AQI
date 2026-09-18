@@ -15,5 +15,5 @@ data/*.parquet
 
 .github/prompts
 design-system/
-
+.agents
 docs/superpowers/
