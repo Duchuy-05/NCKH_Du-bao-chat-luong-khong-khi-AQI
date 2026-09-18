@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import logoImg from '../assets/epu_logo.png';
 import { useLanguage } from '../context/LanguageContext';
-import { Sun, Moon, Globe, Menu, X, Wind, ShieldAlert, User, LogIn, Compass, Calendar, Info, MapPin } from 'lucide-react';
+import { Sun, Moon, Globe, Menu, X, Wind, ShieldAlert, Compass, Calendar, Info } from 'lucide-react';
 
 interface HeaderProps {
   onOpenAuth: (mode: 'login' | 'register') => void;
@@ -116,39 +116,6 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </button>
 
-          {/* User / Auth Buttons */}
-          {currentUser ? (
-            <div className="flex items-center gap-2.5 pl-2.5 border-l border-slate-200 dark:border-slate-700 shrink-0">
-              <div className="w-8 h-8 rounded-full bg-orange-500 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-xs">
-                {currentUser.name.charAt(0).toUpperCase()}
-              </div>
-              <span className="text-xs font-semibold text-slate-700 dark:text-slate-200 max-w-[100px] truncate whitespace-nowrap">
-                {currentUser.name}
-              </span>
-              <button
-                onClick={onLogout}
-                className="text-xs text-slate-400 hover:text-red-500 transition-colors ml-1 whitespace-nowrap shrink-0 cursor-pointer font-semibold"
-                title="Đăng xuất"
-              >
-                {t('nav.logout')}
-              </button>
-            </div>
-          ) : (
-            <div className="flex items-center gap-2 pl-2.5 border-l border-slate-200 dark:border-slate-700 shrink-0">
-              <button
-                onClick={() => onOpenAuth('login')}
-                className="text-xs font-bold px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors whitespace-nowrap shrink-0 flex items-center justify-center cursor-pointer"
-              >
-                <span className="whitespace-nowrap">{t('nav.login')}</span>
-              </button>
-              <button
-                onClick={() => onOpenAuth('register')}
-                className="text-xs font-bold px-3.5 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white shadow-xs hover:shadow transition-all whitespace-nowrap shrink-0 flex items-center justify-center cursor-pointer"
-              >
-                <span className="whitespace-nowrap">{t('nav.register')}</span>
-              </button>
-            </div>
-          )}
         </div>
 
         {/* Mobile Hamburger Button */}
@@ -199,45 +166,6 @@ export const Header: React.FC<HeaderProps> = ({
             })}
           </nav>
 
-          <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-2">
-            {currentUser ? (
-              <div className="flex items-center justify-between px-2 py-2">
-                <span className="text-sm font-medium text-slate-700 dark:text-slate-200">
-                  {currentUser.name}
-                </span>
-                <button
-                  onClick={() => {
-                    onLogout?.();
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="text-xs text-red-500 font-semibold cursor-pointer"
-                >
-                  {t('nav.logout')}
-                </button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    onOpenAuth('login');
-                  }}
-                  className="w-full py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800"
-                >
-                  {t('nav.login')}
-                </button>
-                <button
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    onOpenAuth('register');
-                  }}
-                  className="w-full py-2.5 rounded-xl bg-orange-500 text-xs font-semibold text-white cursor-pointer hover:bg-orange-600"
-                >
-                  {t('nav.register')}
-                </button>
-              </div>
-            )}
-          </div>
         </div>
       )}
     </header>

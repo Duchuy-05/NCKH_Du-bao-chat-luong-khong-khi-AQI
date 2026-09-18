@@ -18,9 +18,6 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.forecast': 'Dự báo 7 ngày',
     'nav.alerts': 'Cảnh báo sức khỏe',
     'nav.about': 'Về chúng tôi',
-    'nav.login': 'Đăng nhập',
-    'nav.register': 'Đăng ký',
-    'nav.logout': 'Đăng xuất',
     
     // Hero
     'hero.title': 'Dự báo Chất lượng Không khí & Thời tiết Việt Nam',
@@ -120,9 +117,6 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.forecast': '7-Day Forecast',
     'nav.alerts': 'Health Alerts',
     'nav.about': 'About Us',
-    'nav.login': 'Sign In',
-    'nav.register': 'Sign Up',
-    'nav.logout': 'Sign Out',
 
     // Hero
     'hero.title': 'Vietnam Air Quality & Weather Forecast',

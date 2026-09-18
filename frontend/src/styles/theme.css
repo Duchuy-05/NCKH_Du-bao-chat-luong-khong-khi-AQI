@@ -4,31 +4,33 @@
     --bg-card: #FFFFFF;
     --bg-card-subtle: #F1F5F9;
     --bg-card-header: #F1F5F9;
-    --border-color: #E2E8F0;
+    --border-color: #D7E1E5;
     --text-main: #0F172A;
-    --text-muted: #64748B;
+    --text-muted: #536671;
     --accent-orange: #F97316;
+    --accent-orange-strong: #B94F16;
     --accent-blue: #0284C7;
     --accent-navy: #0F172A;
   }
 
   .dark {
-    --bg-primary: #0A0A0D;
+    --bg-primary: #0D171B;
     --bg-card: color-mix(in srgb, var(--bg-primary) 95%, white 5%);
     --bg-card-subtle: color-mix(in srgb, var(--bg-primary) 95%, white 5%);
     --bg-card-header: color-mix(in srgb, var(--bg-primary) 90%, white 10%);
     --border-color: color-mix(in srgb, var(--bg-primary) 88%, white 12%);
     --text-main: #F8FAFC;
     --text-muted: #94A3B8;
-    --accent-orange: #FB923C;
-    --accent-blue: #38BDF8;
+    --accent-orange: #E86F28;
+    --accent-orange-strong: #FF9D62;
+    --accent-blue: #55A9C5;
     --accent-navy: var(--bg-card-header);
   }
 
   body {
     background-color: var(--bg-primary);
     color: var(--text-main);
-    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
     overflow-x: hidden;
     transition: background-color 0.25s ease, color 0.25s ease;
   }
