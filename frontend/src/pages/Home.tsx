@@ -221,6 +221,7 @@ export const Home: React.FC<HomeProps> = ({
                             <p className="text-xs font-bold text-[var(--text-primary)]">{st.name}</p>
                             <p className="text-xs text-[var(--text-secondary)]">{st.province} • {st.address}</p>
                           </div>
+                        </div>
                         <div className="flex items-center gap-2">
                           <AQIBadge aqi={st.aqi} size="sm" />
                           <span className="text-xs font-bold">{Math.round(st.aqi)}</span>
@@ -250,8 +251,7 @@ export const Home: React.FC<HomeProps> = ({
           </div>
 
           {/* Main Hero Showcase Card */}
-          <button
-            type="button"
+          <div
             className="relative rounded-3xl overflow-hidden shadow-[var(--shadow-card)] border transition-all duration-500 p-6 sm:p-10"
             style={{
               backgroundColor: 'var(--surface-card)',
@@ -305,7 +305,7 @@ export const Home: React.FC<HomeProps> = ({
                         AQI VN
                       </span>
                     </div>
-                  </div>
+                  </button>
 
                   <div className="space-y-1.5 flex-1 min-w-[200px]">
                     <div className="flex items-center gap-2">
@@ -313,7 +313,7 @@ export const Home: React.FC<HomeProps> = ({
                       <span className="text-xs font-bold text-[var(--text-secondary)]">
                         {t('hero.primary_pollutant')}: <strong className="text-[var(--accent-primary)]">{currentStation.primaryPollutant}</strong>
                       </span>
-                    </button>
+                    </div>
                     <p className="text-sm text-[var(--text-secondary)] leading-6">
                       {lang === 'vi' ? category.descriptionVi : category.descriptionEn}
                     </p>
@@ -979,14 +979,16 @@ export const Home: React.FC<HomeProps> = ({
                   <button
                     type="button"
                     key={idx}
-                    className="p-2.5 rounded-xl bg-[var(--surface-subtle)] flex items-center justify-between gap-2 hover:bg-[var(--surface-header)] transition-colors cursor-pointer"
+                    className="w-full p-2.5 rounded-xl bg-[var(--surface-subtle)] flex items-center justify-between gap-2 text-left hover:bg-[var(--surface-header)] transition-colors cursor-pointer"
                   >
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <span className="font-bold text-[var(--text-primary)] block">{item.time}</span>
                       <span className="text-sm leading-6 text-[var(--text-secondary)]">{lang === 'vi' ? item.adviceVi : item.adviceEn}</span>
                     </div>
-                    <AQIBadge aqi={item.aqi} size="sm" />
-                  </div>
+                    <div className="shrink-0">
+                      <AQIBadge aqi={item.aqi} size="sm" />
+                    </div>
+                  </button>
                 ))}
               </div>
             </div>
