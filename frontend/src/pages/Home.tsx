@@ -400,21 +400,21 @@ export const Home: React.FC<HomeProps> = ({
         <FadeIn direction="up">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-black text-[var(--text-primary)] tracking-tight">
                 {t('table.title')}
               </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-[var(--text-tertiary)] mt-0.5">
                 Dự báo chỉ số ô nhiễm không khí theo ngày & tình trạng thời tiết (nhấn vào để xem dự báo chi tiết)
               </p>
             </div>
 
             {/* Province Filter */}
             <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-500 font-medium hidden sm:inline">{t('table.filter_region')}</span>
+              <span className="text-xs text-[var(--text-tertiary)] font-medium hidden sm:inline">{t('table.filter_region')}</span>
               <select
                 value={selectedProvinceFilter}
                 onChange={(e) => setSelectedProvinceFilter(e.target.value)}
-                className="bg-white dark:surface-card border border-slate-200 surface-border rounded-xl px-3 py-1.5 text-xs text-slate-900 dark:text-white font-medium focus:outline-none focus:border-orange-500 cursor-pointer"
+                className="bg-[var(--surface-card)] border border-[var(--border-default)] rounded-xl px-3 py-1.5 text-xs text-[var(--text-primary)] font-medium focus:outline-none focus:border-orange-500 cursor-pointer"
               >
                 <option value="All">{lang === 'vi' ? 'Tất cả khu vực' : 'All Regions'}</option>
                 {uniqueProvinces.filter((p) => p !== 'All').map((p) => (
@@ -425,11 +425,11 @@ export const Home: React.FC<HomeProps> = ({
           </div>
 
           {filteredForecast.length === 0 ? (
-            <div className="rounded-3xl border border-slate-200 surface-border bg-white dark:surface-card p-8 text-center shadow-sm">
-              <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+            <div className="rounded-2xl border border-[var(--border-default)] bg-[var(--surface-card)] p-8 text-center shadow-[var(--shadow-card)]">
+              <p className="text-sm font-semibold text-[var(--text-primary)]">
                 {lang === 'vi' ? 'Không có dữ liệu dự báo cho khu vực đã chọn.' : 'Forecast unavailable for the selected province.'}
               </p>
-              <p className="mt-1 text-xs text-slate-500">
+              <p className="mt-1 text-xs text-[var(--text-tertiary)]">
                 {lang === 'vi' ? 'Hãy thử chọn khu vực khác hoặc mở trang Dự báo.' : 'Try another province or open the Forecast page.'}
               </p>
               <button
@@ -443,10 +443,10 @@ export const Home: React.FC<HomeProps> = ({
           ) : (
           <>
           {/* Desktop Table View */}
-          <div className="hidden md:block overflow-x-auto rounded-3xl border border-slate-200 surface-border bg-white dark:surface-card shadow-xl">
+          <div className="hidden md:block overflow-x-auto rounded-2xl border border-[var(--border-default)] bg-[var(--surface-card)] shadow-[var(--shadow-card)]">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="border-b border-slate-200 surface-border bg-slate-50 dark:surface-card-header text-slate-600 dark:text-slate-300 font-bold uppercase tracking-wider text-xs">
+                <tr className="border-b border-[var(--border-default)] bg-[var(--surface-header)] text-[var(--text-secondary)] font-bold uppercase tracking-wider text-xs">
                   <th className="py-4 px-6">{t('table.col_day')}</th>
                   <th className="py-4 px-6">{t('table.col_area')}</th>
                   <th className="py-4 px-6">{t('table.col_level')}</th>
@@ -455,19 +455,19 @@ export const Home: React.FC<HomeProps> = ({
                   <th className="py-4 px-6">{t('table.col_condition')}</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/70">
+              <tbody className="divide-y divide-[var(--border-default)]">
                 {filteredForecast.map((item) => {
                   const cat = getAQICategory(item.aqi);
                   return (
                     <tr
                       key={item.id}
-                      className="hover:bg-slate-100 dark:hover:bg-slate-800/70 transition-colors"
+                      className="hover:bg-[var(--surface-subtle)] transition-colors"
                       title="Nhấn để xem dự báo 7 ngày chi tiết / Click to view detailed 7-day forecast"
                       style={{
                         backgroundColor: item.aqi > 150 ? 'rgba(239, 68, 68, 0.04)' : undefined,
                       }}
                     >
-                      <td className="py-4 px-6 font-bold text-slate-900 dark:text-white">
+                      <td className="py-4 px-6 font-bold text-[var(--text-primary)]">
                         <button
                           type="button"
                           onClick={onNavigateToForecast}
@@ -475,10 +475,10 @@ export const Home: React.FC<HomeProps> = ({
                           aria-label={`${lang === 'vi' ? 'Xem dự báo' : 'View forecast'}: ${item.location}, ${item.date}`}
                         >
                           <span>{lang === 'vi' ? item.dayOfWeekVi : item.dayOfWeekEn}</span>
-                          <span className="block text-xs text-slate-500 dark:text-slate-400 font-normal">{item.date}</span>
+                          <span className="block text-xs text-[var(--text-tertiary)] font-normal">{item.date}</span>
                         </button>
                       </td>
-                      <td className="py-4 px-6 font-semibold text-slate-700 dark:text-slate-300">
+                      <td className="py-4 px-6 font-semibold text-[var(--text-secondary)]">
                         {item.location}
                       </td>
                       <td className="py-4 px-6">
@@ -491,16 +491,16 @@ export const Home: React.FC<HomeProps> = ({
                       </td>
                       <td className="py-4 px-6">
                         <span
-                          className="font-black text-sm px-2.5 py-1 rounded-lg"
+                          className="font-bold text-sm px-2.5 py-1 rounded-lg"
                           style={{ backgroundColor: cat.bgColor, color: cat.color }}
                         >
                           {Math.round(item.aqi)}
                         </span>
                       </td>
-                      <td className="py-4 px-6 font-bold text-slate-800 dark:text-slate-200">
+                      <td className="py-4 px-6 font-bold text-[var(--text-primary)]">
                         <span className="text-orange-500">{item.maxTemp}°</span> / <span className="text-sky-500">{item.minTemp}°</span>
                       </td>
-                      <td className="py-4 px-6 text-slate-600 dark:text-slate-300">
+                      <td className="py-4 px-6 text-[var(--text-secondary)]">
                         <div className="flex items-center gap-2">
                           <span>{lang === 'vi' ? item.conditionVi : item.conditionEn}</span>
                           <span className="text-xs text-sky-700 dark:text-sky-300 font-semibold px-1.5 py-0.5 rounded bg-sky-50 dark:bg-sky-950/60">
@@ -523,7 +523,7 @@ export const Home: React.FC<HomeProps> = ({
                 <article
                   key={item.id}
                   onClick={onNavigateToForecast}
-                  className="p-4 rounded-2xl bg-white dark:surface-card border border-slate-200 surface-border shadow-sm space-y-2.5 cursor-pointer hover:border-white/35 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+                  className="p-4 rounded-2xl bg-[var(--surface-card)] border border-[var(--border-default)] shadow-[var(--shadow-card)] space-y-2.5 cursor-pointer hover:border-white/35 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
                   tabIndex={0}
                   role="button"
                   aria-label={`${lang === 'vi' ? 'Xem dự báo' : 'View forecast'}: ${item.location}, ${item.date}`}
@@ -534,27 +534,27 @@ export const Home: React.FC<HomeProps> = ({
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="text-xs font-bold text-slate-900 dark:text-white">
+                      <span className="text-xs font-bold text-[var(--text-primary)]">
                         {lang === 'vi' ? item.dayOfWeekVi : item.dayOfWeekEn} ({item.date})
                       </span>
-                      <span className="block text-xs text-slate-500 dark:text-slate-400">{item.location}</span>
+                      <span className="block text-xs text-[var(--text-tertiary)]">{item.location}</span>
                     </div>
                     <div
-                      className="px-3 py-1 rounded-xl font-black text-sm"
+                      className="px-3 py-1 rounded-xl font-bold text-sm"
                       style={{ backgroundColor: cat.bgColor, color: cat.color }}
                     >
                       AQI {Math.round(item.aqi)}
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-100 dark:border-slate-800">
+                  <div className="flex items-center justify-between text-xs pt-2 border-t border-[var(--border-default)]">
                     <AQIBadge aqi={item.aqi} size="sm" />
-                    <span className="font-bold">
+                    <span className="font-bold text-[var(--text-primary)]">
                       {item.maxTemp}° / {item.minTemp}°C
                     </span>
                   </div>
 
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-[var(--text-tertiary)]">
                     {lang === 'vi' ? item.conditionVi : item.conditionEn} ({item.rainProbability}% xác suất mưa)
                   </p>
                 </article>
@@ -570,10 +570,10 @@ export const Home: React.FC<HomeProps> = ({
       <section className="space-y-4">
         <FadeIn direction="up">
           <div>
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-black text-[var(--text-primary)] tracking-tight">
               {t('health.title')}
             </h2>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-[var(--text-tertiary)] mt-1">
               {t('health.subtitle')}
             </p>
           </div>
@@ -584,7 +584,7 @@ export const Home: React.FC<HomeProps> = ({
                 <div
                   key={group.id}
                   onClick={onNavigateToAlerts}
-                  className="p-6 rounded-3xl bg-white dark:surface-card border border-slate-200 surface-border shadow-md space-y-3 cursor-pointer hover:border-white/35 hover:shadow-xl hover:-translate-y-0.5 transition-all"
+                  className="p-6 rounded-2xl bg-[var(--surface-card)] border border-[var(--border-default)] shadow-[var(--shadow-card)] space-y-3 cursor-pointer hover:border-white/35 hover:shadow-[var(--shadow-card)] hover:-translate-y-0.5 transition-all"
                   title="Nhấn để xem trung tâm cảnh báo & bảo vệ sức khỏe / Click to view health alert center"
                 >
                   <div className="flex items-center justify-between">
@@ -592,7 +592,7 @@ export const Home: React.FC<HomeProps> = ({
                       <div className="p-2.5 rounded-2xl bg-orange-50 dark:bg-orange-950/50 text-orange-500">
                         {getHealthGroupIcon(group.icon)}
                       </div>
-                      <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                      <h3 className="text-base font-bold text-[var(--text-primary)]">
                         {lang === 'vi' ? group.titleVi : group.titleEn}
                       </h3>
                     </div>
@@ -605,9 +605,9 @@ export const Home: React.FC<HomeProps> = ({
                     </span>
                   </div>
 
-                  <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-300">
+                  <ul className="space-y-2 text-sm leading-6 text-[var(--text-secondary)]">
                     {(lang === 'vi' ? group.adviceVi : group.adviceEn).map((advice, idx) => (
-                      <li key={idx} className="flex items-start gap-2 leading-relaxed">
+                      <li key={idx} className="flex items-start gap-2">
                         <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
                         <span>{advice}</span>
                       </li>
@@ -623,7 +623,7 @@ export const Home: React.FC<HomeProps> = ({
       {/* 4. THÔNG BÁO ĐẨY THEO VỊ TRÍ CỦA BẠN */}
       <section>
         <FadeIn direction="up">
-          <div className="p-6 sm:p-8 rounded-3xl bg-white dark:surface-card text-slate-900 dark:text-white border border-slate-200 surface-border shadow-lg relative overflow-hidden transition-colors duration-300">
+          <div className="p-6 sm:p-8 rounded-2xl bg-[var(--surface-card)] text-[var(--text-primary)] border border-[var(--border-default)] shadow-[var(--shadow-card)] relative overflow-hidden transition-colors duration-300">
             <div className="absolute top-0 right-0 w-80 h-80 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
 
             <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
@@ -633,17 +633,17 @@ export const Home: React.FC<HomeProps> = ({
                   <span>{lang === 'vi' ? 'Cảnh báo sớm thời gian thực' : 'Early Real-Time Alerts'}</span>
                 </div>
                 <h3 className="text-2xl font-black tracking-tight">{t('notif.title')}</h3>
-                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed max-w-xl transition-colors duration-300">
+                <p className="text-sm leading-6 text-[var(--text-secondary)] max-w-xl transition-colors duration-300">
                   {t('notif.desc')}
                 </p>
 
                 {/* Slider for AQI Alert Threshold */}
                 <div className="pt-3 max-w-md space-y-2">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-700 dark:text-slate-300 font-semibold transition-colors duration-300">
+                    <span className="text-[var(--text-secondary)] font-semibold transition-colors duration-300">
                       {t('notif.threshold_label')}
                     </span>
-                    <span className="font-black text-orange-600 dark:text-orange-400 px-2 py-0.5 rounded bg-orange-100 dark:bg-orange-500/20 transition-colors duration-300">
+                    <span className="font-bold text-orange-600 dark:text-orange-400 px-2 py-0.5 rounded bg-orange-100 dark:bg-orange-500/20 transition-colors duration-300">
                       AQI &gt; {customThreshold}
                     </span>
                   </div>
@@ -658,7 +658,7 @@ export const Home: React.FC<HomeProps> = ({
                     className="w-full h-2 rounded-lg cursor-pointer accent-orange-500 bg-slate-200 dark:bg-slate-700 transition-colors duration-300"
                   />
                   
-                  <div className="flex justify-between text-xs text-slate-600 dark:text-slate-300 font-medium transition-colors duration-300">
+                  <div className="flex justify-between text-xs text-[var(--text-secondary)] font-medium transition-colors duration-300">
                     <span>50 (Tốt)</span>
                     <span>100 (Trung bình)</span>
                     <span>150 (Kém)</span>
@@ -686,10 +686,10 @@ export const Home: React.FC<HomeProps> = ({
         <FadeIn direction="up">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
             <div>
-              <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-black text-[var(--text-primary)] tracking-tight">
                 {t('pollutants.title')}
               </h2>
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-xs text-[var(--text-tertiary)] mt-1">
                 {t('pollutants.subtitle')}
               </p>
             </div>
@@ -711,15 +711,15 @@ export const Home: React.FC<HomeProps> = ({
                 <div
                   key={key}
                   onClick={() => onSelectStation(currentStation)}
-                  className={`p-4 rounded-2xl bg-white dark:surface-card border transition-all hover:shadow-lg hover:-translate-y-0.5 cursor-pointer ${
+                  className={`p-4 rounded-xl bg-[var(--surface-card)] border transition-all hover:shadow-[var(--shadow-card)] hover:-translate-y-0.5 cursor-pointer ${
                     isOverLimit
                       ? 'border-orange-300 dark:border-orange-900/60 hover:border-white/35'
-                      : 'border-slate-200 surface-border hover:border-white/35'
+                        : 'border-[var(--border-default)] hover:border-white/35'
                   }`}
                   title="Nhấn để xem phân tích chi tiết / Click to view detailed analysis"
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-black text-slate-700 dark:text-slate-200">{title}</span>
+                    <span className="text-xs font-bold text-[var(--text-secondary)]">{title}</span>
                     <div className="flex items-center gap-0.5 text-xs font-bold">
                       {poll.trend === 'up' && <ArrowUpRight className="w-3 h-3 text-red-500" />}
                       {poll.trend === 'down' && <ArrowDownRight className="w-3 h-3 text-emerald-500" />}
@@ -731,15 +731,15 @@ export const Home: React.FC<HomeProps> = ({
                   </div>
 
                   <div className="my-2">
-                    <span className={`text-2xl font-black ${isOverLimit ? 'text-orange-500' : 'text-slate-900 dark:text-white'}`}>
+                    <span className={`text-2xl font-bold ${isOverLimit ? 'text-orange-500' : 'text-[var(--text-primary)]'}`}>
                       {poll.value}
                     </span>
-                    <span className="text-xs text-slate-500 dark:text-slate-400 font-medium ml-1">{poll.unit}</span>
+                    <span className="text-xs text-[var(--text-tertiary)] font-medium ml-1">{poll.unit}</span>
                   </div>
 
-                  <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                  <div className="pt-2 border-t border-[var(--border-default)] flex items-center justify-between text-xs text-[var(--text-tertiary)]">
                     <span>{t('pollutants.safe_limit')}:</span>
-                    <span className="font-semibold text-slate-600 dark:text-slate-300">
+                    <span className="font-semibold text-[var(--text-secondary)]">
                       {poll.maxSafe} {poll.unit}
                     </span>
                   </div>
@@ -755,16 +755,16 @@ export const Home: React.FC<HomeProps> = ({
         <FadeIn direction="up">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
             <div>
-              <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-black text-[var(--text-primary)] tracking-tight">
                 {t('charts.title')}
               </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-[var(--text-tertiary)] mt-0.5">
                 Dữ liệu phân tích theo chuỗi thời gian tại {currentStation.name}
               </p>
             </div>
 
             {/* Chart Tab Selector */}
-            <div className="flex items-center gap-1 p-1 bg-slate-100 dark:surface-card rounded-2xl self-start sm:self-auto">
+            <div className="flex items-center gap-1 p-1 bg-[var(--surface-subtle)] rounded-2xl self-start sm:self-auto">
               <button
                 onClick={() => setChartTab('24h')}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
@@ -798,7 +798,7 @@ export const Home: React.FC<HomeProps> = ({
             </div>
           </div>
 
-          <div className="p-6 rounded-3xl bg-white dark:surface-card border border-slate-200 surface-border shadow-lg">
+          <div className="p-6 rounded-2xl bg-[var(--surface-card)] border border-[var(--border-default)] shadow-[var(--shadow-card)]">
             {chartTab === '24h' && (
               <div className="h-72 w-full">
                 <ResponsiveContainer width="100%" height="100%">
@@ -932,10 +932,10 @@ export const Home: React.FC<HomeProps> = ({
         <FadeIn direction="up">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-2">
             <div>
-              <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-black text-[var(--text-primary)] tracking-tight">
                 {t('map.title')}
               </h2>
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-xs text-[var(--text-tertiary)] mt-1">
                 {t('map.subtitle')}
               </p>
             </div>
@@ -965,12 +965,12 @@ export const Home: React.FC<HomeProps> = ({
         <FadeIn direction="up">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Best Outdoor Hours */}
-            <div className="p-6 rounded-3xl bg-white dark:surface-card border border-slate-200 surface-border shadow-md space-y-4">
+            <div className="p-6 rounded-2xl bg-[var(--surface-card)] border border-[var(--border-default)] shadow-[var(--shadow-card)] space-y-4">
               <div className="flex items-center gap-2.5">
                 <div className="p-2 rounded-xl bg-sky-100 dark:bg-sky-950/60 text-sky-500">
                   <Clock className="w-4 h-4" />
                 </div>
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                <h3 className="text-sm font-bold text-[var(--text-primary)]">
                   {t('insights.best_hours_title')}
                 </h3>
               </div>
@@ -979,11 +979,11 @@ export const Home: React.FC<HomeProps> = ({
                 {BEST_OUTDOOR_HOURS.map((item, idx) => (
                   <div
                     key={idx}
-                    className="p-2.5 rounded-xl bg-slate-50 dark:surface-card flex items-center justify-between gap-2 hover:bg-slate-100 dark:hover:bg-[var(--bg-card-header)] transition-colors cursor-pointer"
+                    className="p-2.5 rounded-xl bg-[var(--surface-subtle)] flex items-center justify-between gap-2 hover:bg-[var(--surface-header)] transition-colors cursor-pointer"
                   >
                     <div>
-                      <span className="font-bold text-slate-800 dark:text-slate-200 block">{item.time}</span>
-                      <span className="text-xs text-slate-600 leading-relaxed">{lang === 'vi' ? item.adviceVi : item.adviceEn}</span>
+                      <span className="font-bold text-[var(--text-primary)] block">{item.time}</span>
+                      <span className="text-sm leading-6 text-[var(--text-secondary)]">{lang === 'vi' ? item.adviceVi : item.adviceEn}</span>
                     </div>
                     <AQIBadge aqi={item.aqi} size="sm" />
                   </div>
@@ -992,12 +992,12 @@ export const Home: React.FC<HomeProps> = ({
             </div>
 
             {/* Quick City Comparisons */}
-            <div className="p-6 rounded-3xl bg-white dark:surface-card border border-slate-200 surface-border shadow-md space-y-4">
+            <div className="p-6 rounded-2xl bg-[var(--surface-card)] border border-[var(--border-default)] shadow-[var(--shadow-card)] space-y-4">
               <div className="flex items-center gap-2.5">
                 <div className="p-2 rounded-xl bg-orange-100 dark:bg-orange-950/60 text-orange-500">
                   <Activity className="w-4 h-4" />
                 </div>
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                <h3 className="text-sm font-bold text-[var(--text-primary)]">
                   {t('insights.city_compare_title')}
                 </h3>
               </div>
@@ -1019,16 +1019,16 @@ export const Home: React.FC<HomeProps> = ({
                           onSelectStation(match);
                         }
                       }}
-                      className="p-2.5 rounded-xl bg-slate-50 dark:surface-card flex items-center justify-between cursor-pointer hover:bg-orange-50/60 dark:hover:bg-orange-950/30 hover:scale-[1.02] transition-all"
+                      className="p-2.5 rounded-xl bg-[var(--surface-subtle)] flex items-center justify-between cursor-pointer hover:bg-orange-50/60 dark:hover:bg-orange-950/30 hover:scale-[1.02] transition-all"
                       title={`Nhấn để chuyển sang trạm ${c.city} / Click to view ${c.city} station`}
                     >
                       <div>
-                        <span className="font-bold text-slate-900 dark:text-white">{c.city}</span>
-                        <span className="text-xs text-slate-500 block">{c.temp}°C • PM2.5: {c.pm25}</span>
+                        <span className="font-bold text-[var(--text-primary)]">{c.city}</span>
+                        <span className="text-xs text-[var(--text-tertiary)] block">{c.temp}°C • PM2.5: {c.pm25}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <span
-                          className="font-black text-xs px-2 py-0.5 rounded-md"
+                          className="font-bold text-xs px-2 py-0.5 rounded-md"
                           style={{ backgroundColor: cat.bgColor, color: cat.color }}
                         >
                           {c.aqi}
@@ -1042,12 +1042,12 @@ export const Home: React.FC<HomeProps> = ({
             </div>
 
             {/* Indoor Air Purification Tips */}
-            <div className="p-6 rounded-3xl bg-white dark:surface-card border border-slate-200 surface-border shadow-md space-y-4">
+            <div className="p-6 rounded-2xl bg-[var(--surface-card)] border border-[var(--border-default)] shadow-[var(--shadow-card)] space-y-4">
               <div className="flex items-center gap-2.5">
                 <div className="p-2 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-500">
                   <Leaf className="w-4 h-4" />
                 </div>
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                <h3 className="text-sm font-bold text-[var(--text-primary)]">
                   {t('insights.tips_title')}
                 </h3>
               </div>
@@ -1055,11 +1055,11 @@ export const Home: React.FC<HomeProps> = ({
               <div className="space-y-3 text-xs">
                 {INDOOR_AIR_TIPS.map((tip, idx) => (
                   <div key={idx} className="space-y-1 p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors cursor-pointer">
-                    <h4 className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                    <h4 className="font-bold text-[var(--text-primary)] flex items-center gap-1.5">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                       <span>{lang === 'vi' ? tip.titleVi : tip.titleEn}</span>
                     </h4>
-                    <p className="text-slate-600 leading-relaxed text-xs pl-3">
+                    <p className="text-sm leading-6 text-[var(--text-secondary)] pl-3">
                       {lang === 'vi' ? tip.descVi : tip.descEn}
                     </p>
                   </div>
