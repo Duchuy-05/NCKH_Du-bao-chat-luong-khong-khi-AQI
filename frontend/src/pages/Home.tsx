@@ -186,7 +186,7 @@ export const Home: React.FC<HomeProps> = ({
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
               {/* Search Input with Autocomplete */}
               <div className="relative flex-1">
-                <Search className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+                <Search className="w-5 h-5 text-[var(--text-tertiary)] absolute left-4 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   value={searchQuery}
@@ -264,16 +264,16 @@ export const Home: React.FC<HomeProps> = ({
                   <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-[var(--surface-subtle)] text-[var(--text-secondary)]">
                     {currentStation.id}
                   </span>
-                  <span className="text-xs text-slate-500 font-medium">
+                  <span className="text-xs text-[var(--text-tertiary)] font-medium">
                     {t('hero.last_updated')}: {formatDateTime(currentStation.lastUpdated, lang)}
                   </span>
                 </div>
 
                 <div>
-                  <h1 id="current-air-quality-title" className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-slate-900 dark:text-white leading-tight">
+                  <h1 id="current-air-quality-title" className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-[var(--text-primary)] leading-tight">
                     {currentStation.name}
                   </h1>
-                  <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5">
+                  <p className="text-xs sm:text-sm text-[var(--text-secondary)] mt-1 flex items-center gap-1.5">
                     <MapPin className="w-4 h-4 text-orange-500 shrink-0" />
                     <span>{currentStation.address}</span>
                   </p>
@@ -300,7 +300,7 @@ export const Home: React.FC<HomeProps> = ({
                       >
                         {Math.round(currentStation.aqi)}
                       </span>
-                      <span className="block text-xs font-black uppercase tracking-widest text-slate-600 mt-0.5">
+                      <span className="block text-xs font-black uppercase tracking-widest text-[var(--text-secondary)] mt-0.5">
                         AQI VN
                       </span>
                     </div>
@@ -309,7 +309,7 @@ export const Home: React.FC<HomeProps> = ({
                   <div className="space-y-1.5 flex-1 min-w-[200px]">
                     <div className="flex items-center gap-2">
                       <AQIBadge aqi={currentStation.aqi} size="lg" />
-                      <span className="text-xs font-bold text-slate-500">
+                      <span className="text-xs font-bold text-[var(--text-secondary)]">
                         {t('hero.primary_pollutant')}: <strong className="text-orange-500">{currentStation.primaryPollutant}</strong>
                       </span>
                     </div>
