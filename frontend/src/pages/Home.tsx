@@ -201,7 +201,7 @@ export const Home: React.FC<HomeProps> = ({
 
                 {/* Autocomplete Dropdown */}
                 {isSearching && searchResults.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--surface-card)] border border-[var(--border-default)] rounded-2xl shadow-2xl z-50 max-h-72 overflow-y-auto divide-y divide-[var(--border-default)]">
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--surface-card)] border border-[var(--border-default)] rounded-2xl shadow-[var(--shadow-card)] z-50 max-h-72 overflow-y-auto divide-y divide-[var(--border-default)]">
                     {searchResults.map((st) => (
                       <div
                         key={st.id}
@@ -624,8 +624,6 @@ export const Home: React.FC<HomeProps> = ({
       <section>
         <FadeIn direction="up">
           <div className="p-6 sm:p-8 rounded-2xl bg-[var(--surface-card)] text-[var(--text-primary)] border border-[var(--border-default)] shadow-[var(--shadow-card)] relative overflow-hidden transition-colors duration-300">
-            <div className="absolute top-0 right-0 w-80 h-80 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
-
             <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               <div className="lg:col-span-7 space-y-3">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100 dark:bg-orange-500/20 text-orange-600 dark:text-orange-400 text-xs font-bold border border-orange-200 dark:border-orange-500/30 transition-colors duration-300">
