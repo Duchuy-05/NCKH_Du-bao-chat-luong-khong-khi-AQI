@@ -201,7 +201,7 @@ export const Home: React.FC<HomeProps> = ({
 
                 {/* Autocomplete Dropdown */}
                 {isSearching && searchResults.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--surface-card)] border border-[var(--border-default)] rounded-2xl shadow-2xl z-50 max-h-72 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800">
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--surface-card)] border border-[var(--border-default)] rounded-2xl shadow-2xl z-50 max-h-72 overflow-y-auto divide-y divide-[var(--border-default)]">
                     {searchResults.map((st) => (
                       <div
                         key={st.id}
@@ -210,15 +210,15 @@ export const Home: React.FC<HomeProps> = ({
                           setIsSearching(false);
                           setSearchQuery('');
                         }}
-                        className="p-3.5 hover:bg-slate-50 dark:hover:bg-slate-800/80 cursor-pointer flex items-center justify-between transition-colors"
+                        className="p-3.5 hover:bg-[var(--surface-subtle)] cursor-pointer flex items-center justify-between transition-colors"
                       >
                         <div className="flex items-center gap-3">
-                          <div className="p-2 rounded-xl bg-slate-100 dark:surface-card text-slate-600 dark:text-slate-300">
+                          <div className="p-2 rounded-xl bg-[var(--surface-subtle)] text-[var(--text-secondary)]">
                             <MapPin className="w-4 h-4 text-orange-500" />
                           </div>
                           <div>
-                            <p className="text-xs font-bold text-slate-900 dark:text-white">{st.name}</p>
-                            <p className="text-xs text-slate-600">{st.province} • {st.address}</p>
+                            <p className="text-xs font-bold text-[var(--text-primary)]">{st.name}</p>
+                            <p className="text-xs text-[var(--text-secondary)]">{st.province} • {st.address}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -235,7 +235,7 @@ export const Home: React.FC<HomeProps> = ({
               <button
                 onClick={handleDetectLocation}
                 disabled={isLocating}
-                className="px-5 py-3.5 rounded-xl bg-[var(--surface-card)] hover:bg-[var(--surface-subtle)] border border-[var(--border-default)] text-[var(--text-primary)] font-bold text-xs shadow-sm flex items-center justify-center gap-2 transition-all active:scale-95 shrink-0 cursor-pointer disabled:opacity-60"
+                className="px-5 py-3.5 rounded-xl bg-[var(--surface-card)] hover:bg-[var(--surface-subtle)] border border-[var(--border-default)] text-[var(--text-primary)] font-bold text-xs shadow-sm flex items-center justify-center gap-2 transition-all active:scale-95 shrink-0 cursor-pointer disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)] focus-visible:ring-offset-2"
               >
                 <Navigation className={`w-4 h-4 text-sky-600 dark:text-sky-400 ${isLocating ? 'animate-spin' : ''}`} />
                 <span>{isLocating ? t('hero.locating') : t('hero.allow_location')}</span>
@@ -261,7 +261,7 @@ export const Home: React.FC<HomeProps> = ({
               {/* Left Column: Big AQI Indicator & Main Info */}
               <div className="lg:col-span-7 space-y-5">
                 <div className="flex flex-wrap items-center gap-2.5">
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-100 dark:surface-card text-slate-700 dark:text-slate-200">
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-[var(--surface-subtle)] text-[var(--text-secondary)]">
                     {currentStation.id}
                   </span>
                   <span className="text-xs text-slate-500 font-medium">
