@@ -762,10 +762,10 @@ export const Home: React.FC<HomeProps> = ({
             </div>
 
             {/* Chart Tab Selector */}
-            <div className="flex items-center gap-1 p-1 bg-[var(--surface-subtle)] rounded-2xl self-start sm:self-auto">
+            <div className="flex items-center gap-1 p-1 bg-[var(--surface-subtle)] rounded-xl self-start sm:self-auto">
               <button
                 onClick={() => setChartTab('24h')}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   chartTab === '24h'
                     ? 'bg-white dark:surface-card text-orange-500 shadow-xs'
                     : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
@@ -775,7 +775,7 @@ export const Home: React.FC<HomeProps> = ({
               </button>
               <button
                 onClick={() => setChartTab('pollutants')}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   chartTab === 'pollutants'
                     ? 'bg-white dark:surface-card text-orange-500 shadow-xs'
                     : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
@@ -785,7 +785,7 @@ export const Home: React.FC<HomeProps> = ({
               </button>
               <button
                 onClick={() => setChartTab('temp')}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   chartTab === 'temp'
                     ? 'bg-white dark:surface-card text-orange-500 shadow-xs'
                     : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
@@ -803,23 +803,23 @@ export const Home: React.FC<HomeProps> = ({
                   <AreaChart data={HOURLY_AQI_DATA_24H} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <defs>
                       <linearGradient id="aqiGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#F97316" stopOpacity={0.4} />
-                        <stop offset="95%" stopColor="#F97316" stopOpacity={0.0} />
+                        <stop offset="5%" stopColor="var(--accent-primary)" stopOpacity={0.4} />
+                        <stop offset="95%" stopColor="var(--accent-primary)" stopOpacity={0.0} />
                       </linearGradient>
                       <linearGradient id="pmGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#0284C7" stopOpacity={0.3} />
-                        <stop offset="95%" stopColor="#0284C7" stopOpacity={0.0} />
+                        <stop offset="5%" stopColor="var(--accent-blue)" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="var(--accent-blue)" stopOpacity={0.0} />
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.2} vertical={false} />
-                    <XAxis dataKey="hour" stroke="#94A3B8" fontSize={11} tickLine={false} />
-                    <YAxis stroke="#94A3B8" fontSize={11} tickLine={false} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" opacity={0.2} vertical={false} />
+                    <XAxis dataKey="hour" stroke="var(--chart-axis)" fontSize={11} tickLine={false} />
+                    <YAxis stroke="var(--chart-axis)" fontSize={11} tickLine={false} />
                     <Tooltip
                       contentStyle={{
-                        backgroundColor: '#0F172A',
-                        borderColor: '#334155',
+                        backgroundColor: 'var(--chart-tooltip-surface)',
+                        borderColor: 'var(--chart-tooltip-border)',
                         borderRadius: '12px',
-                        color: '#F8FAFC',
+                        color: 'var(--text-primary)',
                         fontSize: '12px',
                       }}
                     />
@@ -827,7 +827,7 @@ export const Home: React.FC<HomeProps> = ({
                       type="monotone"
                       dataKey="aqi"
                       name="AQI VN"
-                      stroke="#F97316"
+                      stroke="var(--accent-primary)"
                       strokeWidth={3}
                       fillOpacity={1}
                       fill="url(#aqiGrad)"
@@ -836,7 +836,7 @@ export const Home: React.FC<HomeProps> = ({
                       type="monotone"
                       dataKey="pm25"
                       name="PM2.5 (µg/m³)"
-                      stroke="#0284C7"
+                      stroke="var(--accent-blue)"
                       strokeWidth={2}
                       fillOpacity={1}
                       fill="url(#pmGrad)"
@@ -850,16 +850,16 @@ export const Home: React.FC<HomeProps> = ({
               <div className="h-72 w-full [&_*:focus]:outline-none">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={pollutantDataForBarChart} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.2} vertical={false} />
-                    <XAxis dataKey="name" stroke="#94A3B8" fontSize={11} tickLine={false} />
-                    <YAxis stroke="#94A3B8" fontSize={11} tickLine={false} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" opacity={0.2} vertical={false} />
+                    <XAxis dataKey="name" stroke="var(--chart-axis)" fontSize={11} tickLine={false} />
+                    <YAxis stroke="var(--chart-axis)" fontSize={11} tickLine={false} />
                     <Tooltip
                       cursor={false}
                       contentStyle={{
-                        backgroundColor: '#0F172A',
-                        borderColor: '#334155',
+                        backgroundColor: 'var(--chart-tooltip-surface)',
+                        borderColor: 'var(--chart-tooltip-border)',
                         borderRadius: '12px',
-                        color: '#F8FAFC',
+                        color: 'var(--text-primary)',
                         fontSize: '12px',
                       }}
                     />
@@ -867,11 +867,11 @@ export const Home: React.FC<HomeProps> = ({
                       {pollutantDataForBarChart.map((entry, idx) => (
                         <Cell
                           key={`cell-${idx}`}
-                          fill={entry.value > entry.safe ? '#EF4444' : '#0284C7'}
+                          fill={entry.value > entry.safe ? '#EF4444' : 'var(--accent-blue)'}
                         />
                       ))}
                     </Bar>
-                    <Bar dataKey="safe" name="Ngưỡng chuẩn an toàn" activeBar={false} fill="#94A3B8" opacity={0.3} radius={[8, 8, 0, 0]} />
+                    <Bar dataKey="safe" name="Ngưỡng chuẩn an toàn" activeBar={false} fill="#10B981" opacity={0.3} radius={[8, 8, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -881,15 +881,15 @@ export const Home: React.FC<HomeProps> = ({
               <div className="h-72 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={SEVEN_DAY_FORECAST} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.2} vertical={false} />
-                    <XAxis dataKey="dayOfWeekVi" stroke="#94A3B8" fontSize={11} tickLine={false} />
-                    <YAxis stroke="#94A3B8" fontSize={11} tickLine={false} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" opacity={0.2} vertical={false} />
+                    <XAxis dataKey="dayOfWeekVi" stroke="var(--chart-axis)" fontSize={11} tickLine={false} />
+                    <YAxis stroke="var(--chart-axis)" fontSize={11} tickLine={false} />
                     <Tooltip
                       contentStyle={{
-                        backgroundColor: '#0F172A',
-                        borderColor: '#334155',
+                        backgroundColor: 'var(--chart-tooltip-surface)',
+                        borderColor: 'var(--chart-tooltip-border)',
                         borderRadius: '12px',
-                        color: '#F8FAFC',
+                        color: 'var(--text-primary)',
                         fontSize: '12px',
                       }}
                     />
