@@ -196,36 +196,36 @@ export const Home: React.FC<HomeProps> = ({
                     setIsSearching(true);
                   }}
                   placeholder={t('hero.search_placeholder')}
-                  className="w-full bg-[var(--surface-card)] border border-[var(--border-default)] rounded-xl pl-12 pr-4 py-3.5 text-sm text-[var(--text-primary)] shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-orange-500 transition-all placeholder:text-[var(--text-tertiary)]"
+                  className="w-full bg-[var(--surface-card)] border border-[var(--border-default)] rounded-xl pl-12 pr-4 py-3.5 text-sm text-[var(--text-primary)] shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent-focus)]/40 focus:border-[var(--accent-focus)] transition-all placeholder:text-[var(--text-tertiary)]"
                 />
 
                 {/* Autocomplete Dropdown */}
                 {isSearching && searchResults.length > 0 && (
                   <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--surface-card)] border border-[var(--border-default)] rounded-2xl shadow-[var(--shadow-card)] z-50 max-h-72 overflow-y-auto divide-y divide-[var(--border-default)]">
                     {searchResults.map((st) => (
-                      <div
+                      <button
+                        type="button"
                         key={st.id}
                         onClick={() => {
                           setCurrentStation(st);
                           setIsSearching(false);
                           setSearchQuery('');
                         }}
-                        className="p-3.5 hover:bg-[var(--surface-subtle)] cursor-pointer flex items-center justify-between transition-colors"
+                        className="w-full p-3.5 text-left hover:bg-[var(--surface-subtle)] cursor-pointer flex items-center justify-between transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--accent-focus)]"
                       >
                         <div className="flex items-center gap-3">
                           <div className="p-2 rounded-xl bg-[var(--surface-subtle)] text-[var(--text-secondary)]">
-                            <MapPin className="w-4 h-4 text-orange-500" />
+                            <MapPin className="w-4 h-4 text-[var(--accent-primary)]" />
                           </div>
                           <div>
                             <p className="text-xs font-bold text-[var(--text-primary)]">{st.name}</p>
                             <p className="text-xs text-[var(--text-secondary)]">{st.province} • {st.address}</p>
                           </div>
-                        </div>
                         <div className="flex items-center gap-2">
                           <AQIBadge aqi={st.aqi} size="sm" />
                           <span className="text-xs font-bold">{Math.round(st.aqi)}</span>
                         </div>
-                      </div>
+                      </button>
                     ))}
                   </div>
                 )}
@@ -250,7 +250,8 @@ export const Home: React.FC<HomeProps> = ({
           </div>
 
           {/* Main Hero Showcase Card */}
-          <div
+          <button
+            type="button"
             className="relative rounded-3xl overflow-hidden shadow-[var(--shadow-card)] border transition-all duration-500 p-6 sm:p-10"
             style={{
               backgroundColor: 'var(--surface-card)',
@@ -274,7 +275,7 @@ export const Home: React.FC<HomeProps> = ({
                     {currentStation.name}
                   </h1>
                   <p className="text-xs sm:text-sm text-[var(--text-secondary)] mt-1 flex items-center gap-1.5">
-                    <MapPin className="w-4 h-4 text-orange-500 shrink-0" />
+                    <MapPin className="w-4 h-4 text-[var(--accent-primary)] shrink-0" />
                     <span>{currentStation.address}</span>
                   </p>
                 </div>
@@ -285,7 +286,7 @@ export const Home: React.FC<HomeProps> = ({
                     type="button"
                     onClick={() => onSelectStation(currentStation)}
                     aria-label={`${lang === 'vi' ? 'Xem chi tiết trạm' : 'View station details'}: ${currentStation.name}`}
-                    className="flex items-center justify-center rounded-3xl p-5 shadow-md min-w-[140px] cursor-pointer hover:scale-105 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+                    className="flex items-center justify-center rounded-2xl p-5 shadow-md min-w-[140px] cursor-pointer hover:scale-105 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)]"
                     style={{
                       backgroundColor: 'var(--bg-card-header)',
                       border: '2px solid var(--border-color)',
@@ -300,19 +301,19 @@ export const Home: React.FC<HomeProps> = ({
                       >
                         {Math.round(currentStation.aqi)}
                       </span>
-                      <span className="block text-xs font-black uppercase tracking-widest text-[var(--text-secondary)] mt-0.5">
+                      <span className="block text-xs font-bold uppercase tracking-widest text-[var(--text-secondary)] mt-0.5">
                         AQI VN
                       </span>
                     </div>
-                  </button>
+                  </div>
 
                   <div className="space-y-1.5 flex-1 min-w-[200px]">
                     <div className="flex items-center gap-2">
                       <AQIBadge aqi={currentStation.aqi} size="lg" />
                       <span className="text-xs font-bold text-[var(--text-secondary)]">
-                        {t('hero.primary_pollutant')}: <strong className="text-orange-500">{currentStation.primaryPollutant}</strong>
+                        {t('hero.primary_pollutant')}: <strong className="text-[var(--accent-primary)]">{currentStation.primaryPollutant}</strong>
                       </span>
-                    </div>
+                    </button>
                     <p className="text-sm text-[var(--text-secondary)] leading-6">
                       {lang === 'vi' ? category.descriptionVi : category.descriptionEn}
                     </p>
@@ -324,7 +325,7 @@ export const Home: React.FC<HomeProps> = ({
                   type="button"
                   onClick={onNavigateToAlerts}
                   aria-label={lang === 'vi' ? 'Xem khuyến cáo sức khỏe' : 'View health advice'}
-                  className="w-full text-left p-3.5 rounded-2xl border text-xs leading-relaxed flex items-start gap-2.5 cursor-pointer hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+                  className="w-full text-left p-3.5 rounded-2xl border text-xs leading-relaxed flex items-start gap-2.5 cursor-pointer hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)]"
                   style={{
                     backgroundColor: 'var(--bg-card-header)',
                     borderColor: 'var(--border-color)',
@@ -400,10 +401,10 @@ export const Home: React.FC<HomeProps> = ({
         <FadeIn direction="up">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="text-xl sm:text-2xl font-black text-[var(--text-primary)] tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)] tracking-tight">
                 {t('table.title')}
               </h2>
-              <p className="text-xs text-[var(--text-tertiary)] mt-0.5">
+              <p className="text-sm leading-6 text-[var(--text-tertiary)] mt-0.5">
                 Dự báo chỉ số ô nhiễm không khí theo ngày & tình trạng thời tiết (nhấn vào để xem dự báo chi tiết)
               </p>
             </div>
@@ -414,7 +415,7 @@ export const Home: React.FC<HomeProps> = ({
               <select
                 value={selectedProvinceFilter}
                 onChange={(e) => setSelectedProvinceFilter(e.target.value)}
-                className="bg-[var(--surface-card)] border border-[var(--border-default)] rounded-xl px-3 py-1.5 text-xs text-[var(--text-primary)] font-medium focus:outline-none focus:border-orange-500 cursor-pointer"
+                className="bg-[var(--surface-card)] border border-[var(--border-default)] rounded-xl px-3 py-1.5 text-xs text-[var(--text-primary)] font-medium focus:outline-none focus:border-[var(--accent-focus)] focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)]/40 cursor-pointer"
               >
                 <option value="All">{lang === 'vi' ? 'Tất cả khu vực' : 'All Regions'}</option>
                 {uniqueProvinces.filter((p) => p !== 'All').map((p) => (
@@ -435,7 +436,7 @@ export const Home: React.FC<HomeProps> = ({
               <button
                 type="button"
                 onClick={onNavigateToForecast}
-                className="mt-4 rounded-xl bg-orange-700 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-orange-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+                className="mt-4 rounded-xl bg-[var(--accent-primary)] px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-[var(--accent-primary-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)]"
               >
                 {lang === 'vi' ? 'Mở trang Dự báo' : 'Open Forecast'}
               </button>
@@ -471,7 +472,7 @@ export const Home: React.FC<HomeProps> = ({
                         <button
                           type="button"
                           onClick={onNavigateToForecast}
-                          className="text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-500 rounded-sm"
+                          className="text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--accent-focus)] rounded-sm"
                           aria-label={`${lang === 'vi' ? 'Xem dự báo' : 'View forecast'}: ${item.location}, ${item.date}`}
                         >
                           <span>{lang === 'vi' ? item.dayOfWeekVi : item.dayOfWeekEn}</span>
@@ -498,7 +499,7 @@ export const Home: React.FC<HomeProps> = ({
                         </span>
                       </td>
                       <td className="py-4 px-6 font-bold text-[var(--text-primary)]">
-                        <span className="text-orange-500">{item.maxTemp}°</span> / <span className="text-sky-500">{item.minTemp}°</span>
+                        <span className="text-[var(--accent-primary)]">{item.maxTemp}°</span> / <span className="text-sky-500">{item.minTemp}°</span>
                       </td>
                       <td className="py-4 px-6 text-[var(--text-secondary)]">
                         <div className="flex items-center gap-2">
@@ -523,7 +524,7 @@ export const Home: React.FC<HomeProps> = ({
                 <article
                   key={item.id}
                   onClick={onNavigateToForecast}
-                  className="p-4 rounded-2xl bg-[var(--surface-card)] border border-[var(--border-default)] shadow-[var(--shadow-card)] space-y-2.5 cursor-pointer hover:border-white/35 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+                  className="p-4 rounded-2xl bg-[var(--surface-card)] border border-[var(--border-default)] shadow-[var(--shadow-card)] space-y-2.5 cursor-pointer hover:border-[var(--border-default)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)]"
                   tabIndex={0}
                   role="button"
                   aria-label={`${lang === 'vi' ? 'Xem dự báo' : 'View forecast'}: ${item.location}, ${item.date}`}
@@ -570,7 +571,7 @@ export const Home: React.FC<HomeProps> = ({
       <section className="space-y-4">
         <FadeIn direction="up">
           <div>
-            <h2 className="text-xl sm:text-2xl font-black text-[var(--text-primary)] tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)] tracking-tight">
               {t('health.title')}
             </h2>
             <p className="text-xs text-[var(--text-tertiary)] mt-1">
@@ -584,7 +585,7 @@ export const Home: React.FC<HomeProps> = ({
                 <div
                   key={group.id}
                   onClick={onNavigateToAlerts}
-                  className="p-6 rounded-2xl bg-[var(--surface-card)] border border-[var(--border-default)] shadow-[var(--shadow-card)] space-y-3 cursor-pointer hover:border-white/35 hover:shadow-[var(--shadow-card)] hover:-translate-y-0.5 transition-all"
+                  className="p-6 rounded-2xl bg-[var(--surface-card)] border border-[var(--border-default)] shadow-[var(--shadow-card)] space-y-3 cursor-pointer hover:border-[var(--border-default)] hover:shadow-[var(--shadow-card)] hover:-translate-y-0.5 transition-all"
                   title="Nhấn để xem trung tâm cảnh báo & bảo vệ sức khỏe / Click to view health alert center"
                 >
                   <div className="flex items-center justify-between">
@@ -630,7 +631,7 @@ export const Home: React.FC<HomeProps> = ({
                   <BellRing className="w-3.5 h-3.5" />
                   <span>{lang === 'vi' ? 'Cảnh báo sớm thời gian thực' : 'Early Real-Time Alerts'}</span>
                 </div>
-                <h3 className="text-2xl font-black tracking-tight">{t('notif.title')}</h3>
+                <h3 className="text-2xl font-bold tracking-tight">{t('notif.title')}</h3>
                 <p className="text-sm leading-6 text-[var(--text-secondary)] max-w-xl transition-colors duration-300">
                   {t('notif.desc')}
                 </p>
@@ -653,7 +654,7 @@ export const Home: React.FC<HomeProps> = ({
                     step="10"
                     value={customThreshold}
                     onChange={(e) => setCustomThreshold(Number(e.target.value))}
-                    className="w-full h-2 rounded-lg cursor-pointer accent-orange-500 bg-slate-200 dark:bg-slate-700 transition-colors duration-300"
+                    className="w-full h-2 rounded-lg cursor-pointer accent-[var(--accent-primary)] bg-slate-200 dark:bg-slate-700 transition-colors duration-300"
                   />
                   
                   <div className="flex justify-between text-xs text-[var(--text-secondary)] font-medium transition-colors duration-300">
@@ -668,7 +669,7 @@ export const Home: React.FC<HomeProps> = ({
               <div className="lg:col-span-5 flex flex-col justify-center">
                 <button
                   onClick={handleSaveNotificationConfig}
-                  className="w-full py-3.5 px-6 rounded-2xl bg-orange-700 hover:bg-orange-800 text-white font-bold text-xs shadow-md transition-all active:scale-98 flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-3.5 px-6 rounded-2xl bg-[var(--accent-primary)] hover:bg-[var(--accent-primary-hover)] text-white font-bold text-xs shadow-md transition-all active:scale-98 flex items-center justify-center gap-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)] focus-visible:ring-offset-2"
                 >
                   <Bell className="w-4 h-4" />
                   <span>{preferences.enabled ? t('notif.enabled') : t('notif.enable_btn')}</span>
@@ -684,7 +685,7 @@ export const Home: React.FC<HomeProps> = ({
         <FadeIn direction="up">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
             <div>
-              <h2 className="text-xl sm:text-2xl font-black text-[var(--text-primary)] tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)] tracking-tight">
                 {t('pollutants.title')}
               </h2>
               <p className="text-xs text-[var(--text-tertiary)] mt-1">
@@ -693,7 +694,7 @@ export const Home: React.FC<HomeProps> = ({
             </div>
             <button
               onClick={() => onSelectStation(currentStation)}
-              className="text-xs font-semibold text-orange-500 hover:text-orange-600 flex items-center gap-1 self-start sm:self-auto cursor-pointer"
+              className="text-xs font-semibold text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] flex items-center gap-1 self-start sm:self-auto cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)] rounded-sm"
             >
               <span>{lang === 'vi' ? 'Xem chi tiết thông số trạm' : 'View detailed station specs'}</span>
               <ChevronRight className="w-4 h-4" />
@@ -711,8 +712,8 @@ export const Home: React.FC<HomeProps> = ({
                   onClick={() => onSelectStation(currentStation)}
                   className={`p-4 rounded-xl bg-[var(--surface-card)] border transition-all hover:shadow-[var(--shadow-card)] hover:-translate-y-0.5 cursor-pointer ${
                     isOverLimit
-                      ? 'border-orange-300 dark:border-orange-900/60 hover:border-white/35'
-                        : 'border-[var(--border-default)] hover:border-white/35'
+                      ? 'border-orange-300 dark:border-orange-900/60 hover:border-[var(--border-default)]'
+                        : 'border-[var(--border-default)] hover:border-[var(--border-default)]'
                   }`}
                   title="Nhấn để xem phân tích chi tiết / Click to view detailed analysis"
                 >
@@ -753,7 +754,7 @@ export const Home: React.FC<HomeProps> = ({
         <FadeIn direction="up">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
             <div>
-              <h2 className="text-xl sm:text-2xl font-black text-[var(--text-primary)] tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)] tracking-tight">
                 {t('charts.title')}
               </h2>
               <p className="text-xs text-[var(--text-tertiary)] mt-0.5">
@@ -765,9 +766,9 @@ export const Home: React.FC<HomeProps> = ({
             <div className="flex items-center gap-1 p-1 bg-[var(--surface-subtle)] rounded-xl self-start sm:self-auto">
               <button
                 onClick={() => setChartTab('24h')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)] ${
                   chartTab === '24h'
-                    ? 'bg-white dark:surface-card text-orange-500 shadow-xs'
+                    ? 'bg-white dark:surface-card text-[var(--accent-primary)] shadow-xs'
                     : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
@@ -775,9 +776,9 @@ export const Home: React.FC<HomeProps> = ({
               </button>
               <button
                 onClick={() => setChartTab('pollutants')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)] ${
                   chartTab === 'pollutants'
-                    ? 'bg-white dark:surface-card text-orange-500 shadow-xs'
+                    ? 'bg-white dark:surface-card text-[var(--accent-primary)] shadow-xs'
                     : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
@@ -785,9 +786,9 @@ export const Home: React.FC<HomeProps> = ({
               </button>
               <button
                 onClick={() => setChartTab('temp')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)] ${
                   chartTab === 'temp'
-                    ? 'bg-white dark:surface-card text-orange-500 shadow-xs'
+                    ? 'bg-white dark:surface-card text-[var(--accent-primary)] shadow-xs'
                     : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
@@ -930,7 +931,7 @@ export const Home: React.FC<HomeProps> = ({
         <FadeIn direction="up">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-2">
             <div>
-              <h2 className="text-xl sm:text-2xl font-black text-[var(--text-primary)] tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)] tracking-tight">
                 {t('map.title')}
               </h2>
               <p className="text-xs text-[var(--text-tertiary)] mt-1">
@@ -939,7 +940,7 @@ export const Home: React.FC<HomeProps> = ({
             </div>
             <button
               onClick={onNavigateToMaps}
-              className="text-xs font-semibold px-4 py-2 rounded-xl bg-orange-700 hover:bg-orange-800 text-white shadow-sm flex items-center gap-1.5 self-start sm:self-auto transition-all active:scale-95 cursor-pointer"
+              className="text-xs font-semibold px-4 py-2 rounded-xl bg-[var(--accent-primary)] hover:bg-[var(--accent-primary-hover)] text-white shadow-sm flex items-center gap-1.5 self-start sm:self-auto transition-all active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)] focus-visible:ring-offset-2"
             >
               <span>{t('map.view_full')}</span>
               <ArrowUpRight className="w-4 h-4" />
@@ -975,7 +976,8 @@ export const Home: React.FC<HomeProps> = ({
 
               <div className="space-y-2.5 text-xs">
                 {BEST_OUTDOOR_HOURS.map((item, idx) => (
-                  <div
+                  <button
+                    type="button"
                     key={idx}
                     className="p-2.5 rounded-xl bg-[var(--surface-subtle)] flex items-center justify-between gap-2 hover:bg-[var(--surface-header)] transition-colors cursor-pointer"
                   >
@@ -1004,7 +1006,8 @@ export const Home: React.FC<HomeProps> = ({
                 {CITY_COMPARISONS.slice(0, 5).map((c, idx) => {
                   const cat = getAQICategory(c.aqi);
                   return (
-                    <div
+                    <button
+                      type="button"
                       key={idx}
                       onClick={() => {
                         const match = VIETNAM_STATIONS.find(
@@ -1017,7 +1020,7 @@ export const Home: React.FC<HomeProps> = ({
                           onSelectStation(match);
                         }
                       }}
-                      className="p-2.5 rounded-xl bg-[var(--surface-subtle)] flex items-center justify-between cursor-pointer hover:bg-orange-50/60 dark:hover:bg-orange-950/30 hover:scale-[1.02] transition-all"
+                      className="w-full text-left p-2.5 rounded-xl bg-[var(--surface-subtle)] flex items-center justify-between cursor-pointer hover:bg-orange-50/60 dark:hover:bg-orange-950/30 hover:scale-[1.02] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)]"
                       title={`Nhấn để chuyển sang trạm ${c.city} / Click to view ${c.city} station`}
                     >
                       <div>
@@ -1033,7 +1036,7 @@ export const Home: React.FC<HomeProps> = ({
                         </span>
                         <AQIBadge aqi={c.aqi} size="sm" showIcon={false} />
                       </div>
-                    </div>
+                    </button>
                   );
                 })}
               </div>
