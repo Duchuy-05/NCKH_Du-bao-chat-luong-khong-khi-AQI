@@ -105,9 +105,9 @@ export const Forecast: React.FC = () => {
 
                 <div className="pt-2 border-t border-slate-100 surface-border text-xs space-y-1">
                   <div className="flex items-center justify-between font-bold">
-                    <span className="text-red-500">{day.maxTemp}°</span>
+                    <span className="text-sky-500">{day.minTemp}°</span>
                     <span className="text-slate-300">/</span>
-                    <span className="text-sky-500">{day.minTemp}°C</span>
+                    <span className="text-red-500">{day.maxTemp}°C</span>
                   </div>
                   <div className="text-[10px] text-slate-500 line-clamp-1">
                     {lang === 'vi' ? day.conditionVi : day.conditionEn}
