@@ -45,7 +45,7 @@ export const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) =
           <div className="p-6 overflow-y-auto space-y-4 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
             <h4 className="font-bold text-slate-900 dark:text-white text-sm">1. Thu thập dữ liệu vị trí (Geolocation)</h4>
             <p>
-              Khi bạn nhấn nút "Định vị của tôi", trình duyệt sẽ yêu cầu quyền truy cập GPS/tọa độ. Dữ liệu này CHỈ được xử lý trực tiếp trên thiết bị (client-side) để xác định trạm quan trắc gần nhất và gửi thông báo đẩy cảnh báo. Chúng tôi KHÔNG lưu trữ lịch sử di chuyển hay chia sẻ vị trí của bạn với bên thứ ba.
+              Khi bạn nhấn nút "Vị trí của bạn", trình duyệt sẽ yêu cầu quyền truy cập GPS/tọa độ. Dữ liệu này CHỈ được xử lý trực tiếp trên thiết bị (client-side) để xác định trạm quan trắc gần nhất và gửi thông báo đẩy cảnh báo. Chúng tôi KHÔNG lưu trữ lịch sử di chuyển hay chia sẻ vị trí của bạn với bên thứ ba.
             </p>
 
             <h4 className="font-bold text-slate-900 dark:text-white text-sm">2. Bộ nhớ cục bộ (Local Storage)</h4>
@@ -60,7 +60,7 @@ export const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) =
 
             <h4 className="font-bold text-slate-900 dark:text-white text-sm">4. Liên hệ bảo mật</h4>
             <p>
-              Nếu có bất kỳ thắc mắc nào về chính sách bảo mật dữ liệu, xin vui lòng gửi email về: <strong>privacy@airvision.vn</strong>.
+              Nếu có bất kỳ thắc mắc nào về chính sách bảo mật dữ liệu, xin vui lòng gửi email về: <strong>nguyentienduchuy2005@gmail.com</strong>.
             </p>
           </div>
 

@@ -60,12 +60,12 @@ export const Maps: React.FC<MapsProps> = ({ onSelectStation }) => {
           </div>
 
           {/* Layer Selector Chips */}
-          <div className="flex items-center gap-1.5 p-1 bg-slate-100 dark:bg-slate-800/80 rounded-2xl self-start sm:self-auto">
+          <div className="flex items-center gap-1.5 p-1 bg-slate-100 dark:surface-card rounded-2xl self-start sm:self-auto">
             <button
               onClick={() => setActiveLayer('aqi')}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 activeLayer === 'aqi'
-                  ? 'bg-white dark:bg-slate-900 text-orange-500 shadow-sm'
+                  ? 'bg-white dark:surface-card-header text-orange-500 shadow-sm'
                   : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -75,7 +75,7 @@ export const Maps: React.FC<MapsProps> = ({ onSelectStation }) => {
               onClick={() => setActiveLayer('pm25')}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 activeLayer === 'pm25'
-                  ? 'bg-white dark:bg-slate-900 text-orange-500 shadow-sm'
+                  ? 'bg-white dark:surface-card-header text-orange-500 shadow-sm'
                   : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -85,7 +85,7 @@ export const Maps: React.FC<MapsProps> = ({ onSelectStation }) => {
               onClick={() => setActiveLayer('temp')}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 activeLayer === 'temp'
-                  ? 'bg-white dark:bg-slate-900 text-orange-500 shadow-sm'
+                  ? 'bg-white dark:surface-card-header text-orange-500 shadow-sm'
                   : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -95,7 +95,7 @@ export const Maps: React.FC<MapsProps> = ({ onSelectStation }) => {
               onClick={() => setActiveLayer('wind')}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 activeLayer === 'wind'
-                  ? 'bg-white dark:bg-slate-900 text-orange-500 shadow-sm'
+                  ? 'bg-white dark:surface-card-header text-orange-500 shadow-sm'
                   : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -108,7 +108,7 @@ export const Maps: React.FC<MapsProps> = ({ onSelectStation }) => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
           {/* Left / Center Map Area */}
           <div className="lg:col-span-8 space-y-4">
-            <div className="rounded-3xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800">
+            <div className="rounded-3xl overflow-hidden shadow-2xl border border-slate-200 surface-border">
               <VietnamMap
                 stations={VIETNAM_STATIONS}
                 selectedStation={selectedStation}
@@ -123,7 +123,7 @@ export const Maps: React.FC<MapsProps> = ({ onSelectStation }) => {
             </div>
 
             {/* Time Slider & Playback Controller */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row items-center gap-4">
+            <div className="p-4 sm:p-5 rounded-2xl bg-white dark:surface-card border border-slate-200 surface-border shadow-sm flex flex-col sm:flex-row items-center gap-4">
               <div className="flex items-center gap-2">
                 <button
                   onClick={togglePlayback}
@@ -133,7 +133,7 @@ export const Maps: React.FC<MapsProps> = ({ onSelectStation }) => {
                 </button>
                 <button
                   onClick={() => setTimeHour(8)}
-                  className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors cursor-pointer"
+                  className="p-2.5 rounded-xl bg-slate-100 dark:surface-card-header text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-[var(--bg-card-header)] transition-colors cursor-pointer"
                   title="Đặt lại"
                 >
                   <RotateCcw className="w-4 h-4" />
@@ -151,7 +151,7 @@ export const Maps: React.FC<MapsProps> = ({ onSelectStation }) => {
                   max="23"
                   value={timeHour}
                   onChange={(e) => setTimeHour(Number(e.target.value))}
-                  className="w-full accent-orange-500 h-2 bg-slate-200 dark:bg-slate-800 rounded-lg cursor-pointer"
+                  className="w-full accent-orange-500 h-2 bg-slate-200 dark:surface-card-header rounded-lg cursor-pointer"
                 />
                 <div className="flex justify-between text-[10px] text-slate-400 font-medium">
                   <span>00:00</span>
@@ -166,12 +166,12 @@ export const Maps: React.FC<MapsProps> = ({ onSelectStation }) => {
 
           {/* Right Stations List & Quick Filter Sidebar */}
           <div className="lg:col-span-4 space-y-4">
-            <div className="p-4 sm:p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl flex flex-col h-[676px]">
+            <div className="p-4 sm:p-5 rounded-3xl bg-white dark:surface-card border border-slate-200 surface-border shadow-xl flex flex-col h-[676px]">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white">
                   {lang === 'vi' ? 'Danh sách trạm quan trắc' : 'Monitoring Stations'}
                 </h3>
-                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:surface-card-header text-slate-600 dark:text-slate-300">
                   {filteredStations.length} {lang === 'vi' ? 'trạm' : 'stations'}
                 </span>
               </div>
@@ -184,7 +184,7 @@ export const Maps: React.FC<MapsProps> = ({ onSelectStation }) => {
                   value={searchStation}
                   onChange={(e) => setSearchStation(e.target.value)}
                   placeholder={lang === 'vi' ? 'Tìm theo tên trạm hoặc tỉnh...' : 'Filter by station name or city...'}
-                  className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 rounded-xl pl-9 pr-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-orange-500 transition-colors"
+                  className="w-full bg-slate-50 dark:surface-card-header border border-slate-200 surface-border rounded-xl pl-9 pr-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-orange-500 transition-colors"
                 />
               </div>
 
@@ -203,7 +203,7 @@ export const Maps: React.FC<MapsProps> = ({ onSelectStation }) => {
                       className={`p-3.5 rounded-2xl cursor-pointer transition-all border ${
                         isSelected
                           ? 'border-orange-500 bg-orange-50/50 dark:bg-orange-950/30 shadow-sm'
-                          : 'border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-800/30 hover:bg-slate-100 dark:hover:bg-slate-800/70'
+                          : 'border-slate-100 surface-border bg-slate-50/50 dark:surface-card-header hover:bg-slate-100 dark:hover:bg-[var(--bg-card-header)]'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-2">

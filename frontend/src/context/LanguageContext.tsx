@@ -18,14 +18,11 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.forecast': 'Dự báo 7 ngày',
     'nav.alerts': 'Cảnh báo sức khỏe',
     'nav.about': 'Về chúng tôi',
-    'nav.login': 'Đăng nhập',
-    'nav.register': 'Đăng ký',
-    'nav.logout': 'Đăng xuất',
     
     // Hero
     'hero.title': 'Dự báo Chất lượng Không khí & Thời tiết Việt Nam',
     'hero.subtitle': 'Giám sát chỉ số AQI thời gian thực từ hơn 150 trạm quan trắc chuẩn quốc gia',
-    'hero.search_placeholder': 'Tìm kiếm thành phố, quận/huyện, trạm đo (vd: Hoàn Kiếm, Cầu Rồng, Bến Thành)...',
+    'hero.search_placeholder': 'Tìm kiếm thành phố (vd: Hà Nội, TP.HCM, Đà Nẵng)...',
     'hero.allow_location': 'Vị trí của bạn',
     'hero.locating': 'Đang lấy vị trí...',
     'hero.location_detected': 'Đã định vị thành công',
@@ -69,6 +66,7 @@ const translations: Record<Language, Record<string, string>> = {
 
     // 7-day Table
     'table.title': 'Bảng dự báo chất lượng không khí 7 ngày tới',
+    'table.col_stt': 'STT',
     'table.col_day': 'Thứ / Ngày',
     'table.col_area': 'Khu vực',
     'table.col_level': 'Mức độ',
@@ -119,14 +117,11 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.forecast': '7-Day Forecast',
     'nav.alerts': 'Health Alerts',
     'nav.about': 'About Us',
-    'nav.login': 'Sign In',
-    'nav.register': 'Sign Up',
-    'nav.logout': 'Sign Out',
 
     // Hero
     'hero.title': 'Vietnam Air Quality & Weather Forecast',
     'hero.subtitle': 'Real-time AQI monitoring from over 150 standard environmental stations across Vietnam',
-    'hero.search_placeholder': 'Search city, district, monitoring station (e.g., Hoan Kiem, Dragon Bridge, Ben Thanh)...',
+    'hero.search_placeholder': 'Search city (e.g., Ha Noi, Ho Chi Minh, Da Nang)...',
     'hero.allow_location': 'Your Location',
     'hero.locating': 'Locating...',
     'hero.location_detected': 'Location Detected',
@@ -170,6 +165,7 @@ const translations: Record<Language, Record<string, string>> = {
 
     // 7-day Table
     'table.title': '7-Day Air Quality Forecast Table',
+    'table.col_stt': 'No.',
     'table.col_day': 'Day / Date',
     'table.col_area': 'Region',
     'table.col_level': 'Category',

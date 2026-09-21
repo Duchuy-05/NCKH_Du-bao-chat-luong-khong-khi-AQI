@@ -28,7 +28,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const displayName = mode === 'login' ? (email.split('@')[0] || 'Nguyễn Văn A') : fullName || 'Thành viên mới';
+    const displayName = mode === 'login' ? (email.split('@')[0] || 'Nguyen Van A') : fullName || 'Thành viên mới';
     setSuccessMsg(
       mode === 'login'
         ? (lang === 'vi' ? 'Đăng nhập thành công!' : 'Signed in successfully!')
@@ -43,17 +43,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       setSuccessMsg('');
       onClose();
     }, 900);
-  };
-
-  const handleQuickDemo = () => {
-    setEmail('vietnam.demo@airvision.vn');
-    setPassword('AirVision@2026');
-    setFullName('Nguyễn Hoàng Nam');
-    onLoginSuccess({
-      name: 'Nguyễn Hoàng Nam',
-      email: 'vietnam.demo@airvision.vn',
-    });
-    onClose();
   };
 
   return (
