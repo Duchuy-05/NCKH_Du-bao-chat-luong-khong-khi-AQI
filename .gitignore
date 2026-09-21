@@ -8,3 +8,11 @@ __pycache__/
 *.pyc
 venv/
 .env
+*.csv
+data/*.parquet
+*.joblib
+*.parquet
+
+.github/prompts
+design-system/
+.agents
