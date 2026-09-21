@@ -4,12 +4,31 @@ bằng thuật toán Support Vector Regression (SVR).
 """
 from __future__ import annotations
 
-from fastapi import FastAPI, HTTPException, Query
+import os
+from typing import Optional
+from dotenv import load_dotenv
+from fastapi import FastAPI, HTTPException, Query, Header, Depends
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.models.schema import DailyForecastResponse, HourlyForecastResponse
 from app.services.daily_predictor import get_daily_predictor
 from app.services.hourly_predictor import get_hourly_predictor
+
+# Load environment variables
+load_dotenv()
+
+INTERNAL_API_KEY = os.getenv("INTERNAL_API_KEY", "")
+
+
+def verify_internal_key(x_internal_api_key: Optional[str] = Header(None)):
+    """Kiểm tra API Key nội bộ giữa Backend và ML Service."""
+    if INTERNAL_API_KEY:
+        if not x_internal_api_key or x_internal_api_key != INTERNAL_API_KEY:
+            raise HTTPException(
+                status_code=401,
+                detail="Unauthorized: Khóa xác thực nội bộ (X-Internal-Api-Key) không đúng hoặc bị thiếu."
+            )
+
 
 app = FastAPI(
     title="AirVision ML Service - Hanoi AQI Forecast (SVR)",
@@ -31,7 +50,12 @@ def health_check():
     return {"status": "ok", "service": "airvision-ml-service", "algo": "SVR"}
 
 
-@app.get("/forecast/daily", response_model=DailyForecastResponse, tags=["Forecast"])
+@app.get(
+    "/forecast/daily",
+    response_model=DailyForecastResponse,
+    tags=["Forecast"],
+    dependencies=[Depends(verify_internal_key)],
+)
 def forecast_daily(
     algo: str = Query("svr", description="Thuật toán dự báo (mặc định: svr)")
 ):
@@ -50,7 +74,12 @@ def forecast_daily(
         raise HTTPException(status_code=500, detail=f"Lỗi dự báo Daily: {str(e)}")
 
 
-@app.get("/forecast/hourly", response_model=HourlyForecastResponse, tags=["Forecast"])
+@app.get(
+    "/forecast/hourly",
+    response_model=HourlyForecastResponse,
+    tags=["Forecast"],
+    dependencies=[Depends(verify_internal_key)],
+)
 def forecast_hourly(
     algo: str = Query("svr", description="Thuật toán dự báo (mặc định: svr)")
 ):

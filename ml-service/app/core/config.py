@@ -44,6 +44,9 @@ DB_NAME = os.getenv("DB_NAME", "")
 DB_USER = os.getenv("DB_USER", "")
 DB_PASSWORD = os.getenv("DB_PASSWORD", "")
 
+# Internal API Key for Backend <-> ML Service communication
+INTERNAL_API_KEY = os.getenv("INTERNAL_API_KEY", "")
+
 # Table names in PostgreSQL (pgAdmin)
 TABLE_POLLUTANTS = os.getenv("TABLE_POLLUTANTS", "hanoi_pollutants")
 TABLE_WEATHER = os.getenv("TABLE_WEATHER", "hanoi_weather")
