@@ -499,7 +499,7 @@ export const Home: React.FC<HomeProps> = ({
                         </span>
                       </td>
                       <td className="py-4 px-6 font-bold text-[var(--text-primary)]">
-                        <span className="text-[var(--accent-primary)]">{item.maxTemp}°</span> / <span className="text-sky-500">{item.minTemp}°</span>
+                        <span className="text-sky-500">{item.minTemp}°</span> / <span className="text-[var(--accent-primary)]">{item.maxTemp}°</span>
                       </td>
                       <td className="py-4 px-6 text-[var(--text-secondary)]">
                         <div className="flex items-center gap-2">
@@ -551,7 +551,7 @@ export const Home: React.FC<HomeProps> = ({
                   <div className="flex items-center justify-between text-xs pt-2 border-t border-[var(--border-default)]">
                     <AQIBadge aqi={item.aqi} size="sm" />
                     <span className="font-bold text-[var(--text-primary)]">
-                      {item.maxTemp}° / {item.minTemp}°C
+                      <span className="text-sky-500">{item.minTemp}°</span> / <span className="text-[var(--accent-primary)]">{item.maxTemp}°</span>C
                     </span>
                   </div>
 
