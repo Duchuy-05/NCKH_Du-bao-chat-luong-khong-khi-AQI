@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { AirStation } from '../types/airQuality.types';
 import { getAQICategory } from '../utils/aqi.util';
 import { useLanguage } from '../context/LanguageContext';
@@ -37,6 +37,7 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const dragStart = useRef({ x: 0, y: 0, panX: 0, panY: 0 });
+  const mapCanvasRef = useRef<HTMLDivElement>(null);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
@@ -52,10 +53,32 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
 
   const handleMouseUp = () => setIsDragging(false);
 
+
+
   const filteredStations = stations.filter((s) => {
     if (regionFilter === 'All') return true;
     return s.region === regionFilter;
   });
+
+  // Gắn sự kiện lăn chuột "thủ công" bằng addEventListener thay vì onWheel của
+  // React. Lý do: React (và trình duyệt) mặc định coi sự kiện wheel là
+  // "passive" để tối ưu hiệu năng cuộn trang - khiến e.preventDefault() bên
+  // trong onWheel={} của JSX KHÔNG có tác dụng thật, nên trang vẫn bị cuộn
+  // theo dù đã gọi preventDefault(). Chỉ có cách gắn listener thủ công với
+  // { passive: false } mới ép được trình duyệt cho phép chặn cuộn trang.
+  useEffect(() => {
+    const el = mapCanvasRef.current;
+    if (!el) return;
+
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? -0.1 : 0.1;
+      setZoomLevel((z) => Math.min(1.4, Math.max(0.9, z + delta)));
+    };
+
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, []);
 
   const getStationColor = (st: AirStation) => {
     if (activeLayer === 'temp') {
@@ -138,6 +161,7 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
 
       {/* SVG Map Canvas */}
       <div
+        ref={mapCanvasRef}
         className="relative flex-1 w-full h-full overflow-hidden flex items-center justify-center p-2 sm:p-4"
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
