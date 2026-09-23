@@ -442,127 +442,127 @@ export const Home: React.FC<HomeProps> = ({
               </button>
             </div>
           ) : (
-          <>
-          {/* Desktop Table View */}
-          <div className="hidden md:block overflow-x-auto rounded-2xl border border-[var(--border-default)] bg-[var(--surface-card)] shadow-[var(--shadow-card)]">
-            <table className="w-full text-left border-collapse text-xs">
-              <thead>
-                <tr className="border-b border-[var(--border-default)] bg-[var(--surface-header)] text-[var(--text-secondary)] font-bold uppercase tracking-wider text-xs">
-                  <th className="py-4 px-6">{t('table.col_day')}</th>
-                  <th className="py-4 px-6">{t('table.col_area')}</th>
-                  <th className="py-4 px-6">{t('table.col_level')}</th>
-                  <th className="py-4 px-6">{t('table.col_aqi')}</th>
-                  <th className="py-4 px-6">{t('table.col_temp')}</th>
-                  <th className="py-4 px-6">{t('table.col_condition')}</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[var(--border-default)]">
+            <>
+              {/* Desktop Table View */}
+              <div className="hidden md:block overflow-x-auto rounded-2xl border border-[var(--border-default)] bg-[var(--surface-card)] shadow-[var(--shadow-card)]">
+                <table className="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr className="border-b border-[var(--border-default)] bg-[var(--surface-header)] text-[var(--text-secondary)] font-bold uppercase tracking-wider text-xs">
+                      <th className="py-4 px-6">{t('table.col_day')}</th>
+                      <th className="py-4 px-6">{t('table.col_area')}</th>
+                      <th className="py-4 px-6">{t('table.col_level')}</th>
+                      <th className="py-4 px-6">{t('table.col_aqi')}</th>
+                      <th className="py-4 px-6">{t('table.col_temp')}</th>
+                      <th className="py-4 px-6">{t('table.col_condition')}</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[var(--border-default)]">
+                    {filteredForecast.map((item) => {
+                      const cat = getAQICategory(item.aqi);
+                      return (
+                        <tr
+                          key={item.id}
+                          className="hover:bg-[var(--surface-subtle)] transition-colors"
+                          title="Nhấn để xem dự báo 7 ngày chi tiết / Click to view detailed 7-day forecast"
+                          style={{
+                            backgroundColor: item.aqi > 150 ? 'rgba(239, 68, 68, 0.04)' : undefined,
+                          }}
+                        >
+                          <td className="py-4 px-6 font-bold text-[var(--text-primary)]">
+                            <button
+                              type="button"
+                              onClick={onNavigateToForecast}
+                              className="text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--accent-focus)] rounded-sm"
+                              aria-label={`${lang === 'vi' ? 'Xem dự báo' : 'View forecast'}: ${item.location}, ${item.date}`}
+                            >
+                              <span>{lang === 'vi' ? item.dayOfWeekVi : item.dayOfWeekEn}</span>
+                              <span className="block text-xs text-[var(--text-tertiary)] font-normal">{item.date}</span>
+                            </button>
+                          </td>
+                          <td className="py-4 px-6 font-semibold text-[var(--text-secondary)]">
+                            {item.location}
+                          </td>
+                          <td className="py-4 px-6">
+                            <span
+                              className="text-[0.84rem] font-bold tracking-wide"
+                              style={{ color: cat.textColor }}
+                            >
+                              {lang === 'vi' ? cat.labelVi : cat.labelEn}
+                            </span>
+                          </td>
+                          <td className="py-4 px-6">
+                            <span
+                              className="font-bold text-sm px-2.5 py-1 rounded-lg"
+                              style={{ backgroundColor: cat.bgColor, color: cat.color }}
+                            >
+                              {Math.round(item.aqi)}
+                            </span>
+                          </td>
+                          <td className="py-4 px-6 font-bold text-[var(--text-primary)]">
+                            <span className="text-sky-500">{item.minTemp}°</span> / <span className="text-[var(--accent-primary)]">{item.maxTemp}°</span>
+                          </td>
+                          <td className="py-4 px-6 text-[var(--text-secondary)]">
+                            <div className="flex items-center gap-2">
+                              <span>{lang === 'vi' ? item.conditionVi : item.conditionEn}</span>
+                              <span className="text-xs text-sky-700 dark:text-sky-300 font-semibold px-1.5 py-0.5 rounded bg-sky-50 dark:bg-sky-950/60">
+                                {item.rainProbability}% mưa
+                              </span>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile Card Grid View */}
+              <div className="grid grid-cols-1 gap-3 md:hidden">
                 {filteredForecast.map((item) => {
                   const cat = getAQICategory(item.aqi);
                   return (
-                    <tr
+                    <article
                       key={item.id}
-                      className="hover:bg-[var(--surface-subtle)] transition-colors"
-                      title="Nhấn để xem dự báo 7 ngày chi tiết / Click to view detailed 7-day forecast"
-                      style={{
-                        backgroundColor: item.aqi > 150 ? 'rgba(239, 68, 68, 0.04)' : undefined,
+                      onClick={onNavigateToForecast}
+                      className="p-4 rounded-2xl bg-[var(--surface-card)] border border-[var(--border-default)] shadow-[var(--shadow-card)] space-y-2.5 cursor-pointer hover:border-[var(--border-default)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)]"
+                      tabIndex={0}
+                      role="button"
+                      aria-label={`${lang === 'vi' ? 'Xem dự báo' : 'View forecast'}: ${item.location}, ${item.date}`}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter' || event.key === ' ') onNavigateToForecast();
                       }}
+                      title="Nhấn để xem dự báo 7 ngày chi tiết / Click to view detailed forecast"
                     >
-                      <td className="py-4 px-6 font-bold text-[var(--text-primary)]">
-                        <button
-                          type="button"
-                          onClick={onNavigateToForecast}
-                          className="text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--accent-focus)] rounded-sm"
-                          aria-label={`${lang === 'vi' ? 'Xem dự báo' : 'View forecast'}: ${item.location}, ${item.date}`}
-                        >
-                          <span>{lang === 'vi' ? item.dayOfWeekVi : item.dayOfWeekEn}</span>
-                          <span className="block text-xs text-[var(--text-tertiary)] font-normal">{item.date}</span>
-                        </button>
-                      </td>
-                      <td className="py-4 px-6 font-semibold text-[var(--text-secondary)]">
-                        {item.location}
-                      </td>
-                      <td className="py-4 px-6">
-                        <span
-                          className="text-[0.84rem] font-bold tracking-wide"
-                          style={{ color: cat.textColor }}
-                        >
-                          {lang === 'vi' ? cat.labelVi : cat.labelEn}
-                        </span>
-                      </td>
-                      <td className="py-4 px-6">
-                        <span
-                          className="font-bold text-sm px-2.5 py-1 rounded-lg"
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <span className="text-xs font-bold text-[var(--text-primary)]">
+                            {lang === 'vi' ? item.dayOfWeekVi : item.dayOfWeekEn} ({item.date})
+                          </span>
+                          <span className="block text-xs text-[var(--text-tertiary)]">{item.location}</span>
+                        </div>
+                        <div
+                          className="px-3 py-1 rounded-xl font-bold text-sm"
                           style={{ backgroundColor: cat.bgColor, color: cat.color }}
                         >
-                          {Math.round(item.aqi)}
-                        </span>
-                      </td>
-                      <td className="py-4 px-6 font-bold text-[var(--text-primary)]">
-                        <span className="text-sky-500">{item.minTemp}°</span> / <span className="text-[var(--accent-primary)]">{item.maxTemp}°</span>
-                      </td>
-                      <td className="py-4 px-6 text-[var(--text-secondary)]">
-                        <div className="flex items-center gap-2">
-                          <span>{lang === 'vi' ? item.conditionVi : item.conditionEn}</span>
-                          <span className="text-xs text-sky-700 dark:text-sky-300 font-semibold px-1.5 py-0.5 rounded bg-sky-50 dark:bg-sky-950/60">
-                            {item.rainProbability}% mưa
-                          </span>
+                          AQI {Math.round(item.aqi)}
                         </div>
-                      </td>
-                    </tr>
+                      </div>
+
+                      <div className="flex items-center justify-between text-xs pt-2 border-t border-[var(--border-default)]">
+                        <AQIBadge aqi={item.aqi} size="sm" />
+                        <span className="font-bold text-[var(--text-primary)]">
+                          <span className="text-sky-500">{item.minTemp}°</span> / <span className="text-[var(--accent-primary)]">{item.maxTemp}°</span>C
+                        </span>
+                      </div>
+
+                      <p className="text-xs text-[var(--text-tertiary)]">
+                        {lang === 'vi' ? item.conditionVi : item.conditionEn} ({item.rainProbability}% xác suất mưa)
+                      </p>
+                    </article>
                   );
                 })}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Mobile Card Grid View */}
-          <div className="grid grid-cols-1 gap-3 md:hidden">
-            {filteredForecast.map((item) => {
-              const cat = getAQICategory(item.aqi);
-              return (
-                <article
-                  key={item.id}
-                  onClick={onNavigateToForecast}
-                  className="p-4 rounded-2xl bg-[var(--surface-card)] border border-[var(--border-default)] shadow-[var(--shadow-card)] space-y-2.5 cursor-pointer hover:border-[var(--border-default)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)]"
-                  tabIndex={0}
-                  role="button"
-                  aria-label={`${lang === 'vi' ? 'Xem dự báo' : 'View forecast'}: ${item.location}, ${item.date}`}
-                  onKeyDown={(event) => {
-                    if (event.key === 'Enter' || event.key === ' ') onNavigateToForecast();
-                  }}
-                  title="Nhấn để xem dự báo 7 ngày chi tiết / Click to view detailed forecast"
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-xs font-bold text-[var(--text-primary)]">
-                        {lang === 'vi' ? item.dayOfWeekVi : item.dayOfWeekEn} ({item.date})
-                      </span>
-                      <span className="block text-xs text-[var(--text-tertiary)]">{item.location}</span>
-                    </div>
-                    <div
-                      className="px-3 py-1 rounded-xl font-bold text-sm"
-                      style={{ backgroundColor: cat.bgColor, color: cat.color }}
-                    >
-                      AQI {Math.round(item.aqi)}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between text-xs pt-2 border-t border-[var(--border-default)]">
-                    <AQIBadge aqi={item.aqi} size="sm" />
-                    <span className="font-bold text-[var(--text-primary)]">
-                      <span className="text-sky-500">{item.minTemp}°</span> / <span className="text-[var(--accent-primary)]">{item.maxTemp}°</span>C
-                    </span>
-                  </div>
-
-                  <p className="text-xs text-[var(--text-tertiary)]">
-                    {lang === 'vi' ? item.conditionVi : item.conditionEn} ({item.rainProbability}% xác suất mưa)
-                  </p>
-                </article>
-              );
-            })}
-          </div>
-          </>
+              </div>
+            </>
           )}
         </FadeIn>
       </section>
@@ -597,11 +597,10 @@ export const Home: React.FC<HomeProps> = ({
                         {lang === 'vi' ? group.titleVi : group.titleEn}
                       </h3>
                     </div>
-                    <span className={`text-xs uppercase tracking-wider font-bold px-2 py-0.5 rounded-full ${
-                      group.riskLevel === 'critical'
+                    <span className={`text-xs uppercase tracking-wider font-bold px-2 py-0.5 rounded-full ${group.riskLevel === 'critical'
                         ? 'bg-red-100 dark:bg-red-950/60 text-red-600 dark:text-red-400'
                         : 'bg-orange-100 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400'
-                    }`}>
+                      }`}>
                       {group.riskLevel === 'critical' ? (lang === 'vi' ? 'Rủi ro cao' : 'Critical') : (lang === 'vi' ? 'Lưu ý' : 'Caution')}
                     </span>
                   </div>
@@ -646,7 +645,7 @@ export const Home: React.FC<HomeProps> = ({
                       AQI &gt; {customThreshold}
                     </span>
                   </div>
-                  
+
                   <input
                     type="range"
                     min="50"
@@ -656,7 +655,7 @@ export const Home: React.FC<HomeProps> = ({
                     onChange={(e) => setCustomThreshold(Number(e.target.value))}
                     className="w-full h-2 rounded-lg cursor-pointer accent-[var(--accent-primary)] bg-slate-200 dark:bg-slate-700 transition-colors duration-300"
                   />
-                  
+
                   <div className="flex justify-between text-xs text-[var(--text-secondary)] font-medium transition-colors duration-300">
                     <span>50 (Tốt)</span>
                     <span>100 (Trung bình)</span>
@@ -710,11 +709,10 @@ export const Home: React.FC<HomeProps> = ({
                 <div
                   key={key}
                   onClick={() => onSelectStation(currentStation)}
-                  className={`p-4 rounded-xl bg-[var(--surface-card)] border transition-all hover:shadow-[var(--shadow-card)] hover:-translate-y-0.5 cursor-pointer ${
-                    isOverLimit
+                  className={`p-4 rounded-xl bg-[var(--surface-card)] border transition-all hover:shadow-[var(--shadow-card)] hover:-translate-y-0.5 cursor-pointer ${isOverLimit
                       ? 'border-orange-300 dark:border-orange-900/60 hover:border-[var(--border-default)]'
-                        : 'border-[var(--border-default)] hover:border-[var(--border-default)]'
-                  }`}
+                      : 'border-[var(--border-default)] hover:border-[var(--border-default)]'
+                    }`}
                   title="Nhấn để xem phân tích chi tiết / Click to view detailed analysis"
                 >
                   <div className="flex items-center justify-between mb-1">
@@ -766,31 +764,28 @@ export const Home: React.FC<HomeProps> = ({
             <div className="flex items-center gap-1 p-1 bg-[var(--surface-subtle)] rounded-xl self-start sm:self-auto">
               <button
                 onClick={() => setChartTab('24h')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)] ${
-                  chartTab === '24h'
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)] ${chartTab === '24h'
                     ? 'bg-white dark:surface-card text-[var(--accent-primary)] shadow-xs'
                     : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
-                }`}
+                  }`}
               >
                 {t('charts.tab_24h')}
               </button>
               <button
                 onClick={() => setChartTab('pollutants')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)] ${
-                  chartTab === 'pollutants'
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)] ${chartTab === 'pollutants'
                     ? 'bg-white dark:surface-card text-[var(--accent-primary)] shadow-xs'
                     : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
-                }`}
+                  }`}
               >
                 {t('charts.tab_pollutants')}
               </button>
               <button
                 onClick={() => setChartTab('temp')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)] ${
-                  chartTab === 'temp'
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)] ${chartTab === 'temp'
                     ? 'bg-white dark:surface-card text-[var(--accent-primary)] shadow-xs'
                     : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
-                }`}
+                  }`}
               >
                 {t('charts.tab_temp')}
               </button>
@@ -986,7 +981,7 @@ export const Home: React.FC<HomeProps> = ({
                       <span className="text-sm leading-6 text-[var(--text-secondary)]">{lang === 'vi' ? item.adviceVi : item.adviceEn}</span>
                     </div>
                     <div className="shrink-0">
-                      <AQIBadge aqi={item.aqi} size="sm" />
+                      <AQIBadge aqi={item.aqi} size="sm" showIcon={false} />
                     </div>
                   </button>
                 ))}
