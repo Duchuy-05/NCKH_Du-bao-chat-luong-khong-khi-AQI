@@ -129,3 +129,53 @@ export interface NotificationPreferences {
   dailySummary: boolean;
   summaryTime: string;
 }
+
+// ── Types for REAL data from ML Service & Backend ──
+export type RealAQILevel = AQILevel | null;
+
+export interface RealDailyForecastPoint {
+  date: string;       // Format 'YYYY-MM-DD'
+  aqi: number;        // e.g. 132.4
+  level?: RealAQILevel;
+}
+
+export interface DailyForecastResponseData {
+  city: string;
+  algo: string;
+  generated_at: string;
+  horizon_days: number;
+  forecast: RealDailyForecastPoint[];
+}
+
+export interface RealHourlyForecastPoint {
+  timestamp: string;  // ISO datetime string '2026-09-25T10:00:00Z'
+  aqi: number;
+  level?: RealAQILevel;
+}
+
+export interface HourlyForecastResponseData {
+  city: string;
+  algo: string;
+  generated_at: string;
+  horizon_steps: number;
+  step_hours: number;
+  forecast: RealHourlyForecastPoint[];
+}
+
+export interface DisplayDailyCard {
+  id: string;
+  date: string;
+  dayOfWeekVi: string;
+  dayOfWeekEn: string;
+  aqi: number;
+  level: AQILevel;
+}
+
+export interface DisplayHourlyCard {
+  id: string;
+  timeStr: string;   // '10:00'
+  dateStr: string;   // '25/09'
+  aqi: number;
+  level: AQILevel;
+}
+
