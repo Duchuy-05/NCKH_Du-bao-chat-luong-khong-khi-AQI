@@ -81,7 +81,7 @@ import type {
 test('Khai báo kiểu dữ liệu khớp chính xác với cấu trúc hợp đồng API', () => {
   const dailyPoint: RealDailyForecastPoint = {
     date: '2026-09-26',
-    aqi: 132.4,
+    aqi: 36,
     level: 'unhealthy_sensitive',
   };
 
@@ -95,7 +95,7 @@ test('Khai báo kiểu dữ liệu khớp chính xác với cấu trúc hợp đ
 
   const hourlyPoint: RealHourlyForecastPoint = {
     timestamp: '2026-09-25T10:00:00Z',
-    aqi: 145.2,
+    aqi: 40,
     level: null,
   };
 
@@ -141,7 +141,7 @@ export type RealAQILevel = AQILevel | null;
 
 export interface RealDailyForecastPoint {
   date: string;       // Định dạng 'YYYY-MM-DD'
-  aqi: number;        // Ví dụ: 132.4
+  aqi: number;        
   level?: RealAQILevel;
 }
 

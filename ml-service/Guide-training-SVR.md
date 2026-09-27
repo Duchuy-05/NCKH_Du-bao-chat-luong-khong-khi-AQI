@@ -61,6 +61,8 @@ python -m venv .venv
 
 # Cài đặt toàn bộ thư viện
 pip install -r requirements.txt
+# Cập nhật lại toàn bộ thư viện
+python.exe -m pip install --upgrade pip
 ```
 
 ---
