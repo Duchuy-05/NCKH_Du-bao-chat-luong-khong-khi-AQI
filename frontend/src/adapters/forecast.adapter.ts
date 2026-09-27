@@ -5,6 +5,8 @@ import type {
   DisplayHourlyCard,
   AQILevel,
 } from '../types/airQuality.types';
+export type { DisplayDailyCard, DisplayHourlyCard };
+
 import { getAQICategory } from '../utils/aqi.util';
 
 const VI_WEEKDAYS = ['Chủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
