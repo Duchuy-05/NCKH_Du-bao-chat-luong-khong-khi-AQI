@@ -160,7 +160,15 @@ def make_feature_frame(
 
 @dataclass
 class CityGPRArtifact:
-    """Mô hình và thông tin cần thiết để dự đoán cho một thành phố."""
+    """Mô hình và thông tin cần thiết để dự đoán cho một thành phố.
+
+    Hỗ trợ 2 chế độ:
+    - **Single-horizon**: dùng ``estimator`` (1 model duy nhất) — dùng cho
+      GPR Pollutants hoặc artifact cũ.
+    - **Multi-horizon**: dùng ``estimators`` dict {horizon_int: GPRModel} —
+      mỗi horizon d+1, d+2, ..., d+N có 1 model GPR riêng (Direct
+      Multi-Step, giống SVR Daily).
+    """
 
     estimator: Any
     city_id: str
@@ -174,14 +182,13 @@ class CityGPRArtifact:
     rows_used: int
     forecast_horizon_steps: int
     median_interval_seconds: float | None = None
+    # Multi-horizon: dict mapping horizon (int) → GPRModel
+    estimators: dict[int, Any] | None = None
 
-    def predict(
-        self,
-        frame: pd.DataFrame,
-        return_std: bool = True,
-        prediction_rows: int | None = None,
-    ):
-        """Dự đoán các chỉ số sau số bước đã lưu trong artifact."""
+    # ------------------------------------------------------------------
+    # Internal helpers
+    # ------------------------------------------------------------------
+    def _validate_city(self, frame: pd.DataFrame) -> None:
         if "city_id" not in frame.columns:
             raise ValueError("Dữ liệu dự đoán phải có cột 'city_id'.")
         city_ids = frame["city_id"].dropna().astype(str).unique()
@@ -191,6 +198,12 @@ class CityGPRArtifact:
                 "nhưng dữ liệu dự đoán không thuộc đúng một thành phố đó."
             )
 
+    def _build_model_features(
+        self,
+        frame: pd.DataFrame,
+        prediction_rows: int | None = None,
+    ) -> pd.DataFrame:
+        """Tạo feature frame và lấy prediction_rows cuối cùng."""
         features = make_feature_frame(
             frame, self.raw_feature_columns, self.time_column
         )
@@ -206,11 +219,99 @@ class CityGPRArtifact:
                 f"Model này cần tối thiểu {lookback} dòng lịch sử liên tiếp "
                 "để tạo đặc trưng lag/rolling."
             )
+        return model_features
+
+    @property
+    def is_multi_horizon(self) -> bool:
+        """True nếu artifact chứa nhiều model cho nhiều horizon."""
+        return self.estimators is not None and len(self.estimators) > 0
+
+    @property
+    def horizon_list(self) -> list[int]:
+        """Danh sách các horizon có model, sắp xếp tăng dần."""
+        if self.estimators:
+            return sorted(self.estimators.keys())
+        return [self.forecast_horizon_steps]
+
+    # ------------------------------------------------------------------
+    # Single-horizon predict (backward-compatible)
+    # ------------------------------------------------------------------
+    def predict(
+        self,
+        frame: pd.DataFrame,
+        return_std: bool = True,
+        prediction_rows: int | None = None,
+    ):
+        """Dự đoán các chỉ số sau số bước đã lưu trong artifact.
+
+        Dùng ``estimator`` (single model). Giữ nguyên cho backward
+        compatibility và GPR Pollutants.
+        """
+        self._validate_city(frame)
+        model_features = self._build_model_features(frame, prediction_rows)
         return self.estimator.predict(
             model_features.to_numpy(),
             return_std=return_std,
         )
 
+    # ------------------------------------------------------------------
+    # Multi-horizon predict (Direct Multi-Step)
+    # ------------------------------------------------------------------
+    def predict_horizon(
+        self,
+        frame: pd.DataFrame,
+        horizon: int,
+        return_std: bool = True,
+        prediction_rows: int | None = None,
+    ):
+        """Dự đoán cho 1 horizon cụ thể (d+horizon).
+
+        Nếu artifact có ``estimators`` dict → dùng model tương ứng.
+        Nếu không (single-model) → fallback về ``estimator`` mặc định.
+        """
+        self._validate_city(frame)
+        model_features = self._build_model_features(frame, prediction_rows)
+
+        if self.estimators and horizon in self.estimators:
+            est = self.estimators[horizon]
+        elif horizon == self.forecast_horizon_steps:
+            est = self.estimator
+        else:
+            raise ValueError(
+                f"Không có model cho horizon={horizon}. "
+                f"Các horizon khả dụng: {self.horizon_list}"
+            )
+        return est.predict(model_features.to_numpy(), return_std=return_std)
+
+    def predict_multi_horizon(
+        self,
+        frame: pd.DataFrame,
+        return_std: bool = True,
+        prediction_rows: int = 1,
+    ) -> dict[int, tuple]:
+        """Dự đoán tất cả các horizon có sẵn.
+
+        Returns
+        -------
+        dict mapping horizon (int) → (mean, std) nếu return_std=True
+                                   → mean nếu return_std=False
+        """
+        self._validate_city(frame)
+        model_features = self._build_model_features(frame, prediction_rows)
+        X = model_features.to_numpy()
+
+        results: dict[int, tuple] = {}
+        for h in self.horizon_list:
+            if self.estimators and h in self.estimators:
+                est = self.estimators[h]
+            else:
+                est = self.estimator
+            results[h] = est.predict(X, return_std=return_std)
+        return results
+
+    # ------------------------------------------------------------------
+    # DataFrame output (backward-compatible)
+    # ------------------------------------------------------------------
     def predict_frame(
         self,
         frame: pd.DataFrame,

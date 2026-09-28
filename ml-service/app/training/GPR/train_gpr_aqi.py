@@ -180,13 +180,13 @@ def add_aqi_column_vn(frame: pd.DataFrame) -> pd.DataFrame:
 
 
 # =====================================================================
-# Training chính
+# Training chính — Multi-horizon (Direct Multi-Step)
 # =====================================================================
 
 def train(
     max_train_size: int = 1000,
     recent_ratio: float = 0.7,
-    horizon_steps: int = 1,
+    horizon_days: int | None = None,
     n_restarts_optimizer: int = 3,
     random_state: int = 42,
     n_jobs: int = 1,
@@ -194,14 +194,27 @@ def train(
     overwrite: bool = True,
     output_path: Path | None = None,
 ) -> dict:
-    """Huấn luyện GPR với target = AQI (breakpoint Việt Nam).
+    """Huấn luyện GPR multi-horizon với target = AQI (breakpoint Việt Nam).
+
+    Train ``horizon_days`` model GPR riêng biệt (Direct Multi-Step),
+    mỗi model dự đoán AQI cho 1 ngày cụ thể: d+1, d+2, ..., d+N.
+    Chiến lược giống SVR Daily (7 model riêng cho 7 horizon).
+
+    Parameters
+    ----------
+    horizon_days : int | None
+        Số ngày dự báo. Mặc định dùng ``DAILY_HORIZON`` (7).
 
     Returns
     -------
     dict với keys: model_path, metadata_path, metrics, warnings
     """
+    from app.core.config import DAILY_HORIZON
+
+    n_horizons = horizon_days or DAILY_HORIZON
+
     print("=" * 60)
-    print("[train_gpr_aqi] Bắt đầu huấn luyện GPR cho AQI (VN breakpoint)")
+    print(f"[train_gpr_aqi] Bắt đầu huấn luyện GPR AQI — {n_horizons} horizon (d+1 → d+{n_horizons})")
     print("=" * 60)
 
     # 1. Lấy dữ liệu từ PostgreSQL
@@ -247,44 +260,65 @@ def train(
     raw_feature_columns = resolve_raw_feature_columns(frame)
     print(f"  Raw feature columns: {len(raw_feature_columns)} cột")
 
-    # 5. Build training pairs
-    print("[5/7] Tạo training pairs X(t) → AQI(t+{horizon_steps})...")
+    # 5–6. Train 1 GPR model cho mỗi horizon
     target_columns = ("aqi",)
-    feature_frame, target_frame, timestamps, pair_info = build_training_pairs(
-        frame, "time", raw_feature_columns, target_columns, horizon_steps,
-    )
-    discarded = pair_info["rows_discarded_missing_values"] + pair_info["gap_rows_dropped"]
-    if pair_info["gap_rows_dropped"] > 0:
-        print(
-            f"  ⚠️ Loại {pair_info['gap_rows_dropped']} dòng do khoảng "
-            "trống thời gian không khớp với horizon dự đoán."
-        )
-    print(f"  Dòng hợp lệ: {pair_info['rows_valid']}, loại bỏ: {discarded}")
+    estimators: dict[int, GPRModel] = {}
+    all_metrics: dict[str, dict] = {}
+    all_pair_info: dict[int, dict] = {}
+    shared_feature_columns: tuple[str, ...] | None = None
 
-    if len(feature_frame) < 2:
-        raise ValueError(
-            "Cần ít nhất 2 dòng dữ liệu hợp lệ để huấn luyện. "
-            "Vui lòng kiểm tra dữ liệu trong PostgreSQL."
+    for h in range(1, n_horizons + 1):
+        print(f"\n[5/7] ━━━ Horizon d+{h} ━━━")
+        print(f"  Tạo training pairs X(t) → AQI(t+{h})...")
+        feature_frame, target_frame, timestamps, pair_info = build_training_pairs(
+            frame, "time", raw_feature_columns, target_columns, horizon_steps=h,
         )
+        discarded = pair_info["rows_discarded_missing_values"] + pair_info["gap_rows_dropped"]
+        if pair_info["gap_rows_dropped"] > 0:
+            print(
+                f"  ⚠️ Loại {pair_info['gap_rows_dropped']} dòng do khoảng "
+                "trống thời gian không khớp với horizon dự đoán."
+            )
+        print(f"  Dòng hợp lệ: {pair_info['rows_valid']}, loại bỏ: {discarded}")
 
-    # 6. Fit GPR model
-    print(f"[6/7] Đang huấn luyện GPR (max_train_size={max_train_size})...")
-    estimator = GPRModel(
-        max_train_size=max_train_size,
-        recent_ratio=recent_ratio,
-        random_state=random_state,
-        n_restarts_optimizer=n_restarts_optimizer,
-        n_jobs=n_jobs,
-        inner_n_threads=inner_n_threads,
-    )
-    y = target_frame.iloc[:, 0].to_numpy()
-    estimator.fit(feature_frame.to_numpy(), y, timestamps=timestamps)
-    rows_available = len(feature_frame)
-    rows_used = int(estimator.n_training_samples_ or rows_available)
-    print(f"  Đã fit GPR: {rows_used} mẫu (từ {rows_available} dòng hợp lệ)")
+        if len(feature_frame) < 2:
+            raise ValueError(
+                f"Horizon d+{h}: Cần ít nhất 2 dòng dữ liệu hợp lệ để huấn luyện. "
+                "Vui lòng kiểm tra dữ liệu trong PostgreSQL."
+            )
+
+        # Đảm bảo tất cả horizon dùng cùng feature columns
+        if shared_feature_columns is None:
+            shared_feature_columns = tuple(feature_frame.columns)
+        else:
+            assert tuple(feature_frame.columns) == shared_feature_columns, (
+                f"Feature columns không nhất quán giữa các horizon!"
+            )
+
+        print(f"  Đang huấn luyện GPR d+{h} (max_train_size={max_train_size})...")
+        estimator = GPRModel(
+            max_train_size=max_train_size,
+            recent_ratio=recent_ratio,
+            random_state=random_state,
+            n_restarts_optimizer=n_restarts_optimizer,
+            n_jobs=n_jobs,
+            inner_n_threads=inner_n_threads,
+        )
+        y = target_frame.iloc[:, 0].to_numpy()
+        estimator.fit(feature_frame.to_numpy(), y, timestamps=timestamps)
+        rows_used = int(estimator.n_training_samples_ or len(feature_frame))
+        print(f"  ✅ Đã fit GPR d+{h}: {rows_used} mẫu (từ {len(feature_frame)} dòng hợp lệ)")
+
+        estimators[h] = estimator
+        all_pair_info[h] = pair_info
+        all_metrics[f"d+{h}"] = {
+            "rows_available": len(feature_frame),
+            "rows_used": rows_used,
+            "rows_discarded": discarded,
+        }
 
     # 7. Lưu artifact
-    print("[7/7] Lưu model artifact...")
+    print(f"\n[7/7] Lưu model artifact ({n_horizons} models)...")
     trained_at_utc = datetime.now(timezone.utc).isoformat()
     model_path = output_path or GPR_AQI_MODEL_PATH
     metadata_path = model_path.with_suffix(".json")
@@ -296,61 +330,76 @@ def train(
 
     model_path.parent.mkdir(parents=True, exist_ok=True)
 
+    # Dùng median_interval_seconds từ horizon d+1 (đại diện)
+    representative_pair_info = all_pair_info[1]
+    total_rows_used = sum(
+        int(est.n_training_samples_ or 0) for est in estimators.values()
+    )
+
     artifact = CityGPRArtifact(
-        estimator=estimator,
+        estimator=estimators[1],  # d+1 là default (backward compat)
+        estimators=estimators,    # dict {1: GPRModel, 2: GPRModel, ..., 7: GPRModel}
         city_id=CITY,
         city_name=STATION_NAME,
         target_columns=target_columns,
         raw_feature_columns=raw_feature_columns,
-        feature_columns=tuple(feature_frame.columns),
+        feature_columns=shared_feature_columns,
         time_column="time",
         backend="sklearn",
         trained_at_utc=trained_at_utc,
-        rows_used=rows_used,
-        forecast_horizon_steps=horizon_steps,
-        median_interval_seconds=pair_info["median_interval_seconds"],
+        rows_used=total_rows_used,
+        forecast_horizon_steps=n_horizons,
+        median_interval_seconds=representative_pair_info["median_interval_seconds"],
     )
     joblib.dump(artifact, model_path, compress=3)
 
-    # Vài dự đoán mẫu cuối cùng
-    count = min(5, len(feature_frame))
-    sample_mean, sample_std = estimator.predict(
-        feature_frame.tail(count).to_numpy(), return_std=True,
+    # Vài dự đoán mẫu cuối cùng (dùng tất cả horizon)
+    # Lấy feature frame từ horizon d+1 (dài nhất, nhiều valid rows nhất)
+    last_feature_frame, _, last_timestamps, _ = build_training_pairs(
+        frame, "time", raw_feature_columns, target_columns, horizon_steps=1,
     )
-    sample_mean = np.atleast_1d(sample_mean)
-    sample_std = np.atleast_1d(sample_std)
-    preview = []
-    for i in range(count):
-        aqi_val = float(sample_mean[i])
-        preview.append({
-            "input_time": pd.Timestamp(timestamps[-count + i]).isoformat(),
-            "aqi_prediction": round(aqi_val, 1),
-            "aqi_std": round(float(sample_std[i]), 2),
-            "level": aqi_to_level(aqi_val),
-        })
+    count = min(3, len(last_feature_frame))
+    preview: dict[str, list] = {}
+    for h in range(1, n_horizons + 1):
+        est = estimators[h]
+        sample_mean, sample_std = est.predict(
+            last_feature_frame.tail(count).to_numpy(), return_std=True,
+        )
+        sample_mean = np.atleast_1d(sample_mean)
+        sample_std = np.atleast_1d(sample_std)
+        horizon_preview = []
+        for i in range(count):
+            aqi_val = float(sample_mean[i])
+            horizon_preview.append({
+                "input_time": pd.Timestamp(last_timestamps[-count + i]).isoformat(),
+                "aqi_prediction": round(aqi_val, 1),
+                "aqi_std": round(float(sample_std[i]), 2),
+                "level": aqi_to_level(aqi_val),
+            })
+        preview[f"d+{h}"] = horizon_preview
 
     metadata = {
         "city_id": CITY,
         "city_name": STATION_NAME,
-        "algorithm": "GPR (Gaussian Process Regression)",
+        "algorithm": "GPR (Gaussian Process Regression) — Direct Multi-Step",
         "implementation": "app.algorithms.gpr.gpr_model.GPRModel",
         "purpose": "aqi_prediction_model",
         "aqi_standard": "Breakpoint Việt Nam (QCVN)",
+        "strategy": f"Direct Multi-Step: {n_horizons} model GPR riêng (d+1 → d+{n_horizons})",
+        "n_horizons": n_horizons,
         "target_columns": list(target_columns),
         "input_feature_columns": list(raw_feature_columns),
-        "feature_columns": list(feature_frame.columns),
-        "rows_available": rows_available,
-        "rows_used": rows_used,
-        "rows_discarded": discarded,
-        "rows_discarded_missing_values": pair_info["rows_discarded_missing_values"],
-        "rows_discarded_time_gap": pair_info["gap_rows_dropped"],
-        "median_interval_seconds": pair_info["median_interval_seconds"],
+        "feature_columns": list(shared_feature_columns),
+        "total_rows_used": total_rows_used,
+        "horizon_metrics": all_metrics,
+        "median_interval_seconds": representative_pair_info["median_interval_seconds"],
         "training_sample_selection": TRAINING_SELECTION_DESCRIPTION,
-        "forecast_horizon_steps": horizon_steps,
         "max_train_size": max_train_size,
         "recent_ratio": recent_ratio,
         "trained_at_utc": trained_at_utc,
-        "kernel_params": estimator.get_kernel_params(),
+        "kernel_params": {
+            f"d+{h}": est.get_kernel_params() for h, est in estimators.items()
+        },
         "prediction_preview": preview,
         "artifact": model_path.name,
     }
@@ -360,24 +409,28 @@ def train(
 
     # In kết quả
     print("\n" + "=" * 60)
-    print(f"✅ Đã huấn luyện GPR AQI thành công!")
+    print(f"✅ Đã huấn luyện GPR AQI Multi-Horizon thành công!")
     print(f"  Thành phố: {STATION_NAME} ({CITY})")
     print(f"  Target: AQI (breakpoint Việt Nam)")
-    print(f"  Horizon: {horizon_steps} bước thời gian")
-    print(f"  Mẫu hợp lệ: {rows_available} | Dùng: {rows_used} | Loại: {discarded}")
+    print(f"  Horizons: {n_horizons} models (d+1 → d+{n_horizons})")
+    for h_key, h_metrics in all_metrics.items():
+        print(f"    {h_key}: {h_metrics['rows_used']}/{h_metrics['rows_available']} mẫu dùng")
     print(f"  Model: {model_path}")
     print(f"  Metadata: {metadata_path}")
     print("\n  Dự đoán mẫu (cuối tập train):")
-    for p in preview:
-        print(f"    {p['input_time']}: AQI={p['aqi_prediction']} "
-              f"±{p['aqi_std']} → {p['level']}")
+    for h_key, h_preview in preview.items():
+        print(f"    --- {h_key} ---")
+        for p in h_preview:
+            print(f"      {p['input_time']}: AQI={p['aqi_prediction']} "
+                  f"±{p['aqi_std']} → {p['level']}")
     print("=" * 60)
 
     return {
         "model_path": str(model_path),
         "metadata_path": str(metadata_path),
-        "rows_used": rows_used,
-        "rows_discarded": discarded,
+        "n_horizons": n_horizons,
+        "horizon_metrics": all_metrics,
+        "total_rows_used": total_rows_used,
         "warnings": data_warnings,
         "preview": preview,
     }
@@ -385,3 +438,4 @@ def train(
 
 if __name__ == "__main__":
     train()
+
