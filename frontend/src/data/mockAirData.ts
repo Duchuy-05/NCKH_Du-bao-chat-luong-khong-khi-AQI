@@ -149,120 +149,128 @@ export const HOURLY_AQI_DATA_24H: HourlyAQI[] = [
   { hour: '22:00', time: '22:00', aqi: 130, pm25: 47.0, pm10: 75.0, temperature: 28, humidity: 85, level: 'unhealthy_sensitive' },
 ];
 
-export const SEVEN_DAY_FORECAST: DailyForecast[] = [
-  {
-    id: 'FC-01',
-    dayOfWeekVi: 'Hôm nay',
-    dayOfWeekEn: 'Today',
-    date: '17/08',
-    location: 'Hà Nội',
-    province: 'Hà Nội',
-    aqi: 142,
-    level: 'unhealthy_sensitive',
-    minTemp: 26,
-    maxTemp: 34,
-    conditionVi: 'Có nắng, bụi mờ',
-    conditionEn: 'Sunny, hazy',
-    dominantPollutant: 'PM2.5',
-    rainProbability: 20,
-  },
-  {
-    id: 'FC-02',
-    dayOfWeekVi: 'Thứ Ba',
-    dayOfWeekEn: 'Tuesday',
-    date: '18/08',
-    location: 'Hà Nội',
-    province: 'Hà Nội',
-    aqi: 125,
-    level: 'unhealthy_sensitive',
-    minTemp: 26,
-    maxTemp: 33,
-    conditionVi: 'Nhiều mây, gió nhẹ',
-    conditionEn: 'Partly cloudy',
-    dominantPollutant: 'PM2.5',
-    rainProbability: 35,
-  },
-  {
-    id: 'FC-03',
-    dayOfWeekVi: 'Thứ Tư',
-    dayOfWeekEn: 'Wednesday',
-    date: '19/08',
-    location: 'Hà Nội',
-    province: 'Hà Nội',
-    aqi: 88,
-    level: 'moderate',
-    minTemp: 25,
-    maxTemp: 31,
-    conditionVi: 'Mưa rào rải rác',
-    conditionEn: 'Scattered showers',
-    dominantPollutant: 'PM10',
-    rainProbability: 70,
-  },
-  {
-    id: 'FC-04',
-    dayOfWeekVi: 'Thứ Năm',
-    dayOfWeekEn: 'Thursday',
-    date: '20/08',
-    location: 'Hà Nội',
-    province: 'Hà Nội',
-    aqi: 45,
-    level: 'good',
-    minTemp: 24,
-    maxTemp: 30,
-    conditionVi: 'Mưa dông giải nhiệt, không khí trong lành',
-    conditionEn: 'Rainstorm, fresh air',
-    dominantPollutant: 'O3',
-    rainProbability: 85,
-  },
-  {
-    id: 'FC-05',
-    dayOfWeekVi: 'Thứ Sáu',
-    dayOfWeekEn: 'Friday',
-    date: '21/08',
-    location: 'Hà Nội',
-    province: 'Hà Nội',
-    aqi: 62,
-    level: 'moderate',
-    minTemp: 25,
-    maxTemp: 32,
-    conditionVi: 'Nắng nhẹ, gió Đông Nam',
-    conditionEn: 'Mild sun, SE wind',
-    dominantPollutant: 'PM2.5',
-    rainProbability: 25,
-  },
-  {
-    id: 'FC-06',
-    dayOfWeekVi: 'Thứ Bảy',
-    dayOfWeekEn: 'Saturday',
-    date: '22/08',
-    location: 'Hà Nội',
-    province: 'Hà Nội',
-    aqi: 95,
-    level: 'moderate',
-    minTemp: 26,
-    maxTemp: 33,
-    conditionVi: 'Trời quang đãng, khô ráo',
-    conditionEn: 'Clear sky, dry',
-    dominantPollutant: 'PM2.5',
-    rainProbability: 15,
-  },
-  {
-    id: 'FC-07',
-    dayOfWeekVi: 'Chủ Nhật',
-    dayOfWeekEn: 'Sunday',
-    date: '23/08',
-    location: 'Hà Nội',
-    province: 'Hà Nội',
-    aqi: 110,
-    level: 'unhealthy_sensitive',
-    minTemp: 27,
-    maxTemp: 35,
-    conditionVi: 'Nắng nóng, tích tụ khói bụi giao thông',
-    conditionEn: 'Hot sunny, traffic haze',
-    dominantPollutant: 'PM2.5',
-    rainProbability: 10,
-  },
-];
+const VI_DAYS = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
+const EN_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+export function generateDynamicSevenDayForecast(): DailyForecast[] {
+  const baseForecastData = [
+    {
+      id: 'FC-01',
+      location: 'Hà Nội',
+      province: 'Hà Nội',
+      aqi: 142,
+      level: 'unhealthy_sensitive' as const,
+      minTemp: 26,
+      maxTemp: 34,
+      conditionVi: 'Có nắng, bụi mờ',
+      conditionEn: 'Sunny, hazy',
+      dominantPollutant: 'PM2.5',
+      rainProbability: 20,
+    },
+    {
+      id: 'FC-02',
+      location: 'Hà Nội',
+      province: 'Hà Nội',
+      aqi: 125,
+      level: 'unhealthy_sensitive' as const,
+      minTemp: 26,
+      maxTemp: 33,
+      conditionVi: 'Nhiều mây, gió nhẹ',
+      conditionEn: 'Partly cloudy',
+      dominantPollutant: 'PM2.5',
+      rainProbability: 35,
+    },
+    {
+      id: 'FC-03',
+      location: 'Hà Nội',
+      province: 'Hà Nội',
+      aqi: 88,
+      level: 'moderate' as const,
+      minTemp: 25,
+      maxTemp: 31,
+      conditionVi: 'Mưa rào rải rác',
+      conditionEn: 'Scattered showers',
+      dominantPollutant: 'PM10',
+      rainProbability: 70,
+    },
+    {
+      id: 'FC-04',
+      location: 'Hà Nội',
+      province: 'Hà Nội',
+      aqi: 45,
+      level: 'good' as const,
+      minTemp: 24,
+      maxTemp: 30,
+      conditionVi: 'Mưa dông giải nhiệt, không khí trong lành',
+      conditionEn: 'Rainstorm, fresh air',
+      dominantPollutant: 'O3',
+      rainProbability: 85,
+    },
+    {
+      id: 'FC-05',
+      location: 'Hà Nội',
+      province: 'Hà Nội',
+      aqi: 62,
+      level: 'moderate' as const,
+      minTemp: 25,
+      maxTemp: 32,
+      conditionVi: 'Nắng nhẹ, gió Đông Nam',
+      conditionEn: 'Mild sun, SE wind',
+      dominantPollutant: 'PM2.5',
+      rainProbability: 25,
+    },
+    {
+      id: 'FC-06',
+      location: 'Hà Nội',
+      province: 'Hà Nội',
+      aqi: 95,
+      level: 'moderate' as const,
+      minTemp: 26,
+      maxTemp: 33,
+      conditionVi: 'Trời quang đãng, khô ráo',
+      conditionEn: 'Clear sky, dry',
+      dominantPollutant: 'PM2.5',
+      rainProbability: 15,
+    },
+    {
+      id: 'FC-07',
+      location: 'Hà Nội',
+      province: 'Hà Nội',
+      aqi: 110,
+      level: 'unhealthy_sensitive' as const,
+      minTemp: 27,
+      maxTemp: 35,
+      conditionVi: 'Nắng nóng, tích tụ khói bụi giao thông',
+      conditionEn: 'Hot sunny, traffic haze',
+      dominantPollutant: 'PM2.5',
+      rainProbability: 10,
+    },
+  ];
+
+  return baseForecastData.map((item, index) => {
+    // Bỏ ngày hôm nay, bắt đầu từ ngày mai (offset = index + 1)
+    const targetDate = new Date();
+    targetDate.setDate(targetDate.getDate() + (index + 1));
+
+    const day = String(targetDate.getDate()).padStart(2, '0');
+    const month = String(targetDate.getMonth() + 1).padStart(2, '0');
+    const dateStr = `${day}/${month}`;
+
+    const dayIndex = targetDate.getDay();
+    const dayOfWeekVi = index === 0 ? 'Ngày mai' : VI_DAYS[dayIndex];
+    const dayOfWeekEn = index === 0 ? 'Tomorrow' : EN_DAYS[dayIndex];
+
+    return {
+      ...item,
+      date: dateStr,
+      dayOfWeekVi,
+      dayOfWeekEn,
+    };
+  });
+}
+
+export const SEVEN_DAY_FORECAST: DailyForecast[] = generateDynamicSevenDayForecast();
+
 
 export const HEALTH_GROUPS_ADVICE: HealthAdviceGroup[] = [
   {

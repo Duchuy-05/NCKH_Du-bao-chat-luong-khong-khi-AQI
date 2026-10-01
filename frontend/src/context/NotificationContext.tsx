@@ -48,7 +48,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
       if (permission === 'granted') {
         updatePreferences({ enabled: true });
         sendSimulatedAlert(
-          'AirVision VN: Đã kích hoạt thông báo',
+          'Air VN: Đã kích hoạt thông báo',
           'Bạn sẽ nhận cảnh báo khi chất lượng không khí tại vị trí của bạn vượt ngưỡng quy định.',
           preferences.threshold
         );
