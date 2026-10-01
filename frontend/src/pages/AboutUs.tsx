@@ -76,17 +76,13 @@ export const AboutUs: React.FC = () => {
       <FadeIn direction="up">
         {/* Mission Statement Hero */}
         <div className="text-center max-w-3xl mx-auto space-y-4 pt-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 text-orange-500 text-xs font-bold border border-orange-500/20">
-            <Wind className="w-3.5 h-3.5" />
-            <span>{lang === 'vi' ? 'Sứ mệnh vì sức khỏe cộng đồng' : 'Mission for Public Health'}</span>
-          </div>
           <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-            {lang === 'vi' ? 'Minh bạch hóa chất lượng Không khí Việt Nam' : 'Transparent Air Quality Intelligence in Vietnam'}
+            {lang === 'vi' ? 'Minh bạch hóa chất lượng không khí Việt Nam' : 'Transparent Air Quality Intelligence in Vietnam'}
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
             {lang === 'vi'
-              ? 'AirVision VN được thành lập với mục tiêu cung cấp dữ liệu quan trắc không khí tức thời, chuẩn xác và dễ hiểu nhất cho 100 triệu người dân Việt Nam, giúp mỗi gia đình chủ động bảo vệ lá phổi và sức khỏe hàng ngày.'
-              : 'AirVision VN delivers transparent, real-time, and actionable air quality data to empower communities across Vietnam.'}
+              ? 'Air VN được thành lập với mục tiêu cung cấp dữ liệu quan trắc không khí tức thời, chuẩn xác và dễ hiểu nhất cho 100 triệu người dân Việt Nam, giúp mỗi gia đình chủ động bảo vệ lá phổi và sức khỏe hàng ngày.'
+              : 'Air VN was established with the goal of providing real-time, accurate, and easily understandable air quality monitoring data to over 100 million Vietnamese people, helping every family proactively protect their lungs and health on a daily basis.'}
           </p>
         </div>
 

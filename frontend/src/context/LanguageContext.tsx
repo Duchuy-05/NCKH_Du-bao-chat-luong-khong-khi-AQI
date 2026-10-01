@@ -18,7 +18,7 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.forecast': 'Dự báo 7 ngày',
     'nav.alerts': 'Cảnh báo sức khỏe',
     'nav.about': 'Về chúng tôi',
-    
+
     // Hero
     'hero.title': 'Dự báo Chất lượng Không khí & Thời tiết Việt Nam',
     'hero.subtitle': 'Giám sát chỉ số AQI thời gian thực từ hơn 150 trạm quan trắc chuẩn quốc gia',
@@ -79,7 +79,7 @@ const translations: Record<Language, Record<string, string>> = {
     // Health
     'health.title': 'Khuyến cáo sức khỏe theo nhóm đối tượng',
     'health.subtitle': 'Hướng dẫn hành động phòng ngừa tương ứng với chỉ số không khí hiện tại',
-    
+
     // Notifications
     'notif.title': 'Thông báo đẩy theo vị trí của bạn',
     'notif.desc': 'Nhận cảnh báo sớm trên trình duyệt khi chỉ số AQI vượt quá ngưỡng bạn quan tâm.',
@@ -95,7 +95,7 @@ const translations: Record<Language, Record<string, string>> = {
     'insights.tips_title': 'Mẹo bảo vệ sức khỏe & thanh lọc không khí trong nhà',
 
     // Footer
-    'footer.about': 'AirVision VN là nền tảng số cung cấp dữ liệu quan trắc, dự báo chất lượng không khí và phân tích thời tiết tại Việt Nam do nhóm sinh viên Trường đại học Điện Lực phát triển.',
+    'footer.about': 'Air VN là nền tảng số cung cấp dữ liệu quan trắc, dự báo chất lượng không khí và phân tích thời tiết tại Việt Nam do nhóm sinh viên Trường đại học Điện Lực phát triển.',
     'footer.quick_links': 'Liên kết nhanh',
     'footer.contact': 'Liên hệ & Trợ giúp',
     'footer.address': 'Trường đại học Điện Lực, 235 Đường Hoàng Quốc Việt, Nghĩa Đô, Hà Nội',
@@ -108,7 +108,7 @@ const translations: Record<Language, Record<string, string>> = {
     'footer.newsletter_success': 'Cảm ơn bạn! Đã đăng ký thành công bản tin.',
     'footer.terms': 'Điều khoản sử dụng',
     'footer.privacy': 'Chính sách bảo mật',
-    'footer.rights': 'Bản quyền thuộc về AirVision VN. Nhóm sinh viên trường đại học Điện Lực.',
+    'footer.rights': 'Bản quyền thuộc về Air VN. Nhóm sinh viên trường đại học Điện Lực.',
   },
   en: {
     // Navigation
@@ -207,7 +207,7 @@ const translations: Record<Language, Record<string, string>> = {
     'footer.newsletter_success': 'Thank you! You have successfully subscribed to the newsletter.',
     'footer.terms': 'Terms of Use',
     'footer.privacy': 'Privacy Policy',
-    'footer.rights': 'Copyright © AirVision VN. Electric Power University Student Team.',
+    'footer.rights': 'Copyright © Air VN. Electric Power University Student Team.',
   },
 };
 

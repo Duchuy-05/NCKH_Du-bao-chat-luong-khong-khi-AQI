@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { useNotification } from '../context/NotificationContext';
-import { VIETNAM_STATIONS, HOURLY_AQI_DATA_24H, SEVEN_DAY_FORECAST, HEALTH_GROUPS_ADVICE, BEST_OUTDOOR_HOURS, CITY_COMPARISONS, INDOOR_AIR_TIPS } from '../data/mockAirData';
+import { VIETNAM_STATIONS, HOURLY_AQI_DATA_24H, SEVEN_DAY_FORECAST, generateDynamicSevenDayForecast, HEALTH_GROUPS_ADVICE, BEST_OUTDOOR_HOURS, CITY_COMPARISONS, INDOOR_AIR_TIPS } from '../data/mockAirData';
 import { AirStation, DailyForecast, PollutantDetail } from '../types/airQuality.types';
 import { getAQICategory } from '../utils/aqi.util';
 import { formatDateTime } from '../utils/date.util';
@@ -133,7 +133,7 @@ export const Home: React.FC<HomeProps> = ({
       await requestBrowserPermission();
     } else {
       sendSimulatedAlert(
-        'AirVision VN: Cập nhật ngưỡng',
+        'Air VN: Cập nhật ngưỡng',
         `Bạn sẽ nhận thông báo khi AQI vượt mức ${customThreshold}.`,
         customThreshold
       );
@@ -151,15 +151,17 @@ export const Home: React.FC<HomeProps> = ({
     ];
   }, [currentStation]);
 
+  const dynamicForecast = useMemo(() => generateDynamicSevenDayForecast(), []);
+
   const uniqueProvinces = useMemo(() => {
-    const list = Array.from(new Set(SEVEN_DAY_FORECAST.map((f) => f.province)));
+    const list = Array.from(new Set(dynamicForecast.map((f) => f.province)));
     return ['All', ...list];
-  }, []);
+  }, [dynamicForecast]);
 
   const filteredForecast = useMemo(() => {
-    if (selectedProvinceFilter === 'All') return SEVEN_DAY_FORECAST;
-    return SEVEN_DAY_FORECAST.filter((f) => f.province === selectedProvinceFilter);
-  }, [selectedProvinceFilter]);
+    if (selectedProvinceFilter === 'All') return dynamicForecast;
+    return dynamicForecast.filter((f) => f.province === selectedProvinceFilter);
+  }, [selectedProvinceFilter, dynamicForecast]);
 
   const getHealthGroupIcon = (icon: string) => {
     switch (icon) {
@@ -405,7 +407,9 @@ export const Home: React.FC<HomeProps> = ({
                 {t('table.title')}
               </h2>
               <p className="text-sm leading-6 text-[var(--text-tertiary)] mt-0.5">
-                Dự báo chỉ số ô nhiễm không khí theo ngày & tình trạng thời tiết (nhấn vào để xem dự báo chi tiết)
+                {lang === 'vi'
+                  ? 'Dự báo chỉ số ô nhiễm không khí 7 ngày tới (bắt đầu từ ngày mai, nhấn vào để xem dự báo chi tiết)'
+                  : '7-day air quality forecast starting from tomorrow (click to view detailed forecast)'}
               </p>
             </div>
 
@@ -452,7 +456,6 @@ export const Home: React.FC<HomeProps> = ({
                       <th className="py-4 px-6">{t('table.col_area')}</th>
                       <th className="py-4 px-6">{t('table.col_level')}</th>
                       <th className="py-4 px-6">{t('table.col_aqi')}</th>
-                      <th className="py-4 px-6">{t('table.col_temp')}</th>
                       <th className="py-4 px-6">{t('table.col_condition')}</th>
                     </tr>
                   </thead>
@@ -497,9 +500,6 @@ export const Home: React.FC<HomeProps> = ({
                             >
                               {Math.round(item.aqi)}
                             </span>
-                          </td>
-                          <td className="py-4 px-6 font-bold text-[var(--text-primary)]">
-                            <span className="text-sky-500">{item.minTemp}°</span> / <span className="text-[var(--accent-primary)]">{item.maxTemp}°</span>
                           </td>
                           <td className="py-4 px-6 text-[var(--text-secondary)]">
                             <div className="flex items-center gap-2">
@@ -550,8 +550,11 @@ export const Home: React.FC<HomeProps> = ({
 
                       <div className="flex items-center justify-between text-xs pt-2 border-t border-[var(--border-default)]">
                         <AQIBadge aqi={item.aqi} size="sm" />
-                        <span className="font-bold text-[var(--text-primary)]">
-                          <span className="text-sky-500">{item.minTemp}°</span> / <span className="text-[var(--accent-primary)]">{item.maxTemp}°</span>C
+                        <span
+                          className="text-xs font-bold tracking-wide"
+                          style={{ color: cat.textColor }}
+                        >
+                          {lang === 'vi' ? cat.labelVi : cat.labelEn}
                         </span>
                       </div>
 
@@ -598,8 +601,8 @@ export const Home: React.FC<HomeProps> = ({
                       </h3>
                     </div>
                     <span className={`text-xs uppercase tracking-wider font-bold px-2 py-0.5 rounded-full ${group.riskLevel === 'critical'
-                        ? 'bg-red-100 dark:bg-red-950/60 text-red-600 dark:text-red-400'
-                        : 'bg-orange-100 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400'
+                      ? 'bg-red-100 dark:bg-red-950/60 text-red-600 dark:text-red-400'
+                      : 'bg-orange-100 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400'
                       }`}>
                       {group.riskLevel === 'critical' ? (lang === 'vi' ? 'Rủi ro cao' : 'Critical') : (lang === 'vi' ? 'Lưu ý' : 'Caution')}
                     </span>
@@ -710,8 +713,8 @@ export const Home: React.FC<HomeProps> = ({
                   key={key}
                   onClick={() => onSelectStation(currentStation)}
                   className={`p-4 rounded-xl bg-[var(--surface-card)] border transition-all hover:shadow-[var(--shadow-card)] hover:-translate-y-0.5 cursor-pointer ${isOverLimit
-                      ? 'border-orange-300 dark:border-orange-900/60 hover:border-[var(--border-default)]'
-                      : 'border-[var(--border-default)] hover:border-[var(--border-default)]'
+                    ? 'border-orange-300 dark:border-orange-900/60 hover:border-[var(--border-default)]'
+                    : 'border-[var(--border-default)] hover:border-[var(--border-default)]'
                     }`}
                   title="Nhấn để xem phân tích chi tiết / Click to view detailed analysis"
                 >
@@ -765,8 +768,8 @@ export const Home: React.FC<HomeProps> = ({
               <button
                 onClick={() => setChartTab('24h')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)] ${chartTab === '24h'
-                    ? 'bg-white dark:surface-card text-[var(--accent-primary)] shadow-xs'
-                    : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                  ? 'bg-white dark:surface-card text-[var(--accent-primary)] shadow-xs'
+                  : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                   }`}
               >
                 {t('charts.tab_24h')}
@@ -774,8 +777,8 @@ export const Home: React.FC<HomeProps> = ({
               <button
                 onClick={() => setChartTab('pollutants')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)] ${chartTab === 'pollutants'
-                    ? 'bg-white dark:surface-card text-[var(--accent-primary)] shadow-xs'
-                    : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                  ? 'bg-white dark:surface-card text-[var(--accent-primary)] shadow-xs'
+                  : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                   }`}
               >
                 {t('charts.tab_pollutants')}
@@ -783,8 +786,8 @@ export const Home: React.FC<HomeProps> = ({
               <button
                 onClick={() => setChartTab('temp')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-focus)] ${chartTab === 'temp'
-                    ? 'bg-white dark:surface-card text-[var(--accent-primary)] shadow-xs'
-                    : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                  ? 'bg-white dark:surface-card text-[var(--accent-primary)] shadow-xs'
+                  : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                   }`}
               >
                 {t('charts.tab_temp')}

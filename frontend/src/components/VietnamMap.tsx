@@ -4,7 +4,7 @@ import { getAQICategory } from '../utils/aqi.util';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 import { AQIBadge } from './AQIBadge';
-import { MapPin, Wind, Thermometer, Droplets, ArrowUpRight, ZoomIn, ZoomOut, Layers } from 'lucide-react';
+import { MapPin, Wind, Thermometer, Droplets, ArrowUpRight, ZoomIn, ZoomOut, Layers, RotateCcw } from 'lucide-react';
 
 interface VietnamMapProps {
   stations: AirStation[];
@@ -33,6 +33,10 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
   const [hoveredStation, setHoveredStation] = useState<AirStation | null>(null);
   const [regionFilter, setRegionFilter] = useState<'All' | 'Bac' | 'Trung' | 'Nam'>('All');
   const [zoomLevel, setZoomLevel] = useState(1);
+  const MIN_ZOOM = 0.5;
+  const MAX_ZOOM = 3.5;
+  const ZOOM_STEP = 0.2;
+
   // --- Hiệu ứng kéo (drag) bản đồ ---
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
@@ -53,8 +57,6 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
 
   const handleMouseUp = () => setIsDragging(false);
 
-
-
   const filteredStations = stations.filter((s) => {
     if (regionFilter === 'All') return true;
     return s.region === regionFilter;
@@ -72,8 +74,8 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
 
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
-      const delta = e.deltaY > 0 ? -0.1 : 0.1;
-      setZoomLevel((z) => Math.min(1.4, Math.max(0.9, z + delta)));
+      const delta = e.deltaY > 0 ? -0.15 : 0.15;
+      setZoomLevel((z) => Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, Math.round((z + delta) * 100) / 100)));
     };
 
     el.addEventListener('wheel', onWheel, { passive: false });
@@ -114,11 +116,10 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
               <button
                 key={r}
                 onClick={() => setRegionFilter(r)}
-                className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
-                  regionFilter === r
-                    ? 'bg-sky-500 text-white shadow-sm font-semibold'
-                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-                }`}
+                className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${regionFilter === r
+                  ? 'bg-sky-500 text-white shadow-sm font-semibold'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+                  }`}
               >
                 {t(labelKey)}
               </button>
@@ -131,18 +132,28 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
           {showControls && (
             <div className="flex items-center bg-white/90 dark:bg-slate-900/80 backdrop-blur-md p-1 rounded-xl border border-slate-200 dark:border-slate-700/80 shadow-md">
               <button
-                onClick={() => setZoomLevel((z) => Math.min(1.4, z + 0.15))}
+                onClick={() => setZoomLevel((z) => Math.min(MAX_ZOOM, Math.round((z + ZOOM_STEP) * 100) / 100))}
                 className="p-1.5 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
-                title="Phóng to"
+                title={lang === 'vi' ? 'Phóng to' : 'Zoom In'}
               >
                 <ZoomIn className="w-4 h-4" />
               </button>
               <button
-                onClick={() => setZoomLevel((z) => Math.max(0.9, z - 0.15))}
+                onClick={() => setZoomLevel((z) => Math.max(MIN_ZOOM, Math.round((z - ZOOM_STEP) * 100) / 100))}
                 className="p-1.5 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
-                title="Thu nhỏ"
+                title={lang === 'vi' ? 'Thu nhỏ' : 'Zoom Out'}
               >
                 <ZoomOut className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => {
+                  setZoomLevel(1);
+                  setPan({ x: 0, y: 0 });
+                }}
+                className="p-1.5 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
+                title={lang === 'vi' ? 'Đặt lại kích thước' : 'Reset Zoom'}
+              >
+                <RotateCcw className="w-4 h-4" />
               </button>
             </div>
           )}
@@ -413,21 +424,20 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
                     backgroundColor: color,
                     borderColor: isSelected ? '#FFFFFF' : 'rgba(255,255,255,0.8)',
                   }}
-                  className={`relative flex items-center justify-center rounded-full text-white font-black shadow-xl transition-all ${
-                    isSelected
-                      ? 'w-9 h-9 text-xs ring-4 ring-orange-500 scale-125 z-30'
-                      : isHovered
+                  className={`relative flex items-center justify-center rounded-full text-white font-black shadow-xl transition-all ${isSelected
+                    ? 'w-9 h-9 text-xs ring-4 ring-orange-500 scale-125 z-30'
+                    : isHovered
                       ? 'w-8 h-8 text-[11px] scale-110 z-20'
                       : 'w-7 h-7 text-[10px]'
-                  } border-2`}
+                    } border-2`}
                 >
                   {activeLayer === 'temp'
                     ? `${Math.round(st.temperature)}°`
                     : activeLayer === 'pm25'
-                    ? Math.round(st.pollutants.pm25.value)
-                    : activeLayer === 'wind'
-                    ? Math.round(st.windSpeed)
-                    : Math.round(st.aqi)}
+                      ? Math.round(st.pollutants.pm25.value)
+                      : activeLayer === 'wind'
+                        ? Math.round(st.windSpeed)
+                        : Math.round(st.aqi)}
                 </div>
 
                 {/* Tiny Province Label Tag */}
@@ -447,7 +457,7 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
             const st = hoveredStation || selectedStation!;
             onSelectStation(st);
           }}
-          className="absolute bottom-4 left-4 right-4 md:right-auto md:w-80 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl text-slate-900 dark:text-white cursor-pointer hover:border-orange-500 transition-colors"
+          className="absolute bottom-[7.5%] left-2 right-4 md:right-auto md:w-80 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl text-slate-900 dark:text-white cursor-pointer hover:border-orange-500 transition-colors"
           title="Nhấn để xem chi tiết thông số trạm / Click to view station details"
         >
           {(() => {
