@@ -23,9 +23,19 @@ CLEAN_DAILY_PATH = DATA_DIR / "clean_daily.parquet"
 DAILY_FEATURES_PATH = DATA_DIR / "daily_features.parquet"
 HOURLY_FEATURES_PATH = DATA_DIR / "hourly_features.parquet"
 
-# Models
+# Models — SVR
 SVR_DAILY_MODEL_PATH = MODELS_DIR / "svr_daily.joblib"
 SVR_HOURLY_MODEL_PATH = MODELS_DIR / "svr_hourly.joblib"
+
+# Models — GPR (Gaussian Process Regression)
+GPR_AQI_MODEL_PATH = MODELS_DIR / "gpr_aqi.joblib"
+GPR_POLLUTANTS_MODEL_PATH = MODELS_DIR / "gpr_pollutants.joblib"
+
+# GPR Training settings (có thể override khi gọi hàm train)
+GPR_MAX_TRAIN_SIZE = 1000       # Giới hạn mẫu train (GPR là O(n³))
+GPR_RECENT_RATIO = 0.7          # 70% mẫu gần nhất, 30% lịch sử theo mùa
+GPR_HORIZON_STEPS = 1           # Dự đoán 1 bước thời gian phía trước
+GPR_N_RESTARTS_OPTIMIZER = 3    # Khởi động lại optimizer kernel
 
 # Forecast settings
 DAILY_HORIZON = 7        # 7 ngày tới

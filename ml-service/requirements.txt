@@ -4,6 +4,8 @@ pydantic
 pandas
 numpy
 scikit-learn
+scipy
+threadpoolctl
 joblib
 pyarrow
 python-dotenv
