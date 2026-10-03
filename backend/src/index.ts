@@ -5,6 +5,7 @@ import { envConfig } from './config/env.config';
 import { connectDatabase } from './config/database.config';
 import authRouter from './routers/auth.router';
 import airQualityRouter from './routers/airQuality.router';
+import healthAdviceRouter from './routers/healthAdvice.router';
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.get('/health', (req, res) => {
 // Mount các router
 app.use('/api/auth', authRouter);
 app.use('/api/air-quality', airQualityRouter);
+app.use('/api/health-advice', healthAdviceRouter);
 
 // Middleware xử lý lỗi tập trung (Error Handler)
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
