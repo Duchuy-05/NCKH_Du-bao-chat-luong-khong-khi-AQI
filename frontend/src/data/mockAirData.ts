@@ -1,4 +1,4 @@
-import { AirStation, DailyForecast, HealthAdviceGroup, HourlyAQI, ActiveAlert } from '../types/airQuality.types';
+import type { AirStation, DailyForecast, HourlyAQI, ActiveAlert } from '../types/airQuality.types';
 
 export const VIETNAM_STATIONS: AirStation[] = [
   {
@@ -272,84 +272,6 @@ export function generateDynamicSevenDayForecast(): DailyForecast[] {
 export const SEVEN_DAY_FORECAST: DailyForecast[] = generateDynamicSevenDayForecast();
 
 
-export const HEALTH_GROUPS_ADVICE: HealthAdviceGroup[] = [
-  {
-    id: 'group-children',
-    titleVi: 'Trẻ em & Phụ nữ mang thai',
-    titleEn: 'Children & Pregnant Women',
-    icon: 'Baby',
-    riskLevel: 'high',
-    adviceVi: [
-      'Hạn chế các hoạt động ngoài trời trong khung giờ cao điểm (06:30 - 09:00 và 17:00 - 19:30).',
-      'Đeo khẩu trang chuyên dụng N95 kích cỡ nhỏ khi di chuyển ngoài đường.',
-      'Bổ sung nước hoa quả giàu vitamin C và chất chống oxy hóa.',
-      'Sử dụng máy lọc không khí có màng HEPA trong phòng ngủ.',
-    ],
-    adviceEn: [
-      'Limit outdoor activities during rush hours (06:30 - 09:00 & 17:00 - 19:30).',
-      'Wear small-sized N95 masks when traveling outside.',
-      'Increase hydration with vitamin C rich juices.',
-      'Run HEPA air purifiers in bedrooms.',
-    ],
-  },
-  {
-    id: 'group-elderly',
-    titleVi: 'Người cao tuổi',
-    titleEn: 'Elderly People',
-    icon: 'HeartPulse',
-    riskLevel: 'high',
-    adviceVi: [
-      'Tránh tập thể dục dưỡng sinh vào sáng sớm khi sương mù hoặc hiện tượng nghịch nhiệt giữ bụi mịn sát mặt đất.',
-      'Uống thuốc tim mạch, huyết áp đúng giờ theo chỉ định bác sĩ.',
-      'Theo dõi các triệu chứng tức ngực, khó thở hoặc ho dai dẳng.',
-      'Tập các bài nhẹ nhàng trong nhà có không khí lưu thông sạch.',
-    ],
-    adviceEn: [
-      'Avoid early morning outdoor exercises when inversion keeps fine dust near ground level.',
-      'Take cardiovascular and blood pressure medications strictly on schedule.',
-      'Monitor for symptoms like chest tightness, shortness of breath, or coughing.',
-      'Perform light indoor exercises in clean ventilated spaces.',
-    ],
-  },
-  {
-    id: 'group-respiratory',
-    titleVi: 'Người có bệnh hô hấp / Hen suyễn',
-    titleEn: 'Asthma & Respiratory Patients',
-    icon: 'Activity',
-    riskLevel: 'critical',
-    adviceVi: [
-      'Luôn mang theo bình xịt cắt cơn hen hoặc thuốc giãn phế quản bên mình.',
-      'Hạn chế ra ngoài khi AQI trên 100; nếu bắt buộc phải đi, đeo khẩu trang N95 ôm khít.',
-      'Súc họng bằng nước muối sinh lý 2 lần/ngày sau khi trở về nhà.',
-      'Rửa mũi và vệ sinh mắt bằng nước muối đẳng trương.',
-    ],
-    adviceEn: [
-      'Always carry quick-relief asthma inhalers or bronchodilators.',
-      'Stay indoors when AQI exceeds 100; wear a snug N95 mask if outdoors is unavoidable.',
-      'Gargle with saline solution twice daily after coming home.',
-      'Rinse nasal passages and eyes with sterile saline.',
-    ],
-  },
-  {
-    id: 'group-outdoor',
-    titleVi: 'Người vận động & Lao động ngoài trời',
-    titleEn: 'Outdoor Workers & Athletes',
-    icon: 'Bike',
-    riskLevel: 'moderate',
-    adviceVi: [
-      'Chuyển các buổi chạy bộ, đạp xe sang phòng gym hoặc vào khung giờ không khí trong lành nhất (13:00 - 15:30).',
-      'Giảm cường độ vận động để hạn chế lượng không khí hít sâu vào phổi.',
-      'Trang bị kính chắn bụi và khẩu trang lọc than hoạt tính đối với tài xế/người giao hàng.',
-      'Tắm rửa và thay quần áo ngay sau khi kết thúc ca làm việc ngoài trời.',
-    ],
-    adviceEn: [
-      'Shift running or cycling to gyms or cleaner window hours (13:00 - 15:30).',
-      'Lower exertion intensity to reduce heavy air volume intake.',
-      'Use protective glasses and active carbon masks for delivery riders/drivers.',
-      'Shower and change clothes promptly after outdoor work shifts.',
-    ],
-  },
-];
 
 export const ACTIVE_ALERTS: ActiveAlert[] = [
   {

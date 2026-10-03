@@ -1,21 +1,13 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { ACTIVE_ALERTS, HEALTH_GROUPS_ADVICE } from '../data/mockAirData';
+import { ACTIVE_ALERTS } from '../data/mockAirData';
 import { AQI_VN_CATEGORIES } from '../utils/aqi.util';
 import { formatDateTime } from '../utils/date.util';
 import { FadeIn } from '../components/FadeIn';
 import {
   ShieldAlert,
-  AlertTriangle,
   Flame,
-  CheckCircle2,
-  HeartPulse,
-  Baby,
-  Activity,
-  Bike,
-  Info,
-  ExternalLink,
-  ShieldCheck
+  CheckCircle2
 } from 'lucide-react';
 
 export const HealthAlerts: React.FC = () => {

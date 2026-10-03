@@ -96,15 +96,6 @@ export interface DailyForecast {
   rainProbability: number;
 }
 
-export interface HealthAdviceGroup {
-  id: string;
-  titleVi: string;
-  titleEn: string;
-  icon: string;
-  riskLevel: 'low' | 'moderate' | 'high' | 'critical';
-  adviceVi: string[];
-  adviceEn: string[];
-}
 
 export interface ActiveAlert {
   id: string;
