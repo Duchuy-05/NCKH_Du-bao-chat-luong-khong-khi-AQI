@@ -634,72 +634,38 @@ export const Home: React.FC<HomeProps> = ({
               <h2 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)] tracking-tight">
                 {t('health.title')}
               </h2>
-              <p className="text-xs text-[var(--text-tertiary)] mt-1 flex items-center gap-1.5 flex-wrap">
-                <span>
-                  {lang === 'vi'
-                    ? 'Khuyến cáo theo nhóm đối tượng, xoay vòng tự động mỗi 6 tiếng'
-                    : 'Targeted health recommendations, rotating automatically every 6 hours'}
-                </span>
-                {adviceRotatesAt && (
-                  <span className="hidden sm:inline-block px-2 py-0.5 rounded-full bg-[var(--surface-subtle)] text-[11px] font-medium text-[var(--text-secondary)]">
-                    {lang === 'vi' ? `Làm mới tiếp theo: ${formatDateTime(adviceRotatesAt)}` : `Next rotation: ${formatDateTime(adviceRotatesAt)}`}
-                  </span>
-                )}
+              <p className="text-xs text-[var(--text-tertiary)] mt-1">
+                {lang === 'vi'
+                  ? 'Khuyến cáo theo nhóm đối tượng, xoay vòng tự động mỗi 6 tiếng'
+                  : 'Targeted health recommendations, rotating automatically every 6 hours'}
               </p>
             </div>
 
             {/* Pagination Controls */}
-            <div className="flex items-center gap-2 self-start sm:self-auto">
-              <div className="flex items-center bg-[var(--surface-card)] border border-[var(--border-default)] rounded-xl p-1 shadow-xs">
-                <button
-                  type="button"
-                  onClick={() => setAdvicePage(1)}
-                  className={`px-2.5 py-1 text-xs font-bold rounded-lg transition-colors cursor-pointer ${
-                    advicePage === 1
-                      ? 'bg-[var(--accent-primary)] text-white shadow-xs'
-                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                  }`}
-                  aria-label={lang === 'vi' ? 'Trang 1: Nhóm 1 đến 4' : 'Page 1: Groups 1-4'}
-                >
-                  {lang === 'vi' ? 'Nhóm 1–4' : 'Groups 1–4'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setAdvicePage(2)}
-                  className={`px-2.5 py-1 text-xs font-bold rounded-lg transition-colors cursor-pointer ${
-                    advicePage === 2
-                      ? 'bg-[var(--accent-primary)] text-white shadow-xs'
-                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                  }`}
-                  aria-label={lang === 'vi' ? 'Trang 2: Nhóm 5 đến 8' : 'Page 2: Groups 5-8'}
-                >
-                  {lang === 'vi' ? 'Nhóm 5–8' : 'Groups 5–8'}
-                </button>
-              </div>
-
-              <div className="flex items-center gap-1">
-                <button
-                  type="button"
-                  onClick={() => setAdvicePage(Math.max(1, advicePage - 1))}
-                  disabled={advicePage <= 1}
-                  className="p-1.5 rounded-lg border border-[var(--border-default)] bg-[var(--surface-card)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
-                  aria-label="Trang trước"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-                <span className="text-xs font-semibold text-[var(--text-tertiary)] px-1">
-                  {advicePage}/{adviceTotalPages}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setAdvicePage(Math.min(adviceTotalPages, advicePage + 1))}
-                  disabled={advicePage >= adviceTotalPages}
-                  className="p-1.5 rounded-lg border border-[var(--border-default)] bg-[var(--surface-card)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
-                  aria-label="Trang sau"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
+            <div className="flex items-center gap-1.5 self-start sm:self-auto bg-[var(--surface-card)] border border-[var(--border-default)] rounded-xl p-1 shadow-xs">
+              <button
+                type="button"
+                onClick={() => setAdvicePage(Math.max(1, advicePage - 1))}
+                disabled={advicePage <= 1}
+                className="p-1.5 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-subtle)] disabled:opacity-30 disabled:hover:bg-transparent disabled:cursor-not-allowed cursor-pointer transition-colors"
+                aria-label={lang === 'vi' ? 'Trang trước' : 'Previous page'}
+                title={lang === 'vi' ? 'Trang trước' : 'Previous page'}
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <span className="text-xs font-semibold text-[var(--text-secondary)] px-1 select-none">
+                {advicePage}/{adviceTotalPages}
+              </span>
+              <button
+                type="button"
+                onClick={() => setAdvicePage(Math.min(adviceTotalPages, advicePage + 1))}
+                disabled={advicePage >= adviceTotalPages}
+                className="p-1.5 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-subtle)] disabled:opacity-30 disabled:hover:bg-transparent disabled:cursor-not-allowed cursor-pointer transition-colors"
+                aria-label={lang === 'vi' ? 'Trang sau' : 'Next page'}
+                title={lang === 'vi' ? 'Trang sau' : 'Next page'}
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
             </div>
           </div>
 
