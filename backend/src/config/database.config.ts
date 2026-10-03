@@ -3,6 +3,9 @@ import { DataSource } from 'typeorm';
 import { envConfig } from './env.config';
 import { User } from '../models/entities/User.entity';
 import { AirQualityPrediction } from '../models/entities/AirQualityPrediction.entity';
+import { AdviceTopic } from '../models/entities/AdviceTopic.entity';
+import { AdviceItem } from '../models/entities/AdviceItem.entity';
+import { AdviceSource } from '../models/entities/AdviceSource.entity';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -13,7 +16,13 @@ export const AppDataSource = new DataSource({
   database: envConfig.DB_NAME,
   synchronize: false,
   logging: envConfig.NODE_ENV === 'development' ? ['error', 'warn'] : false,
-  entities: [User, AirQualityPrediction],
+  entities: [
+    User,
+    AirQualityPrediction,
+    AdviceTopic,
+    AdviceItem,
+    AdviceSource,
+  ],
   migrations: [],
   subscribers: [],
 });
