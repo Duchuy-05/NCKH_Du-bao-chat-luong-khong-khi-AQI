@@ -1,71 +1,35 @@
 import {
-  Table,
+  Entity,
+  PrimaryGeneratedColumn,
   Column,
-  Model,
-  DataType,
-  CreatedAt,
-  UpdatedAt,
-  AllowNull,
-  Default,
-} from 'sequelize-typescript';
+  CreateDateColumn,
+  UpdateDateColumn,
+  BaseEntity,
+} from 'typeorm';
 
-@Table({
-  tableName: 'air_quality_predictions',
-  timestamps: true,
-  underscored: true,
-})
-export class AirQualityPrediction extends Model {
-  @Column({
-    type: DataType.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-  })
-  declare id: number;
+@Entity({ name: 'air_quality_predictions' })
+export class AirQualityPrediction extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-  @AllowNull(false)
-  @Column({
-    type: DataType.STRING(20),
-    comment: 'Loại dự báo: daily hoặc hourly',
-  })
-  declare type: string;
+  @Column({ type: 'varchar', length: 20 })
+  type!: string;
 
-  @AllowNull(false)
-  @Default('svr')
-  @Column({
-    type: DataType.STRING(50),
-    comment: 'Thuật toán sử dụng: svr',
-  })
-  declare algo: string;
+  @Column({ type: 'varchar', length: 50, default: 'svr' })
+  algo!: string;
 
-  @AllowNull(false)
-  @Default('hanoi')
-  @Column({
-    type: DataType.STRING(100),
-    comment: 'Thành phố hoặc trạm đo',
-  })
-  declare city: string;
+  @Column({ type: 'varchar', length: 100, default: 'hanoi' })
+  city!: string;
 
-  @AllowNull(false)
-  @Column({
-    type: DataType.JSONB,
-    field: 'prediction_data',
-    comment: 'Toàn bộ dữ liệu dự báo trả về từ ml-service',
-  })
-  declare predictionData: object;
+  @Column({ name: 'prediction_data', type: 'jsonb' })
+  predictionData!: object;
 
-  @AllowNull(false)
-  @Column({
-    type: DataType.DATE,
-    field: 'generated_at',
-    comment: 'Thời điểm ml-service khởi tạo kết quả',
-  })
-  declare generatedAt: Date;
+  @Column({ name: 'generated_at', type: 'timestamptz' })
+  generatedAt!: Date;
 
-  @CreatedAt
-  @Column({ field: 'created_at' })
-  declare createdAt: Date;
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
+  createdAt!: Date;
 
-  @UpdatedAt
-  @Column({ field: 'updated_at' })
-  declare updatedAt: Date;
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
+  updatedAt!: Date;
 }

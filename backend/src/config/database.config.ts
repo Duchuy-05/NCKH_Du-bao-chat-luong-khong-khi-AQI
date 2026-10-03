@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { envConfig } from './env.config';
 import { User } from '../models/entities/User.entity';
+import { AirQualityPrediction } from '../models/entities/AirQualityPrediction.entity';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -12,7 +13,7 @@ export const AppDataSource = new DataSource({
   database: envConfig.DB_NAME,
   synchronize: false,
   logging: envConfig.NODE_ENV === 'development' ? ['error', 'warn'] : false,
-  entities: [User],
+  entities: [User, AirQualityPrediction],
   migrations: [],
   subscribers: [],
 });
