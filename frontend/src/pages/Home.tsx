@@ -629,44 +629,10 @@ export const Home: React.FC<HomeProps> = ({
       {/* 3. KHUYẾN CÁO SỨC KHỎE THEO NHÓM ĐỐI TƯỢNG */}
       <section className="space-y-4">
         <FadeIn direction="up">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)] tracking-tight">
-                {t('health.title')}
-              </h2>
-              <p className="text-xs text-[var(--text-tertiary)] mt-1">
-                {lang === 'vi'
-                  ? 'Khuyến cáo theo nhóm đối tượng, xoay vòng tự động mỗi 6 tiếng'
-                  : 'Targeted health recommendations, rotating automatically every 6 hours'}
-              </p>
-            </div>
-
-            {/* Pagination Controls */}
-            <div className="flex items-center gap-1.5 self-start sm:self-auto bg-[var(--surface-card)] border border-[var(--border-default)] rounded-xl p-1 shadow-xs">
-              <button
-                type="button"
-                onClick={() => setAdvicePage(Math.max(1, advicePage - 1))}
-                disabled={advicePage <= 1}
-                className="p-1.5 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-subtle)] disabled:opacity-30 disabled:hover:bg-transparent disabled:cursor-not-allowed cursor-pointer transition-colors"
-                aria-label={lang === 'vi' ? 'Trang trước' : 'Previous page'}
-                title={lang === 'vi' ? 'Trang trước' : 'Previous page'}
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <span className="text-xs font-semibold text-[var(--text-secondary)] px-1 select-none">
-                {advicePage}/{adviceTotalPages}
-              </span>
-              <button
-                type="button"
-                onClick={() => setAdvicePage(Math.min(adviceTotalPages, advicePage + 1))}
-                disabled={advicePage >= adviceTotalPages}
-                className="p-1.5 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-subtle)] disabled:opacity-30 disabled:hover:bg-transparent disabled:cursor-not-allowed cursor-pointer transition-colors"
-                aria-label={lang === 'vi' ? 'Trang sau' : 'Next page'}
-                title={lang === 'vi' ? 'Trang sau' : 'Next page'}
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)] tracking-tight">
+              {t('health.title')}
+            </h2>
           </div>
 
           {/* Skeleton Loading State */}
@@ -717,80 +683,107 @@ export const Home: React.FC<HomeProps> = ({
             </div>
           )}
 
-          {/* Data Cards Grid (2 pages x 4 cards) */}
+          {/* Data Cards Grid with Side Navigation Buttons (Left: <, Right: >) */}
           {!isAdviceLoading && !adviceError && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-              {adviceTopics.map((topic) => {
-                const badge = getRiskBadge(topic.riskLevel);
-                const title = lang === 'vi' ? topic.titleVi : (topic.titleEn || topic.titleVi);
+            <div className="relative mt-4">
+              {/* Previous Button (Left Side) */}
+              <button
+                type="button"
+                onClick={() => setAdvicePage(Math.max(1, advicePage - 1))}
+                disabled={advicePage <= 1}
+                className="absolute -left-4 sm:-left-7 top-1/2 -translate-y-1/2 z-20 p-1 text-[var(--text-tertiary)] hover:text-[var(--text-primary)] disabled:opacity-15 disabled:hover:scale-100 disabled:cursor-not-allowed transition-all duration-200 hover:scale-115 active:scale-95 cursor-pointer focus-visible:outline-none"
+                aria-label={lang === 'vi' ? 'Trang trước' : 'Previous page'}
+                title={lang === 'vi' ? 'Trang trước' : 'Previous page'}
+              >
+                <ChevronLeft className="w-7 h-7 sm:w-9 sm:h-9" />
+              </button>
 
-                return (
-                  <div
-                    key={topic.id}
-                    onClick={onNavigateToAlerts}
-                    className="p-6 rounded-2xl bg-[var(--surface-card)] border border-[var(--border-default)] shadow-[var(--shadow-card)] space-y-3 cursor-pointer hover:border-[var(--border-default)] hover:shadow-[var(--shadow-card)] hover:-translate-y-0.5 transition-all flex flex-col justify-between"
-                    title="Nhấn để xem trung tâm cảnh báo & bảo vệ sức khỏe / Click to view health alert center"
-                  >
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="p-2.5 rounded-2xl bg-orange-50 dark:bg-orange-950/50 text-orange-500">
-                            {getHealthGroupIcon(topic.iconKey)}
+              {/* Next Button (Right Side) */}
+              <button
+                type="button"
+                onClick={() => setAdvicePage(Math.min(adviceTotalPages, advicePage + 1))}
+                disabled={advicePage >= adviceTotalPages}
+                className="absolute -right-4 sm:-right-7 top-1/2 -translate-y-1/2 z-20 p-1 text-[var(--text-tertiary)] hover:text-[var(--text-primary)] disabled:opacity-15 disabled:hover:scale-100 disabled:cursor-not-allowed transition-all duration-200 hover:scale-115 active:scale-95 cursor-pointer focus-visible:outline-none"
+                aria-label={lang === 'vi' ? 'Trang sau' : 'Next page'}
+                title={lang === 'vi' ? 'Trang sau' : 'Next page'}
+              >
+                <ChevronRight className="w-7 h-7 sm:w-9 sm:h-9" />
+              </button>
+
+              {/* Cards Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {adviceTopics.map((topic) => {
+                  const badge = getRiskBadge(topic.riskLevel);
+                  const title = lang === 'vi' ? topic.titleVi : (topic.titleEn || topic.titleVi);
+
+                  return (
+                    <div
+                      key={topic.id}
+                      onClick={onNavigateToAlerts}
+                      className="p-6 rounded-2xl bg-[var(--surface-card)] border border-[var(--border-default)] shadow-[var(--shadow-card)] space-y-3 cursor-pointer hover:border-[var(--border-default)] hover:shadow-[var(--shadow-card)] hover:-translate-y-0.5 transition-all flex flex-col justify-between"
+                      title="Nhấn để xem trung tâm cảnh báo & bảo vệ sức khỏe / Click to view health alert center"
+                    >
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="p-2.5 rounded-2xl bg-orange-50 dark:bg-orange-950/50 text-orange-500">
+                              {getHealthGroupIcon(topic.iconKey)}
+                            </div>
+                            <h3 className="text-base font-bold text-[var(--text-primary)]">
+                              {title}
+                            </h3>
                           </div>
-                          <h3 className="text-base font-bold text-[var(--text-primary)]">
-                            {title}
-                          </h3>
+                          <span className={`text-xs uppercase tracking-wider font-bold px-2 py-0.5 rounded-full ${badge.className}`}>
+                            {badge.label}
+                          </span>
                         </div>
-                        <span className={`text-xs uppercase tracking-wider font-bold px-2 py-0.5 rounded-full ${badge.className}`}>
-                          {badge.label}
-                        </span>
+
+                        <ul className="space-y-2 text-sm leading-6 text-[var(--text-secondary)]">
+                          {topic.items.map((item) => (
+                            <li key={item.id} className="flex items-start gap-2">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                              <span>{lang === 'vi' ? item.contentVi : (item.contentEn || item.contentVi)}</span>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
 
-                      <ul className="space-y-2 text-sm leading-6 text-[var(--text-secondary)]">
-                        {topic.items.map((item) => (
-                          <li key={item.id} className="flex items-start gap-2">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                            <span>{lang === 'vi' ? item.contentVi : (item.contentEn || item.contentVi)}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                      {/* Card Footer: Sources & Quick Link */}
+                      <div className="pt-2 border-t border-[var(--border-default)] flex items-center justify-between text-xs">
+                        {topic.sources && topic.sources.length > 0 ? (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedSourcesTopic(topic);
+                            }}
+                            className="font-medium text-[var(--accent-primary)] hover:underline inline-flex items-center gap-1 cursor-pointer focus-visible:outline-none"
+                            title="Xem các hướng dẫn y khoa chính thống tham khảo"
+                          >
+                            <Info className="w-3.5 h-3.5" />
+                            <span>{lang === 'vi' ? `Nguồn tài liệu y khoa (${topic.sources.length})` : `Medical Sources (${topic.sources.length})`}</span>
+                          </button>
+                        ) : (
+                          <span className="text-[var(--text-tertiary)]">
+                            {lang === 'vi' ? 'Tiêu chuẩn WHO/EPA' : 'WHO/EPA Standard'}
+                          </span>
+                        )}
 
-                    {/* Card Footer: Sources & Quick Link */}
-                    <div className="pt-2 border-t border-[var(--border-default)] flex items-center justify-between text-xs">
-                      {topic.sources && topic.sources.length > 0 ? (
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedSourcesTopic(topic);
-                          }}
-                          className="font-medium text-[var(--accent-primary)] hover:underline inline-flex items-center gap-1 cursor-pointer focus-visible:outline-none"
-                          title="Xem các hướng dẫn y khoa chính thống tham khảo"
-                        >
-                          <Info className="w-3.5 h-3.5" />
-                          <span>{lang === 'vi' ? `Nguồn tài liệu y khoa (${topic.sources.length})` : `Medical Sources (${topic.sources.length})`}</span>
-                        </button>
-                      ) : (
-                        <span className="text-[var(--text-tertiary)]">
-                          {lang === 'vi' ? 'Tiêu chuẩn WHO/EPA' : 'WHO/EPA Standard'}
+                        <span className="text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] inline-flex items-center gap-0.5">
+                          <span>{lang === 'vi' ? 'Chi tiết' : 'Details'}</span>
+                          <ChevronRight className="w-3.5 h-3.5" />
                         </span>
-                      )}
-
-                      <span className="text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] inline-flex items-center gap-0.5">
-                        <span>{lang === 'vi' ? 'Chi tiết' : 'Details'}</span>
-                        <ChevronRight className="w-3.5 h-3.5" />
-                      </span>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           )}
 
           {/* Medical Disclaimer Banner */}
-          <div className="mt-4 p-4 rounded-xl bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200/70 dark:border-amber-900/50 flex items-start gap-3 text-xs text-[var(--text-secondary)]">
-            <Info className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+          <div className="mt-4 p-4 rounded-2xl bg-white dark:bg-[var(--surface-card)] border border-[var(--border-default)] shadow-[var(--shadow-card)] flex items-start gap-3 text-xs text-[var(--text-secondary)]">
+            <Info className="w-4 h-4 text-orange-500 shrink-0 mt-0.5" />
             <p>
               <span className="font-bold text-[var(--text-primary)]">
                 {lang === 'vi' ? 'Lưu ý an toàn sức khỏe: ' : 'Health Safety Notice: '}
