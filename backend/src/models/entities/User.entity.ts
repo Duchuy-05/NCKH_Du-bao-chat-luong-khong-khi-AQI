@@ -1,119 +1,73 @@
 import {
-  Table,
+  Entity,
+  PrimaryGeneratedColumn,
   Column,
-  Model,
-  DataType,
-  CreatedAt,
-  UpdatedAt,
-  BeforeCreate,
+  CreateDateColumn,
+  UpdateDateColumn,
+  BeforeInsert,
   BeforeUpdate,
-  Unique,
-  AllowNull,
-  Default,
-} from 'sequelize-typescript';
+  BaseEntity,
+} from 'typeorm';
 import bcrypt from 'bcryptjs';
 
 export enum UserRole {
   USER = 'user',
   ADMIN = 'admin',
 }
-@Table({
-  tableName: 'users',
-  timestamps: true,
-})
-export class User extends Model {
-  // Primary key: auto-increment integer
+
+@Entity({ name: 'users' })
+export class User extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id!: number;
+
+  @Column({ name: 'full_name', type: 'varchar', length: 100 })
+  fullName!: string;
+
+  @Column({ type: 'varchar', length: 255, unique: true })
+  email!: string;
+
+  @Column({ name: 'password_hash', type: 'varchar', length: 255 })
+  passwordHash!: string;
+
   @Column({
-    type: DataType.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
+    type: 'varchar',
+    length: 20,
+    default: UserRole.USER,
   })
-  declare id: number;
+  role!: UserRole;
 
-  // Full name of the user
-  @AllowNull(false)
-  @Column({
-    type: DataType.STRING(100),
-    field: 'full_name',
-  })
-  declare fullName: string;
+  @Column({ name: 'is_active', type: 'boolean', default: true })
+  isActive!: boolean;
 
-  // Email – must be unique across the table
-  @Unique
-  @AllowNull(false)
-  @Column({
-    type: DataType.STRING(255),
-  })
-  declare email: string;
+  @Column({ name: 'last_login_at', type: 'timestamptz', nullable: true })
+  lastLoginAt!: Date | null;
 
-  // Hashed password (never stored in plain text)
-  @AllowNull(false)
-  @Column({
-    type: DataType.STRING(255),
-    field: 'password_hash',
-  })
-  declare passwordHash: string;
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
+  createdAt!: Date;
 
-  // Role: 'user' (default) or 'admin'
-  @Default(UserRole.USER)
-  @Column({
-    type: DataType.ENUM(...Object.values(UserRole)),
-  })
-  declare role: UserRole;
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
+  updatedAt!: Date;
 
-  // Whether the account has been activated
-  @Default(true)
-  @Column({
-    type: DataType.BOOLEAN,
-    field: 'is_active',
-  })
-  declare isActive: boolean;
-
-  // Timestamp of last login
-  @Column({
-    type: DataType.DATE,
-    field: 'last_login_at',
-    allowNull: true,
-  })
-  declare lastLoginAt: Date | null;
-
-  // Sequelize-managed timestamps
-  @CreatedAt
-  @Column({ field: 'created_at' })
-  declare createdAt: Date;
-
-  @UpdatedAt
-  @Column({ field: 'updated_at' })
-  declare updatedAt: Date;
-
-  // ─── Hooks ───────────────────────────────────────────────────────────────
-
-  /** Hash password before creating a new record */
-  @BeforeCreate
-  static async hashPasswordOnCreate(instance: User): Promise<void> {
-    if (instance.passwordHash) {
+  @BeforeInsert()
+  async hashPasswordOnInsert(): Promise<void> {
+    if (this.passwordHash) {
       const salt = await bcrypt.genSalt(12);
-      instance.passwordHash = await bcrypt.hash(instance.passwordHash, salt);
+      this.passwordHash = await bcrypt.hash(this.passwordHash, salt);
     }
   }
 
-  /** Hash password before updating (only when it actually changed) */
-  @BeforeUpdate
-  static async hashPasswordOnUpdate(instance: User): Promise<void> {
-    if (instance.changed('passwordHash')) {
+  @BeforeUpdate()
+  async hashPasswordOnUpdate(): Promise<void> {
+    if (this.passwordHash && !this.passwordHash.startsWith('$2a$') && !this.passwordHash.startsWith('$2b$')) {
       const salt = await bcrypt.genSalt(12);
-      instance.passwordHash = await bcrypt.hash(instance.passwordHash, salt);
+      this.passwordHash = await bcrypt.hash(this.passwordHash, salt);
     }
   }
 
-  // ─── Instance methods ─────────────────────────────────────────────────────
-
-  /** Compare a plain-text password with the stored hash */
   async comparePassword(plainPassword: string): Promise<boolean> {
     return bcrypt.compare(plainPassword, this.passwordHash);
   }
 
-  /** Return a safe representation (no password hash) */
   toSafeObject() {
     return {
       id: this.id,
