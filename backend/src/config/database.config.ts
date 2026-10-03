@@ -1,41 +1,29 @@
-import { Sequelize } from 'sequelize-typescript';
+import 'reflect-metadata';
+import { DataSource } from 'typeorm';
 import { envConfig } from './env.config';
-import { User } from '../models/entities/User.entity';
-import { AirQualityPrediction } from '../models/entities/AirQualityPrediction.entity';
 
-/**
- * Sequelize instance configured from environment variables.
- * Add new entity classes to the `models` array when created.
- */
-export const sequelize = new Sequelize({
-  dialect: 'postgres',
+export const AppDataSource = new DataSource({
+  type: 'postgres',
   host: envConfig.DB_HOST,
   port: envConfig.DB_PORT,
-  database: envConfig.DB_NAME,
   username: envConfig.DB_USER,
   password: envConfig.DB_PASSWORD,
-  logging: false,
-  models: [
-    User,
-    AirQualityPrediction,
-  ],
-  define: {
-    underscored: true,              // snake_case columns in DB
-    timestamps: true,
-  },
+  database: envConfig.DB_NAME,
+  synchronize: false,
+  logging: envConfig.NODE_ENV === 'development' ? ['error', 'warn'] : false,
+  entities: [],
+  migrations: [],
+  subscribers: [],
 });
 
-/**
- * Connect to the database and sync the schema.
- * Use `alter: true` in development so columns are updated automatically.
- * In production, use migrations instead of sync.
- */
 export async function connectDatabase(): Promise<void> {
-  await sequelize.authenticate();
-  console.log('✅  Database connection established.');
-
-  if (envConfig.NODE_ENV !== 'production') {
-    await sequelize.sync({ alter: true });
-    console.log('✅  Database schema synchronised (alter mode).');
+  try {
+    if (!AppDataSource.isInitialized) {
+      await AppDataSource.initialize();
+      console.log('✅  Kết nối cơ sở dữ liệu PostgreSQL (TypeORM DataSource) thành công.');
+    }
+  } catch (error) {
+    console.error('❌  Khởi động TypeORM DataSource thất bại:', error);
+    throw error;
   }
 }
