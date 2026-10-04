@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "nodemon src/index.ts",
     "build": "tsc",
+    "prestart": "npm run build",
     "start": "node dist/index.js",
     "lint": "tsc --noEmit"
   },
@@ -20,10 +21,8 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.13.1",
-    "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.2.2",
-    "sequelize": "^6.37.5",
-    "sequelize-typescript": "^2.1.6"
+    "typeorm": "^0.3.31"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -31,6 +30,7 @@
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.10.2",
+    "@types/pg": "^8.23.1",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2"

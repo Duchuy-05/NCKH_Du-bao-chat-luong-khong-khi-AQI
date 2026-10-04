@@ -78,7 +78,6 @@ const translations: Record<Language, Record<string, string>> = {
 
     // Health
     'health.title': 'Khuyến cáo sức khỏe theo nhóm đối tượng',
-    'health.subtitle': 'Hướng dẫn hành động phòng ngừa tương ứng với chỉ số không khí hiện tại',
 
     // Notifications
     'notif.title': 'Thông báo đẩy theo vị trí của bạn',
@@ -177,7 +176,6 @@ const translations: Record<Language, Record<string, string>> = {
 
     // Health
     'health.title': 'Health Advisory by Target Group',
-    'health.subtitle': 'Tailored preventive guidelines based on current atmospheric pollution levels',
 
     // Notifications
     'notif.title': 'Location-Based Push Notifications',

@@ -457,7 +457,7 @@ export const VietnamMap: React.FC<VietnamMapProps> = ({
             const st = hoveredStation || selectedStation!;
             onSelectStation(st);
           }}
-          className="absolute bottom-[7.5%] left-2 right-4 md:right-auto md:w-80 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl text-slate-900 dark:text-white cursor-pointer hover:border-orange-500 transition-colors"
+          className="absolute bottom-[8%] left-2 right-4 md:right-auto md:w-80 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl text-slate-900 dark:text-white cursor-pointer hover:border-orange-500 transition-colors"
           title="Nhấn để xem chi tiết thông số trạm / Click to view station details"
         >
           {(() => {

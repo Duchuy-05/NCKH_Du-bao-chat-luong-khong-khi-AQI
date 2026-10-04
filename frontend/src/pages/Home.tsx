@@ -1,7 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { useNotification } from '../context/NotificationContext';
-import { VIETNAM_STATIONS, HOURLY_AQI_DATA_24H, SEVEN_DAY_FORECAST, generateDynamicSevenDayForecast, HEALTH_GROUPS_ADVICE, BEST_OUTDOOR_HOURS, CITY_COMPARISONS, INDOOR_AIR_TIPS } from '../data/mockAirData';
+import { useHealthAdvice } from '../hooks/useHealthAdvice';
+import type { HealthAdviceTopic } from '../types/healthAdvice.types';
+import { VIETNAM_STATIONS, HOURLY_AQI_DATA_24H, SEVEN_DAY_FORECAST, generateDynamicSevenDayForecast, BEST_OUTDOOR_HOURS, CITY_COMPARISONS, INDOOR_AIR_TIPS } from '../data/mockAirData';
 import { AirStation, DailyForecast, PollutantDetail } from '../types/airQuality.types';
 import { getAQICategory } from '../utils/aqi.util';
 import { formatDateTime } from '../utils/date.util';
@@ -26,13 +28,21 @@ import {
   HeartPulse,
   Baby,
   Bike,
+  Heart,
+  Users,
+  ShieldAlert,
+  Info,
+  ChevronLeft,
+  ChevronRight,
+  ExternalLink,
+  RotateCw,
+  X,
   CheckCircle2,
   AlertTriangle,
   Sliders,
   Sparkles,
   MapPin,
   Clock,
-  ChevronRight,
   Layers,
   Leaf
 } from 'lucide-react';
@@ -82,6 +92,22 @@ export const Home: React.FC<HomeProps> = ({
 
   // Notification threshold slider local state
   const [customThreshold, setCustomThreshold] = useState<number>(preferences.threshold);
+
+  // Dynamic health advice state from backend with 6h rotation
+  const {
+    topics: adviceTopics,
+    allTopics: allAdviceTopics,
+    rotatesAt: adviceRotatesAt,
+    isLoading: isAdviceLoading,
+    error: adviceError,
+    currentPage: advicePage,
+    totalPages: adviceTotalPages,
+    setCurrentPage: setAdvicePage,
+    refetch: refetchAdvice,
+  } = useHealthAdvice();
+
+  // Selected topic for medical source popover/modal
+  const [selectedSourcesTopic, setSelectedSourcesTopic] = useState<HealthAdviceTopic | null>(null);
 
   const category = getAQICategory(currentStation.aqi);
 
@@ -163,18 +189,48 @@ export const Home: React.FC<HomeProps> = ({
     return dynamicForecast.filter((f) => f.province === selectedProvinceFilter);
   }, [selectedProvinceFilter, dynamicForecast]);
 
-  const getHealthGroupIcon = (icon: string) => {
-    switch (icon) {
+  const getHealthGroupIcon = (iconKey?: string) => {
+    switch (iconKey) {
       case 'Baby':
         return <Baby className="w-5 h-5" />;
       case 'HeartPulse':
         return <HeartPulse className="w-5 h-5" />;
       case 'Activity':
         return <Activity className="w-5 h-5" />;
+      case 'Heart':
+        return <Heart className="w-5 h-5" />;
       case 'Bike':
         return <Bike className="w-5 h-5" />;
+      case 'Users':
+        return <Users className="w-5 h-5" />;
       default:
-        return <HeartPulse className="w-5 h-5" />;
+        return <ShieldAlert className="w-5 h-5" />;
+    }
+  };
+
+  const getRiskBadge = (riskLevel: string) => {
+    switch (riskLevel) {
+      case 'critical':
+        return {
+          label: lang === 'vi' ? 'Nguy cấp' : 'Critical',
+          className: 'bg-red-100 dark:bg-red-950/60 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/50',
+        };
+      case 'high':
+        return {
+          label: lang === 'vi' ? 'Rủi ro cao' : 'High Risk',
+          className: 'bg-orange-100 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-900/50',
+        };
+      case 'moderate':
+        return {
+          label: lang === 'vi' ? 'Lưu ý' : 'Moderate',
+          className: 'bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900/50',
+        };
+      case 'low':
+      default:
+        return {
+          label: lang === 'vi' ? 'An toàn' : 'Low Risk',
+          className: 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900/50',
+        };
     }
   };
 
@@ -577,48 +633,165 @@ export const Home: React.FC<HomeProps> = ({
             <h2 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)] tracking-tight">
               {t('health.title')}
             </h2>
-            <p className="text-xs text-[var(--text-tertiary)] mt-1">
-              {t('health.subtitle')}
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-            {HEALTH_GROUPS_ADVICE.map((group) => {
-              return (
+          {/* Skeleton Loading State */}
+          {isAdviceLoading && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              {[1, 2, 3, 4].map((i) => (
                 <div
-                  key={group.id}
-                  onClick={onNavigateToAlerts}
-                  className="p-6 rounded-2xl bg-[var(--surface-card)] border border-[var(--border-default)] shadow-[var(--shadow-card)] space-y-3 cursor-pointer hover:border-[var(--border-default)] hover:shadow-[var(--shadow-card)] hover:-translate-y-0.5 transition-all"
-                  title="Nhấn để xem trung tâm cảnh báo & bảo vệ sức khỏe / Click to view health alert center"
+                  key={i}
+                  className="p-6 rounded-2xl bg-[var(--surface-card)] border border-[var(--border-default)] shadow-[var(--shadow-card)] space-y-4 animate-pulse"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="p-2.5 rounded-2xl bg-orange-50 dark:bg-orange-950/50 text-orange-500">
-                        {getHealthGroupIcon(group.icon)}
-                      </div>
-                      <h3 className="text-base font-bold text-[var(--text-primary)]">
-                        {lang === 'vi' ? group.titleVi : group.titleEn}
-                      </h3>
+                      <div className="w-10 h-10 rounded-2xl bg-slate-200 dark:bg-slate-700" />
+                      <div className="h-5 w-32 bg-slate-200 dark:bg-slate-700 rounded-md" />
                     </div>
-                    <span className={`text-xs uppercase tracking-wider font-bold px-2 py-0.5 rounded-full ${group.riskLevel === 'critical'
-                      ? 'bg-red-100 dark:bg-red-950/60 text-red-600 dark:text-red-400'
-                      : 'bg-orange-100 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400'
-                      }`}>
-                      {group.riskLevel === 'critical' ? (lang === 'vi' ? 'Rủi ro cao' : 'Critical') : (lang === 'vi' ? 'Lưu ý' : 'Caution')}
-                    </span>
+                    <div className="h-5 w-16 bg-slate-200 dark:bg-slate-700 rounded-full" />
                   </div>
-
-                  <ul className="space-y-2 text-sm leading-6 text-[var(--text-secondary)]">
-                    {(lang === 'vi' ? group.adviceVi : group.adviceEn).map((advice, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                        <span>{advice}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="space-y-2.5 pt-2">
+                    <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-full" />
+                    <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-5/6" />
+                    <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-4/6" />
+                  </div>
                 </div>
-              );
-            })}
+              ))}
+            </div>
+          )}
+
+          {/* Error State with Retry Button */}
+          {!isAdviceLoading && adviceError && (
+            <div className="rounded-2xl border border-red-200 dark:border-red-900/50 bg-red-50/50 dark:bg-red-950/20 p-6 text-center shadow-[var(--shadow-card)] mt-4 space-y-3">
+              <div className="inline-flex p-3 rounded-full bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400">
+                <AlertTriangle className="w-5 h-5" />
+              </div>
+              <p className="text-sm font-semibold text-red-800 dark:text-red-200">
+                {lang === 'vi' ? 'Không thể tải dữ liệu khuyến cáo sức khỏe' : 'Unable to load health advice data'}
+              </p>
+              <p className="text-xs text-red-600 dark:text-red-300">
+                {adviceError}
+              </p>
+              <button
+                type="button"
+                onClick={() => refetchAdvice()}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[var(--accent-primary)] hover:bg-[var(--accent-primary-hover)] text-white text-xs font-bold transition-all shadow-xs cursor-pointer"
+              >
+                <RotateCw className="w-3.5 h-3.5" />
+                <span>{lang === 'vi' ? 'Thử lại' : 'Retry'}</span>
+              </button>
+            </div>
+          )}
+
+          {/* Data Cards Grid with Side Navigation Buttons (Left: <, Right: >) */}
+          {!isAdviceLoading && !adviceError && (
+            <div className="relative mt-4">
+              {/* Previous Button (Left Side) */}
+              <button
+                type="button"
+                onClick={() => setAdvicePage(Math.max(1, advicePage - 1))}
+                disabled={advicePage <= 1}
+                className="absolute -left-4 sm:-left-7 top-1/2 -translate-y-1/2 z-20 p-1 text-[var(--text-tertiary)] hover:text-[var(--text-primary)] disabled:opacity-15 disabled:hover:scale-100 disabled:cursor-not-allowed transition-all duration-200 hover:scale-115 active:scale-95 cursor-pointer focus-visible:outline-none"
+                aria-label={lang === 'vi' ? 'Trang trước' : 'Previous page'}
+                title={lang === 'vi' ? 'Trang trước' : 'Previous page'}
+              >
+                <ChevronLeft className="w-7 h-7 sm:w-9 sm:h-9" />
+              </button>
+
+              {/* Next Button (Right Side) */}
+              <button
+                type="button"
+                onClick={() => setAdvicePage(Math.min(adviceTotalPages, advicePage + 1))}
+                disabled={advicePage >= adviceTotalPages}
+                className="absolute -right-4 sm:-right-7 top-1/2 -translate-y-1/2 z-20 p-1 text-[var(--text-tertiary)] hover:text-[var(--text-primary)] disabled:opacity-15 disabled:hover:scale-100 disabled:cursor-not-allowed transition-all duration-200 hover:scale-115 active:scale-95 cursor-pointer focus-visible:outline-none"
+                aria-label={lang === 'vi' ? 'Trang sau' : 'Next page'}
+                title={lang === 'vi' ? 'Trang sau' : 'Next page'}
+              >
+                <ChevronRight className="w-7 h-7 sm:w-9 sm:h-9" />
+              </button>
+
+              {/* Cards Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {adviceTopics.map((topic) => {
+                  const badge = getRiskBadge(topic.riskLevel);
+                  const title = lang === 'vi' ? topic.titleVi : (topic.titleEn || topic.titleVi);
+
+                  return (
+                    <div
+                      key={topic.id}
+                      onClick={onNavigateToAlerts}
+                      className="p-6 rounded-2xl bg-[var(--surface-card)] border border-[var(--border-default)] shadow-[var(--shadow-card)] space-y-3 cursor-pointer hover:border-[var(--border-default)] hover:shadow-[var(--shadow-card)] hover:-translate-y-0.5 transition-all flex flex-col justify-between"
+                      title="Nhấn để xem trung tâm cảnh báo & bảo vệ sức khỏe / Click to view health alert center"
+                    >
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="p-2.5 rounded-2xl bg-orange-50 dark:bg-orange-950/50 text-orange-500">
+                              {getHealthGroupIcon(topic.iconKey)}
+                            </div>
+                            <h3 className="text-base font-bold text-[var(--text-primary)]">
+                              {title}
+                            </h3>
+                          </div>
+                          <span className={`text-xs uppercase tracking-wider font-bold px-2 py-0.5 rounded-full ${badge.className}`}>
+                            {badge.label}
+                          </span>
+                        </div>
+
+                        <ul className="space-y-2 text-sm leading-6 text-[var(--text-secondary)]">
+                          {topic.items.map((item) => (
+                            <li key={item.id} className="flex items-start gap-2">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                              <span>{lang === 'vi' ? item.contentVi : (item.contentEn || item.contentVi)}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Card Footer: Sources & Quick Link */}
+                      <div className="pt-2 border-t border-[var(--border-default)] flex items-center justify-between text-xs">
+                        {topic.sources && topic.sources.length > 0 ? (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedSourcesTopic(topic);
+                            }}
+                            className="font-medium text-[var(--accent-primary)] hover:underline inline-flex items-center gap-1 cursor-pointer focus-visible:outline-none"
+                            title="Xem các hướng dẫn y khoa chính thống tham khảo"
+                          >
+                            <Info className="w-3.5 h-3.5" />
+                            <span>{lang === 'vi' ? `Nguồn tài liệu y khoa (${topic.sources.length})` : `Medical Sources (${topic.sources.length})`}</span>
+                          </button>
+                        ) : (
+                          <span className="text-[var(--text-tertiary)]">
+                            {lang === 'vi' ? 'Tiêu chuẩn WHO/EPA' : 'WHO/EPA Standard'}
+                          </span>
+                        )}
+
+                        <span className="text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] inline-flex items-center gap-0.5">
+                          <span>{lang === 'vi' ? 'Chi tiết' : 'Details'}</span>
+                          <ChevronRight className="w-3.5 h-3.5" />
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Medical Disclaimer Banner */}
+          <div className="mt-4 p-4 rounded-2xl bg-white dark:bg-[var(--surface-card)] border border-[var(--border-default)] shadow-[var(--shadow-card)] flex items-start gap-3 text-xs text-[var(--text-secondary)]">
+            <Info className="w-4 h-4 text-orange-500 shrink-0 mt-0.5" />
+            <p>
+              <span className="font-bold text-[var(--text-primary)]">
+                {lang === 'vi' ? 'Lưu ý an toàn sức khỏe: ' : 'Health Safety Notice: '}
+              </span>
+              {lang === 'vi'
+                ? 'Các khuyến cáo mang tính chất tham khảo khoa học, không thay thế chẩn đoán hay chỉ định y khoa chuyên sâu. Người có triệu chứng hô hấp/tim mạch nặng cần thăm khám bác sĩ kịp thời.'
+                : 'These recommendations are based on scientific reference standards and do not substitute for individual professional medical diagnosis or care. Patients with severe cardiovascular or respiratory symptoms should seek immediate medical care.'}
+            </p>
           </div>
         </FadeIn>
       </section>
@@ -1070,6 +1243,100 @@ export const Home: React.FC<HomeProps> = ({
           </div>
         </FadeIn>
       </section>
+
+      {/* Medical Sources Modal */}
+      {selectedSourcesTopic && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-200"
+          onClick={() => setSelectedSourcesTopic(null)}
+        >
+          <div
+            className="bg-[var(--surface-card)] border border-[var(--border-default)] rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[85vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between pb-3 border-b border-[var(--border-default)]">
+              <div className="flex items-center gap-2">
+                <div className="p-2 rounded-xl bg-orange-50 dark:bg-orange-950/50 text-orange-500">
+                  <Info className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-[var(--text-primary)]">
+                    {lang === 'vi' ? 'Nguồn tài liệu y khoa tham khảo' : 'Medical Reference Sources'}
+                  </h3>
+                  <p className="text-xs text-[var(--text-tertiary)]">
+                    {lang === 'vi' ? selectedSourcesTopic.titleVi : (selectedSourcesTopic.titleEn || selectedSourcesTopic.titleVi)}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedSourcesTopic(null)}
+                className="p-1.5 rounded-lg text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-subtle)] transition-colors cursor-pointer"
+                aria-label="Đóng"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              {selectedSourcesTopic.sources && selectedSourcesTopic.sources.length > 0 ? (
+                selectedSourcesTopic.sources.map((src) => (
+                  <div
+                    key={src.code}
+                    className="p-3.5 rounded-xl border border-[var(--border-default)] bg-[var(--surface-subtle)] space-y-1.5"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-[var(--accent-primary)]/10 text-[var(--accent-primary)]">
+                        {src.code}
+                      </span>
+                      {src.publishedYear && (
+                        <span className="text-xs text-[var(--text-tertiary)] font-medium">
+                          {src.publishedYear}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs font-bold text-[var(--text-primary)]">
+                      {src.title}
+                    </p>
+                    {src.publisher && (
+                      <p className="text-xs text-[var(--text-secondary)]">
+                        {src.publisher}
+                      </p>
+                    )}
+                    {src.url && (
+                      <a
+                        href={src.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-xs text-[var(--accent-primary)] hover:underline pt-1 font-medium"
+                      >
+                        <span>{lang === 'vi' ? 'Xem tài liệu gốc' : 'View original publication'}</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <p className="text-xs text-[var(--text-tertiary)] text-center py-4">
+                  {lang === 'vi' ? 'Không có tài liệu tham khảo chi tiết.' : 'No detailed references available.'}
+                </p>
+              )}
+            </div>
+
+            <div className="pt-2 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setSelectedSourcesTopic(null)}
+                className="px-4 py-2 rounded-xl bg-[var(--surface-subtle)] hover:bg-[var(--border-default)] text-xs font-bold text-[var(--text-primary)] transition-colors cursor-pointer"
+              >
+                {lang === 'vi' ? 'Đóng' : 'Close'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

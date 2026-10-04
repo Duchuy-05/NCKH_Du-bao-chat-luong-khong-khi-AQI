@@ -2,8 +2,6 @@ import jwt from 'jsonwebtoken';
 import { User, UserRole } from '../models/entities/User.entity';
 import { envConfig } from '../config/env.config';
 
-// ── Types ────────────────────────────────────────────────────────────────────
-
 export interface RegisterDto {
   fullName: string;
   email: string;
@@ -16,40 +14,29 @@ export interface LoginDto {
 }
 
 export interface JwtPayload {
-  sub: number;   // user id
+  sub: number;
   email: string;
   role: UserRole;
 }
 
-// ── Service ──────────────────────────────────────────────────────────────────
-
 export class AuthService {
-  /**
-   * Register a new user account.
-   * Throws if email already exists.
-   */
   async register(dto: RegisterDto): Promise<{ user: object; token: string }> {
     const existing = await User.findOne({ where: { email: dto.email } });
     if (existing) {
       throw new Error('Email đã được sử dụng.');
     }
 
-    // passwordHash stores the plain password at this stage;
-    // the BeforeCreate hook in User.entity.ts will hash it automatically.
-    const user = await User.create({
+    const user = User.create({
       fullName: dto.fullName,
       email: dto.email,
       passwordHash: dto.password,
     });
+    await user.save();
 
     const token = this.generateToken(user);
     return { user: user.toSafeObject(), token };
   }
 
-  /**
-   * Authenticate an existing user.
-   * Throws if credentials are invalid or account inactive.
-   */
   async login(dto: LoginDto): Promise<{ user: object; token: string }> {
     const user = await User.findOne({ where: { email: dto.email } });
 
@@ -66,23 +53,18 @@ export class AuthService {
       throw new Error('Email hoặc mật khẩu không đúng.');
     }
 
-    // Update last login timestamp
-    await user.update({ lastLoginAt: new Date() });
+    user.lastLoginAt = new Date();
+    await user.save();
 
     const token = this.generateToken(user);
     return { user: user.toSafeObject(), token };
   }
 
-  /**
-   * Return the profile of the authenticated user.
-   */
   async getProfile(userId: number): Promise<object> {
-    const user = await User.findByPk(userId);
+    const user = await User.findOne({ where: { id: userId } });
     if (!user) throw new Error('Người dùng không tồn tại.');
     return user.toSafeObject();
   }
-
-  // ── Helpers ──────────────────────────────────────────────────────────────
 
   private generateToken(user: User): string {
     const payload: JwtPayload = {

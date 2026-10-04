@@ -16,7 +16,7 @@ export class AirQualityController {
           city: data.city,
           predictionData: data,
           generatedAt: new Date(data.generated_at),
-        });
+        }).save();
       } catch (dbErr) {
         console.error('⚠️ [AirQualityController] Không thể lưu lịch sử DB:', dbErr);
       }
@@ -56,7 +56,7 @@ export class AirQualityController {
           city: data.city,
           predictionData: data,
           generatedAt: new Date(data.generated_at),
-        });
+        }).save();
       } catch (dbErr) {
         console.error('⚠️ [AirQualityController] Không thể lưu lịch sử DB:', dbErr);
       }
