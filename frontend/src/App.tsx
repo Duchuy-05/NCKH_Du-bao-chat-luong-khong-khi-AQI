@@ -1,16 +1,11 @@
 import { Suspense, lazy, useState } from "react";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
 import { LanguageProvider } from "./context/LanguageContext";
-import { NotificationProvider } from "./context/NotificationContext";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
-import { NotificationToast } from "./components/NotificationToast";
-import { AuthModal } from "./components/AuthModal";
 import { TermsModal } from "./components/TermsModal";
 import { PrivacyModal } from "./components/PrivacyModal";
-import { StationDetailModal } from "./components/StationDetailModal";
-import type { AirStation } from "./types/airQuality.types";
 
 // Lazy load: mỗi trang chỉ được tải (và render) khi người dùng thực sự
 // truy cập route tương ứng, thay vì gộp tất cả vào 1 bundle duy nhất.
@@ -29,44 +24,13 @@ function PageLoader() {
 }
 
 function MainApp() {
-  const navigate = useNavigate();
-  const [selectedStationForModal, setSelectedStationForModal] = useState<AirStation | null>(null);
-
-  // Auth state & modals
-  const [isAuthOpen, setIsAuthOpen] = useState(false);
-  const [authMode, setAuthMode] = useState<"login" | "register">("login");
-  const [currentUser, setCurrentUser] = useState<{ name: string; email: string } | null>(null);
-
-  // Legal modals
   const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
-
-  const handleOpenAuth = (mode: "login" | "register") => {
-    setAuthMode(mode);
-    setIsAuthOpen(true);
-  };
-
-  const handleLoginSuccess = (user: { name: string; email: string }) => {
-    setCurrentUser(user);
-  };
-
-  const handleLogout = () => {
-    setCurrentUser(null);
-  };
-
-  const handleSelectStation = (station: AirStation) => {
-    setSelectedStationForModal(station);
-  };
-
-  const goTo = (path: string) => {
-    navigate(path);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--surface-page)] text-[var(--text-primary)] transition-colors">
       {/* Top sticky Navigation Header */}
-      <Header onOpenAuth={handleOpenAuth} currentUser={currentUser} onLogout={handleLogout} />
+      <Header />
 
       {/* Main Page Body - chỉ route khớp URL mới được render */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6">
@@ -75,15 +39,10 @@ function MainApp() {
             <Route
               path="/"
               element={
-                <Home
-                  onSelectStation={handleSelectStation}
-                  onNavigateToMaps={() => goTo("/maps")}
-                  onNavigateToForecast={() => goTo("/forecast")}
-                  onNavigateToAlerts={() => goTo("/alerts")}
-                />
+                <Home />
               }
             />
-            <Route path="/maps" element={<Maps onSelectStation={handleSelectStation} />} />
+            <Route path="/maps" element={<Maps />} />
             <Route path="/forecast" element={<Forecast />} />
             <Route path="/alerts" element={<HealthAlerts />} />
             <Route path="/about" element={<AboutUs />} />
@@ -94,22 +53,9 @@ function MainApp() {
       {/* Footer */}
       <Footer onOpenTerms={() => setIsTermsOpen(true)} onOpenPrivacy={() => setIsPrivacyOpen(true)} />
 
-      {/* Dialog Modals */}
-      <AuthModal
-        isOpen={isAuthOpen}
-        onClose={() => setIsAuthOpen(false)}
-        initialMode={authMode}
-        onLoginSuccess={handleLoginSuccess}
-      />
-
       <TermsModal isOpen={isTermsOpen} onClose={() => setIsTermsOpen(false)} />
 
       <PrivacyModal isOpen={isPrivacyOpen} onClose={() => setIsPrivacyOpen(false)} />
-
-      <StationDetailModal station={selectedStationForModal} onClose={() => setSelectedStationForModal(null)} />
-
-      {/* Real-time Notification Toast banner */}
-      <NotificationToast />
     </div>
   );
 }
@@ -119,9 +65,7 @@ function App() {
     <BrowserRouter>
       <ThemeProvider>
         <LanguageProvider>
-          <NotificationProvider>
-            <MainApp />
-          </NotificationProvider>
+          <MainApp />
         </LanguageProvider>
       </ThemeProvider>
     </BrowserRouter>

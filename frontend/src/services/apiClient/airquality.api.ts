@@ -1,6 +1,7 @@
 import type {
   DailyForecastResponseData,
   HourlyForecastResponseData,
+  CurrentAQIResponseData,
 } from '../../types/airQuality.types';
 
 const API_BASE_URL =
@@ -59,7 +60,7 @@ async function request<T>(endpoint: string, timeoutMs: number = 8000): Promise<T
     }
     if (error.name === 'AbortError') {
       throw new AirQualityApiError(
-        'Yêu cầu kết nối quá thời gian chờ (8 giây). Vui lòng thử lại.',
+        `Yêu cầu kết nối quá thời gian chờ (${Math.round(timeoutMs / 1000)} giây). Vui lòng thử lại.`,
         408,
         false
       );
@@ -75,12 +76,23 @@ async function request<T>(endpoint: string, timeoutMs: number = 8000): Promise<T
 }
 
 export const airQualityApi = {
-  async getDailyForecast(algo: string = 'svr'): Promise<DailyForecastResponseData> {
-    return request<DailyForecastResponseData>(`/air-quality/predict/daily?algo=${encodeURIComponent(algo)}`);
+  async getCurrentAQI(city: string = 'hanoi'): Promise<CurrentAQIResponseData> {
+    return request<CurrentAQIResponseData>(
+      `/air-quality/current?city=${encodeURIComponent(city)}`,
+      15000
+    );
   },
 
-  async getHourlyForecast(algo: string = 'svr'): Promise<HourlyForecastResponseData> {
-    return request<HourlyForecastResponseData>(`/air-quality/predict/hourly?algo=${encodeURIComponent(algo)}`);
+  async getDailyForecast(algo: string = 'svr', city: string = 'hanoi'): Promise<DailyForecastResponseData> {
+    return request<DailyForecastResponseData>(
+      `/air-quality/predict/daily?algo=${encodeURIComponent(algo)}&city=${encodeURIComponent(city)}`
+    );
+  },
+
+  async getHourlyForecast(algo: string = 'svr', city: string = 'hanoi'): Promise<HourlyForecastResponseData> {
+    return request<HourlyForecastResponseData>(
+      `/air-quality/predict/hourly?algo=${encodeURIComponent(algo)}&city=${encodeURIComponent(city)}`
+    );
   },
 
   async checkMlServiceHealth(): Promise<{ isHealthy: boolean; details?: any }> {

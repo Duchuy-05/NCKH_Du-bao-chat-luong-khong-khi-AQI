@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+pydantic
+pandas
+numpy
+scikit-learn
+joblib
+pyarrow
+python-dotenv
+sqlalchemy
+psycopg[binary]
+alembic>=1.13,<2

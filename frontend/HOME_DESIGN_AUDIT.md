@@ -1,5 +1,7 @@
 # Frontend Design Audit: Home
 
+> **Lưu ý:** Tài liệu này ghi nhận giao diện Home phiên bản cũ (dùng dữ liệu trạm mẫu) và chỉ còn giá trị tham khảo lịch sử. Home hiện hiển thị dự báo VN_AQI theo thành phố lấy từ backend; các điểm trên bản đồ là tọa độ đại diện, không phải trạm quan trắc.
+
 **Target:** `src/pages/Home.tsx`  
 **Scope:** Chỉ đánh giá 4 tiêu chí:
 

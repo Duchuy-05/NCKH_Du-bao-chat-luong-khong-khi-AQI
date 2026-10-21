@@ -54,11 +54,19 @@ export function toDisplayHourlyCards(
   forecast: RealHourlyForecastPoint[]
 ): DisplayHourlyCard[] {
   return forecast.map((point, index) => {
-    const d = new Date(point.timestamp);
-    const hours = String(d.getHours()).padStart(2, '0');
-    const minutes = String(d.getMinutes()).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const parts = new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Asia/Ho_Chi_Minh',
+      hour: '2-digit',
+      minute: '2-digit',
+      day: '2-digit',
+      month: '2-digit',
+      hourCycle: 'h23',
+    }).formatToParts(new Date(point.timestamp));
+    const getPart = (type: string) => parts.find((part) => part.type === type)?.value ?? '00';
+    const hours = getPart('hour');
+    const minutes = getPart('minute');
+    const day = getPart('day');
+    const month = getPart('month');
 
     return {
       id: `hourly-${point.timestamp}-${index}`,

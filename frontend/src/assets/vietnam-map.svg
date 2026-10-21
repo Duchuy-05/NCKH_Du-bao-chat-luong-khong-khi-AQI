@@ -1,17 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" fill="none" className="vietnam-map-svg">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" fill="none" class="vietnam-map-svg">
   <defs>
     <linearGradient id="vnMapGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stopColor="#1E3A8A" />
-      <stop offset="50%" stopColor="#172554" />
-      <stop offset="100%" stopColor="#0F172A" />
+      <stop offset="0%" stop-color="#1E3A8A" />
+      <stop offset="50%" stop-color="#172554" />
+      <stop offset="100%" stop-color="#0F172A" />
     </linearGradient>
     <filter id="vnMapGlow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#0284C7" floodOpacity="0.3" />
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0284C7" flood-opacity="0.3" />
     </filter>
   </defs>
 
   <!-- BACKGROUND MARITIME SUBTLE CONTOURS -->
-  <g opacity="0.15" stroke="#38BDF8" strokeWidth="0.8" strokeDasharray="4 4">
+  <g opacity="0.15" stroke="#38BDF8" stroke-width="0.8" stroke-dasharray="4 4">
     <line x1="80" y1="180" x2="740" y2="180" />
     <line x1="80" y1="360" x2="740" y2="360" />
     <line x1="80" y1="540" x2="740" y2="540" />
@@ -70,8 +70,8 @@
       "
       fill="url(#vnMapGradient)"
       stroke="#38BDF8"
-      strokeWidth="2.5"
-      strokeLinejoin="round"
+      stroke-width="2.5"
+      stroke-linejoin="round"
     />
 
     <!-- NORTHERN WEST & EAST EXTRA NATURAL BORDER DETAILS -->
@@ -89,8 +89,8 @@
       "
       fill="url(#vnMapGradient)"
       stroke="#38BDF8"
-      strokeWidth="2"
-      strokeLinejoin="round"
+      stroke-width="2"
+      stroke-linejoin="round"
     />
 
     <!-- SOUTHERN MEKONG DELTA & CA MAU PENINSULA ACCURATE SHAPE -->
@@ -105,15 +105,15 @@
       "
       fill="url(#vnMapGradient)"
       stroke="#38BDF8"
-      strokeWidth="2"
-      strokeLinejoin="round"
+      stroke-width="2"
+      stroke-linejoin="round"
     />
   </g>
 
   <!-- ======================================================= -->
   <!-- QUẦN ĐẢO HOÀNG SA (VIỆT NAM) - PARACEL ARCHIPELAGO       -->
   <!-- ======================================================= -->
-  <g id="hoang-sa-archipelago" className="island-group">
+  <g id="hoang-sa-archipelago" class="island-group">
     <!-- Amphitrite & Crescent island groups matching user map -->
     <circle cx="560" cy="420" r="5" fill="#38BDF8" />
     <circle cx="576" cy="428" r="4" fill="#38BDF8" />
@@ -128,12 +128,12 @@
     <circle cx="550" cy="488" r="3" fill="#38BDF8" />
 
     <!-- Archipelago Boundary -->
-    <ellipse cx="575" cy="455" rx="48" ry="42" stroke="#38BDF8" strokeWidth="1.2" strokeDasharray="4 4" fill="rgba(56,189,248,0.08)" opacity="0.8" />
+    <ellipse cx="575" cy="455" rx="48" ry="42" stroke="#38BDF8" stroke-width="1.2" stroke-dasharray="4 4" fill="rgba(56,189,248,0.08)" opacity="0.8" />
 
     <!-- Label Banner -->
     <g transform="translate(520, 380)">
-      <rect x="0" y="0" width="165" height="26" rx="8" fill="#020617" stroke="#38BDF8" strokeWidth="1.5" opacity="0.95" />
-      <text x="82.5" y="17" fill="#F8FAFC" fontSize="11" fontWeight="800" textAnchor="middle" letterSpacing="0.5">
+      <rect x="0" y="0" width="165" height="26" rx="8" fill="#020617" stroke="#38BDF8" stroke-width="1.5" opacity="0.95" />
+      <text x="82.5" y="17" fill="#F8FAFC" font-size="11" font-weight="800" text-anchor="middle" letter-spacing="0.5">
         ★ QĐ. HOÀNG SA (VN)
       </text>
     </g>
@@ -142,7 +142,7 @@
   <!-- ======================================================= -->
   <!-- QUẦN ĐẢO TRƯỜNG SA (VIỆT NAM) - SPRATLY ARCHIPELAGO      -->
   <!-- ======================================================= -->
-  <g id="truong-sa-archipelago" className="island-group">
+  <g id="truong-sa-archipelago" class="island-group">
     <!-- Distinctive island cluster matching user map image -->
     <circle cx="610" cy="730" r="5" fill="#38BDF8" />
     <circle cx="628" cy="748" r="4" fill="#38BDF8" />
@@ -165,12 +165,12 @@
     <circle cx="600" cy="960" r="3" fill="#38BDF8" />
 
     <!-- Archipelago Boundary -->
-    <ellipse cx="615" cy="845" rx="65" ry="85" stroke="#38BDF8" strokeWidth="1.2" strokeDasharray="4 4" fill="rgba(56,189,248,0.08)" opacity="0.8" />
+    <ellipse cx="615" cy="845" rx="65" ry="85" stroke="#38BDF8" stroke-width="1.2" stroke-dasharray="4 4" fill="rgba(56,189,248,0.08)" opacity="0.8" />
 
     <!-- Label Banner -->
     <g transform="translate(540, 690)">
-      <rect x="0" y="0" width="168" height="26" rx="8" fill="#020617" stroke="#38BDF8" strokeWidth="1.5" opacity="0.95" />
-      <text x="84" y="17" fill="#F8FAFC" fontSize="11" fontWeight="800" textAnchor="middle" letterSpacing="0.5">
+      <rect x="0" y="0" width="168" height="26" rx="8" fill="#020617" stroke="#38BDF8" stroke-width="1.5" opacity="0.95" />
+      <text x="84" y="17" fill="#F8FAFC" font-size="11" font-weight="800" text-anchor="middle" letter-spacing="0.5">
         ★ QĐ. TRƯỜNG SA (VN)
       </text>
     </g>
@@ -181,48 +181,48 @@
   <!-- ======================================================= -->
   <!-- Đảo Phú Quốc -->
   <g id="dao-phu-quoc">
-    <ellipse cx="260" cy="880" rx="10" ry="18" fill="url(#vnMapGradient)" stroke="#38BDF8" strokeWidth="2" transform="rotate(-15 260 880)" />
-    <text x="210" y="885" fill="#E2E8F0" fontSize="11" fontWeight="700">Đ. Phú Quốc</text>
+    <ellipse cx="260" cy="880" rx="10" ry="18" fill="url(#vnMapGradient)" stroke="#38BDF8" stroke-width="2" transform="rotate(-15 260 880)" />
+    <text x="210" y="885" fill="#E2E8F0" font-size="11" font-weight="700">Đ. Phú Quốc</text>
   </g>
 
   <!-- Côn Đảo -->
   <g id="con-dao">
-    <ellipse cx="390" cy="940" rx="7" ry="10" fill="url(#vnMapGradient)" stroke="#38BDF8" strokeWidth="1.8" transform="rotate(30 390 940)" />
-    <text x="405" y="945" fill="#E2E8F0" fontSize="10" fontWeight="700">Côn Đảo</text>
+    <ellipse cx="390" cy="940" rx="7" ry="10" fill="url(#vnMapGradient)" stroke="#38BDF8" stroke-width="1.8" transform="rotate(30 390 940)" />
+    <text x="405" y="945" fill="#E2E8F0" font-size="10" font-weight="700">Côn Đảo</text>
   </g>
 
   <!-- Đảo Phú Quý -->
   <g id="dao-phu-quy">
     <circle cx="490" cy="775" r="4.5" fill="#38BDF8" />
-    <text x="502" y="778" fill="#CBD5E1" fontSize="9" fontWeight="600">Phú Quý</text>
+    <text x="502" y="778" fill="#CBD5E1" font-size="9" font-weight="600">Phú Quý</text>
   </g>
 
   <!-- Đảo Lý Sơn -->
   <g id="dao-ly-son">
     <circle cx="475" cy="540" r="4.5" fill="#38BDF8" />
-    <text x="488" y="543" fill="#CBD5E1" fontSize="9" fontWeight="600">Lý Sơn</text>
+    <text x="488" y="543" fill="#CBD5E1" font-size="9" font-weight="600">Lý Sơn</text>
   </g>
 
   <!-- Đảo Cồn Cỏ -->
   <g id="dao-con-co">
     <circle cx="395" cy="385" r="3.5" fill="#38BDF8" />
-    <text x="405" y="388" fill="#CBD5E1" fontSize="8" fontWeight="600">Cồn Cỏ</text>
+    <text x="405" y="388" fill="#CBD5E1" font-size="8" font-weight="600">Cồn Cỏ</text>
   </g>
 
   <!-- Bạch Long Vĩ -->
   <g id="bach-long-vi">
     <circle cx="485" cy="225" r="4" fill="#38BDF8" />
-    <text x="495" y="228" fill="#CBD5E1" fontSize="9" fontWeight="600">Bạch Long Vĩ</text>
+    <text x="495" y="228" fill="#CBD5E1" font-size="9" font-weight="600">Bạch Long Vĩ</text>
   </g>
 
   <!-- SEA ZONE WATERMARKS -->
-  <text x="510" y="590" fill="#38BDF8" opacity="0.16" fontSize="32" fontWeight="900" letterSpacing="6">
+  <text x="510" y="590" fill="#38BDF8" opacity="0.16" font-size="32" font-weight="900" letter-spacing="6">
     BIỂN ĐÔNG
   </text>
-  <text x="390" y="270" fill="#38BDF8" opacity="0.14" fontSize="16" fontWeight="800" letterSpacing="2">
+  <text x="390" y="270" fill="#38BDF8" opacity="0.14" font-size="16" font-weight="800" letter-spacing="2">
     VỊNH BẮC BỘ
   </text>
-  <text x="180" y="820" fill="#38BDF8" opacity="0.14" fontSize="16" fontWeight="800" letterSpacing="2">
+  <text x="180" y="820" fill="#38BDF8" opacity="0.14" font-size="16" font-weight="800" letter-spacing="2">
     VỊNH THÁI LAN
   </text>
 </svg>

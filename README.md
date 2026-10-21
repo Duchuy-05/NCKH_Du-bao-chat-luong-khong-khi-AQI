@@ -1,97 +1,92 @@
-```
-NCKH/
-├── frontend/                     
-│   └── src/
-│       ├── assets/
-│       ├── components/
-│       ├── data/
-│       ├── layouts/
-│       ├── pages/
-│       ├── services/
-│       │   └── apiClient/
-│       │       └── airquality.api.ts   # gọi sang BE (KHÔNG gọi thẳng ML service)
-│       ├── styles/
-│       └── utils/
-│
-├── backend/                     
-│   └── src/
-│       ├── config/
-│       │   ├── database.config.ts
-│       │   ├── env.config.ts
-│       │   ├── cloudinary.config.ts
-│       │   ├── redis.config.ts
-│       │   └── mlService.config.ts     # base URL + timeout của ML service
-│       ├── controllers/
-│       │   └── airQuality.controller.ts  # nhận request, gọi service
-│       ├── middlewares/
-│       ├── models/
-│       │   └── entities/
-│       │       └── AirQualityPrediction.entity.ts  # lưu lịch sử dự đoán
-│       ├── routers/
-│       │   └── airQuality.router.ts     # POST /api/air-quality/predict
-│       ├── services/
-│       │   └── mlClient.service.ts      # hàm gọi HTTP sang FastAPI
-│       └── utils/
-│
-├── ml-service/                    # service Python độc lập
-│   ├── app/
-│   │   ├── main.py                # khởi tạo FastAPI app
-│   │   ├── api/
-│   │   │   └── predict.py         # route POST /predict
-│   │   ├── core/
-│   │   │   └── config.py          # đọc biến môi trường
-│   │   ├── models/
-│   │   │   └── schema.py          # Pydantic request/response schema
-│   │   ├── services/
-│   │   │   └── predictor.py       # load model, xử lý predict
-│   │   └── ml/
-│   │       └── air_quality_model.pkl   # model đã train (scikit-learn/joblib)
-│   ├── requirements.txt
-│   ├── Dockerfile
-│   └── .env
-│
-└── docker-compose.yml             # chạy đồng thời 3 service
+# AirVision
+
+AirVision là ứng dụng dự báo chất lượng không khí tại 5 thành phố Việt Nam. Frontend hiển thị AQI hiện tại, dự báo 7 ngày và 24 giờ, biểu đồ AQI, cùng khuyến cáo sức khỏe. Dự báo dùng các mô hình SVR riêng theo thành phố và theo chu kỳ.
+
+## Công nghệ
+
+- **Frontend:** React, TypeScript, Vite, Tailwind CSS, Recharts.
+- **API và machine learning:** FastAPI, scikit-learn, SVR.
+- **Dữ liệu:** PostgreSQL; dữ liệu thời tiết và AQI được lấy/xử lý qua Open-Meteo.
+- **Thành phố:** Hà Nội, Hải Phòng, Đà Nẵng, TP. Hồ Chí Minh và Cần Thơ.
+
+## Chạy bằng Docker Compose
+
+Cần cài Docker Desktop hoặc Docker Engine kèm Docker Compose. Từ thư mục gốc:
+
+```powershell
+Copy-Item .env.example .env
+docker compose up --build -d
 ```
 
-## Yêu cầu môi trường
+Compose khởi chạy PostgreSQL, chạy migration Alembic rồi khởi chạy FastAPI và frontend. Sau khi các container sẵn sàng:
 
-- Node.js >= 18
-- Python >= 3.10 (nếu chạy ml-service)
-- Docker & Docker Compose (nếu muốn chạy cả 3 service cùng lúc)
+- Frontend: <http://localhost:5173>
+- FastAPI Swagger: <http://localhost:3000/docs>
+- API health: <http://localhost:3000/health>
+- PostgreSQL: `localhost:5432`
 
-## Cách chạy (Frontend)
+Database mới cần nạp lịch sử và huấn luyện mô hình lần đầu. Chạy các lệnh sau từ thư mục gốc sau khi backend đã sẵn sàng:
 
-```bash
-git clone https://github.com/Duchuy-05/NCKH_Du-bao-chat-luong-khong-khi-AQI.git
-cd NCKH_Du-bao-chat-luong-khong-khi-AQI/frontend
-npm i
+```powershell
+docker compose exec backend python -m app.data.ingest_open_meteo
+docker compose exec backend python -m app.training.SVR.train_all_cities
+```
+
+Lệnh nạp dữ liệu mặc định lấy lịch sử từ `2022-10-01` đến hôm qua. Huấn luyện chạy 10 lượt: daily và hourly cho từng thành phố. Có thể mất thời gian đáng kể. Dữ liệu PostgreSQL được giữ trong volume `pgdata`; model được giữ trong `backend/models`.
+
+Để dừng các service:
+
+```powershell
+docker compose down
+```
+
+`docker compose down -v` cũng xóa volume PostgreSQL, vì vậy sẽ xóa dữ liệu database.
+
+## Chạy frontend và backend riêng
+
+### Backend
+
+Cần Python 3.10+ và PostgreSQL. Tạo `backend/.env` từ mẫu rồi sửa `DATABASE_URL` để trỏ tới PostgreSQL:
+
+```powershell
+Copy-Item backend/.env.example backend/.env
+cd backend
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python -m alembic upgrade head
+python -m app.data.ingest_open_meteo
+python -m app.training.SVR.train_all_cities
+uvicorn app.main:app --reload --port 3000
+```
+
+### Frontend
+
+Cần Node.js 18+. Mở terminal thứ hai từ thư mục gốc:
+
+```powershell
+Copy-Item frontend/.env.example frontend/.env
+cd frontend
+npm ci
 npm run dev
 ```
 
-Mặc định app chạy tại `http://localhost:5173`.
+Frontend mặc định gọi `http://localhost:3000/api`. Có thể thay đổi URL trong `frontend/.env` bằng `VITE_API_BASE_URL`.
 
-## Cách chạy (Backend)
+## Thành phố và mô hình
 
-```bash
-cd backend
-npm i
-npm start
+Mỗi thành phố có model SVR daily (7 ngày) và hourly (24 mốc giờ). Để huấn luyện lại toàn bộ mô hình, chạy từ `backend/`:
+
+```powershell
+python -m app.training.SVR.train_all_cities
 ```
 
-Tạo file `.env` trong `backend/` dựa theo biến trong `src/config/env.config.ts` (DB, Redis, Cloudinary, ML_SERVICE_URL...) trước khi chạy.
+Có thể chỉ định thành phố hoặc chu kỳ, ví dụ `--city hanoi --city danang` hoặc `--target daily`. Xem [hướng dẫn dữ liệu và huấn luyện](backend/Guide-training-SVR.md) để biết thêm về ingestion, migration và pipeline SVR.
 
-## Cách chạy (ML Service)
+## Cấu trúc chính
 
-```bash
-cd ml-service
-python -m venv venv
-source venv/bin/activate   # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
-```
-
-## Chạy toàn bộ bằng Docker Compose
-
-```bash
-docker compose up --build
+```text
+backend/       FastAPI, migrations, ingestion, training và dự báo
+frontend/      React/Vite application
+docker-compose.yml
 ```

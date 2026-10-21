@@ -30,7 +30,7 @@ export const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) =
               </div>
               <div>
                 <h3 className="text-lg font-black tracking-tight">{t('footer.privacy')}</h3>
-                <p className="text-xs text-slate-500">AirVision VN • Cam kết bảo mật quyền riêng tư</p>
+                <p className="text-xs text-slate-500">AirVision VN</p>
               </div>
             </div>
             <button
@@ -43,24 +43,32 @@ export const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) =
 
           {/* Body */}
           <div className="p-6 overflow-y-auto space-y-4 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-            <h4 className="font-bold text-slate-900 dark:text-white text-sm">1. Thu thập dữ liệu vị trí (Geolocation)</h4>
+            <h4 className="font-bold text-slate-900 dark:text-white text-sm">1. Dữ liệu gửi tới backend</h4>
             <p>
-              Khi bạn nhấn nút "Vị trí của bạn", trình duyệt sẽ yêu cầu quyền truy cập GPS/tọa độ. Dữ liệu này CHỈ được xử lý trực tiếp trên thiết bị (client-side) để xác định trạm quan trắc gần nhất và gửi thông báo đẩy cảnh báo. Chúng tôi KHÔNG lưu trữ lịch sử di chuyển hay chia sẻ vị trí của bạn với bên thứ ba.
+              {lang === 'vi'
+                ? 'Frontend gửi các yêu cầu đọc dự báo theo mã thành phố và tải khuyến cáo sức khỏe. Trang web hiện không yêu cầu vị trí GPS, không có tài khoản người dùng và không gửi vị trí cá nhân.'
+                : 'The frontend requests forecasts by city code and loads health advice. The website does not request GPS location, provide user accounts, or send personal location data.'}
             </p>
 
-            <h4 className="font-bold text-slate-900 dark:text-white text-sm">2. Bộ nhớ cục bộ (Local Storage)</h4>
+            <h4 className="font-bold text-slate-900 dark:text-white text-sm">2. Bộ nhớ trên trình duyệt</h4>
             <p>
-              Các tùy chọn như Chế độ sáng/tối (Theme), Ngôn ngữ ưa thích (VI/EN), và Ngưỡng cảnh báo AQI cá nhân được lưu trữ an toàn trong LocalStorage của trình duyệt của bạn. Bạn có thể xóa dữ liệu này bất cứ lúc nào qua cài đặt trình duyệt.
+              {lang === 'vi'
+                ? 'Ứng dụng lưu tùy chọn giao diện sáng/tối và ngôn ngữ VI/EN trong LocalStorage. Bạn có thể xóa các giá trị này trong cài đặt trình duyệt.'
+                : 'The app stores the light/dark theme and VI/EN language preference in browser LocalStorage. You can remove them in your browser settings.'}
             </p>
 
-            <h4 className="font-bold text-slate-900 dark:text-white text-sm">3. Thông báo đẩy trình duyệt</h4>
+            <h4 className="font-bold text-slate-900 dark:text-white text-sm">3. Tài khoản và thông báo</h4>
             <p>
-              AirVision VN sử dụng tiêu chuẩn Web Notifications API để gửi các cảnh báo khi không khí vượt mức ô nhiễm an toàn. Bạn có thể bật hoặc tắt quyền này bất cứ lúc nào trong bảng điều khiển thông báo hoặc trong cài đặt quyền trang web của trình duyệt.
+              {lang === 'vi'
+                ? 'Backend hiện chưa hỗ trợ tài khoản người dùng, lưu tùy chọn AQI, bản tin email hoặc cảnh báo AQI tự động.'
+                : 'The backend does not currently support user accounts, AQI preference storage, email newsletters, or automated AQI alerts.'}
             </p>
 
-            <h4 className="font-bold text-slate-900 dark:text-white text-sm">4. Liên hệ bảo mật</h4>
+            <h4 className="font-bold text-slate-900 dark:text-white text-sm">4. Dữ liệu nguồn</h4>
             <p>
-              Nếu có bất kỳ thắc mắc nào về chính sách bảo mật dữ liệu, xin vui lòng gửi email về: <strong>nguyentienduchuy2005@gmail.com</strong>.
+              {lang === 'vi'
+                ? 'Backend truy cập Open-Meteo để nhập dữ liệu khí tượng và chất lượng không khí. Việc lưu trữ và xử lý dữ liệu đó được thực hiện tại backend và PostgreSQL của dự án.'
+                : 'The backend accesses Open-Meteo to ingest weather and air-quality data. The project backend and PostgreSQL database store and process that data.'}
             </p>
           </div>
 

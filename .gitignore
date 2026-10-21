@@ -1,20 +1,38 @@
-# Node
+# Dependencies and frontend build output
 node_modules/
 dist/
-.env
+coverage/
+*.tsbuildinfo
 
-# Python (ml-service)
-__pycache__/
-*.pyc
-*.py[cod]
-venv/
+# Local environment files (keep example templates versioned)
+.env
+.env.*
+!.env.example
+!**/.env.example
+
+# Python environments, bytecode, and tool caches
 .venv/
-.env
-*.csv
-data/*.parquet
-*.joblib
-*.parquet
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
 
+# Generated datasets and trained model artifacts
+/backend/data/
+/backend/models/*.joblib
+/backend/models/*.parquet
+
+# Local editor and operating system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Agent/design assets maintained outside the application source
 .github/prompts/
 .github/skills/
 .agents/skills/

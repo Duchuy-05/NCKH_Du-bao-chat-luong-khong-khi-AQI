@@ -5,10 +5,6 @@
 export const StorageKeys = {
   THEME: 'airvision_theme',
   LANGUAGE: 'airvision_lang',
-  NOTIFICATIONS: 'airvision_notifications',
-  LAST_LOCATION: 'airvision_last_location',
-  FAVORITE_STATIONS: 'airvision_favorites',
-  ALERT_THRESHOLD: 'airvision_threshold',
 } as const;
 
 export function getStorageItem<T>(key: string, defaultValue: T): T {

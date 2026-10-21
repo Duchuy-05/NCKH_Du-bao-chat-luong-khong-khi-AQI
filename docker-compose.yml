@@ -1,47 +1,61 @@
-version: "3.9"
-
 services:
-  frontend:
-    build: ./frontend
-    ports:
-      - "5173:5173"
-    depends_on:
-      - backend
-
-  backend:
-    build: ./backend
-    ports:
-      - "3000:3000"
-    environment:
-      - DB_HOST=localhost
-      - DB_PORT=5432
-      - DB_NAME=aqi_prediction
-      - DB_USER=postgres
-      - DB_PASSWORD=${DB_PASSWORD}
-      - ML_SERVICE_URL=http://ml-service:8000
-      - ML_INTERNAL_API_KEY=${ML_INTERNAL_API_KEY}
-    depends_on:
-      - ml-service
-      - postgres
-
-  ml-service:
-    build: ./ml-service
-    environment:
-      - INTERNAL_API_KEY=${ML_INTERNAL_API_KEY}
-    # KHÔNG expose port ra ngoài host, chỉ backend gọi được qua docker network nội bộ
-    expose:
-      - "8000"
-
   postgres:
-    image: postgres:16
+    image: postgres:16-alpine
     environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-airvision}
+      POSTGRES_USER: ${POSTGRES_USER:-airvision}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-airvision_dev_password}
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  backend:
+    build:
+      context: ./backend
+    command:
+      - sh
+      - -c
+      - python -m alembic upgrade head && exec uvicorn app.main:app --host 0.0.0.0 --port 3000
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-airvision}:${POSTGRES_PASSWORD:-airvision_dev_password}@postgres:5432/${POSTGRES_DB:-airvision}
+      INTERNAL_API_KEY: ${INTERNAL_API_KEY:-}
+      CORS_ALLOW_ORIGINS: ${CORS_ALLOW_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}
+      DATA_SYNC_ENABLED: ${DATA_SYNC_ENABLED:-true}
+      DATA_SYNC_TIMES: ${DATA_SYNC_TIMES:-06:00,18:00}
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend/models:/app/models
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:3000/health', timeout=3)"
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:3000/api}
+    ports:
+      - "5173:80"
+    depends_on:
+      backend:
+        condition: service_healthy
 
 volumes:
   pgdata:

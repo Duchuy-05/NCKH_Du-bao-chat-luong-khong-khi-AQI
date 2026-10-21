@@ -5,17 +5,7 @@ import logoImg from '../assets/epu_logo.png';
 import { useLanguage } from '../context/LanguageContext';
 import { Sun, Moon, Globe, Menu, X } from 'lucide-react';
 
-interface HeaderProps {
-  onOpenAuth: (mode: 'login' | 'register') => void;
-  currentUser?: { name: string; email: string } | null;
-  onLogout?: () => void;
-}
-
-export const Header: React.FC<HeaderProps> = ({
-  onOpenAuth,
-  currentUser,
-  onLogout,
-}) => {
+export const Header: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const { lang, toggleLang, t } = useLanguage();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

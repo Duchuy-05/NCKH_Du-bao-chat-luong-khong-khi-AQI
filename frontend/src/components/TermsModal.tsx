@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { X, FileText, Check } from 'lucide-react';
+import { X, FileText } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface TermsModalProps {
@@ -45,22 +45,28 @@ export const TermsModal: React.FC<TermsModalProps> = ({ isOpen, onClose }) => {
           <div className="p-6 overflow-y-auto space-y-4 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
             <h4 className="font-bold text-slate-900 dark:text-white text-sm">1. Mục đích và Phạm vi Dịch vụ</h4>
             <p>
-              AirVision VN cung cấp các chỉ số quan trắc chất lượng không khí (AQI), nồng độ các chất ô nhiễm (PM2.5, PM10, O3, NO2, SO2, CO), và dữ liệu dự báo thời tiết tại Việt Nam nhằm mục đích tham khảo và nâng cao nhận thức cộng đồng về bảo vệ sức khỏe.
+              {lang === 'vi'
+                ? 'AirVision VN hiển thị dự báo VN_AQI theo thành phố bằng mô hình SVR và khuyến cáo sức khỏe. Ứng dụng hiện không cung cấp số đo AQI thời gian thực hoặc dữ liệu trực tiếp từ trạm quan trắc.'
+                : 'AirVision VN displays city-level VN_AQI forecasts from SVR models and health advice. It does not currently provide real-time AQI readings or direct monitoring-station data.'}
             </p>
 
             <h4 className="font-bold text-slate-900 dark:text-white text-sm">2. Nguồn dữ liệu & Độ chính xác</h4>
             <p>
-              Dữ liệu được thu thập từ các trạm quan trắc chuẩn quốc gia, mạng lưới cảm biến cộng đồng đã được chuẩn hóa và các mô hình khí quyển vệ tinh (Copernicus CAMS, OpenMeteo). Dữ liệu chỉ mang tính chất tham khảo khoa học, không thay thế cho các chỉ đạo khẩn cấp từ cơ quan chức năng nhà nước trong các tình huống thiên tai đặc biệt.
+              {lang === 'vi'
+                ? 'Backend lấy dữ liệu lịch sử chất lượng không khí và thời tiết từ Open-Meteo tại tọa độ đại diện của năm thành phố, xử lý, tính VN_AQI và dùng dữ liệu đó để huấn luyện/dự báo SVR. Kết quả mang tính tham khảo, không thay thế dữ liệu hoặc hướng dẫn chính thức từ cơ quan chức năng.'
+                : 'The backend retrieves historical air-quality and weather data from Open-Meteo at representative coordinates for five cities, processes it, calculates VN_AQI, and uses it for SVR forecasts. Results are informational and do not replace official data or guidance.'}
             </p>
 
             <h4 className="font-bold text-slate-900 dark:text-white text-sm">3. Quyền sở hữu trí tuệ</h4>
             <p>
-              Mọi biểu đồ, thuật toán tính toán phân cấp chỉ số AQI VN theo QCVN 05:2023/BTNMT và giao diện hiển thị thuộc quyền sở hữu của AirVision VN. Người dùng có quyền xem, chia sẻ dữ liệu phi thương mại có dẫn nguồn.
+              Mọi biểu đồ, thuật toán tính toán VN_AQI theo Quyết định 1459/QĐ-TCMT và giao diện hiển thị thuộc quyền sở hữu của AirVision VN. Người dùng có quyền xem, chia sẻ dữ liệu phi thương mại có dẫn nguồn.
             </p>
 
             <h4 className="font-bold text-slate-900 dark:text-white text-sm">4. Giới hạn trách nhiệm</h4>
             <p>
-              AirVision VN không chịu trách nhiệm đối với bất kỳ thiệt hại trực tiếp hoặc gián tiếp nào phát sinh từ việc sử dụng hoặc không thể sử dụng các khuyến nghị sức khỏe trên nền tảng.
+              {lang === 'vi'
+                ? 'Dự báo có thể sai lệch do giới hạn dữ liệu và mô hình. Khuyến cáo sức khỏe trên ứng dụng chỉ nhằm mục đích thông tin, không phải tư vấn y tế cá nhân.'
+                : 'Forecasts can be inaccurate due to data and model limitations. Health advice is informational and is not individual medical advice.'}
             </p>
           </div>
 

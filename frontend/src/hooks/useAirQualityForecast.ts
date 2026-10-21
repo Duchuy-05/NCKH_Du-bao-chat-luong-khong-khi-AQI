@@ -15,6 +15,7 @@ import type {
 
 interface UseAirQualityForecastOptions {
   algo?: string;
+  city?: string;
   lang?: 'vi' | 'en';
 }
 
@@ -32,6 +33,7 @@ export interface UseAirQualityForecastReturn {
 
 export function useAirQualityForecast({
   algo = 'svr',
+  city = 'hanoi',
   lang = 'vi',
 }: UseAirQualityForecastOptions = {}): UseAirQualityForecastReturn {
   const [dailyCards, setDailyCards] = useState<DisplayDailyCard[]>([]);
@@ -48,18 +50,48 @@ export function useAirQualityForecast({
     setIsLoading(true);
     setIsMlServiceDown(false);
     setError(null);
+    setRawDaily(null);
+    setRawHourly(null);
+    setDailyCards([]);
+    setHourlyCards([]);
+    setChartData([]);
 
     try {
-      const [dailyRes, hourlyRes] = await Promise.all([
-        airQualityApi.getDailyForecast(algo),
-        airQualityApi.getHourlyForecast(algo),
+      const [dailyResult, hourlyResult] = await Promise.allSettled([
+        airQualityApi.getDailyForecast(algo, city),
+        airQualityApi.getHourlyForecast(algo, city),
       ]);
 
-      setRawDaily(dailyRes);
-      setRawHourly(hourlyRes);
-      setDailyCards(toDisplayDailyCards(dailyRes.forecast, lang));
-      setHourlyCards(toDisplayHourlyCards(hourlyRes.forecast));
-      setChartData(toChartData(dailyRes.forecast, lang));
+      const errors: string[] = [];
+      let mlServiceDown = false;
+
+      if (dailyResult.status === 'fulfilled') {
+        setRawDaily(dailyResult.value);
+        setDailyCards(toDisplayDailyCards(dailyResult.value.forecast, lang));
+        setChartData(toChartData(dailyResult.value.forecast, lang));
+      } else {
+        const label = lang === 'vi' ? '7 ngày' : '7-day forecast';
+        const message = dailyResult.reason instanceof Error
+          ? dailyResult.reason.message
+          : lang === 'vi' ? 'Không thể tải dự báo.' : 'Could not load forecast.';
+        errors.push(`${label}: ${message}`);
+        mlServiceDown ||= dailyResult.reason instanceof AirQualityApiError && dailyResult.reason.status === 503;
+      }
+
+      if (hourlyResult.status === 'fulfilled') {
+        setRawHourly(hourlyResult.value);
+        setHourlyCards(toDisplayHourlyCards(hourlyResult.value.forecast));
+      } else {
+        const label = lang === 'vi' ? '24 giờ' : '24-hour forecast';
+        const message = hourlyResult.reason instanceof Error
+          ? hourlyResult.reason.message
+          : lang === 'vi' ? 'Không thể tải dự báo.' : 'Could not load forecast.';
+        errors.push(`${label}: ${message}`);
+        mlServiceDown ||= hourlyResult.reason instanceof AirQualityApiError && hourlyResult.reason.status === 503;
+      }
+
+      setIsMlServiceDown(mlServiceDown);
+      setError(errors.length ? errors.join(' · ') : null);
     } catch (err: any) {
       if (err instanceof AirQualityApiError) {
         setIsMlServiceDown(err.isMlServiceDown || err.status === 503);
@@ -70,14 +102,10 @@ export function useAirQualityForecast({
     } finally {
       setIsLoading(false);
     }
-  }, [algo, lang]);
+  }, [algo, city, lang]);
 
   useEffect(() => {
-    let mounted = true;
     fetchData();
-    return () => {
-      mounted = false;
-    };
   }, [fetchData]);
 
   return {
