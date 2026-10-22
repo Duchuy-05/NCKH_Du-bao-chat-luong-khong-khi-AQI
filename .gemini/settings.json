@@ -1,0 +1,16 @@
+{
+  "tools": {
+    "allowed": [
+      "run_shell_command(Get-ChildItem)",
+      "run_shell_command(Get-Location)",
+      "run_shell_command(git status)",
+      "run_shell_command(git diff)",
+      "run_shell_command(git log)",
+      "run_shell_command(git show)",
+      "run_shell_command(git -C \"C:\\Users\\Anh\\.gemini\\config\\plugins\\superpowers\" fetch)",
+      "run_shell_command(git -C \"C:\\Users\\Anh\\.gemini\\config\\plugins\\superpowers\" status)",
+      "run_shell_command(git -C \"C:\\Users\\Anh\\.gemini\\config\\plugins\\superpowers\" log)",
+      "run_shell_command(git -C \"C:\\Users\\Anh\\.gemini\\config\\plugins\\superpowers\" diff)"
+    ]
+  }
+}
