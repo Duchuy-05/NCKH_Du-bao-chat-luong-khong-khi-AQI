@@ -14,7 +14,7 @@ venv/
 data/*.parquet
 *.joblib
 *.parquet
-
+.gemini/
 .github/prompts/
 .github/skills/
 .agents/skills/
